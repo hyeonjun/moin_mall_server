@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <appender name="dailyRollingFileAppender"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <prudent>true</prudent>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>access-byebuying-backend.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>DEBUG</level>
+    </filter>
+    <encoder>
+      <pattern>%d{yyyy:MM:dd HH:mm:ss.SSS} %-5level --- [%thread] %logger{35} : %msg %n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="dailyRollingErrorFileAppender"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <prudent>true</prudent>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>error-byebuying-backend.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>error</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <encoder>
+      <pattern>%d{yyyy:MM:dd HH:mm:ss.SSS} %-5level --- [%thread] %logger{35} : %msg %n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- log level : TRACE < DEBUG < INFO < WARN < ERROR -->
+  <logger name="org.hibernate.SQL" level="DEBUG" additivity="false"/>
+  <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+  <logger name="com.buying" level="DEBUG"/>
+  <logger name="org.springframework" level="INFO"/>
+  <logger name="org.springframework.web.filter" level="DEBUG"/>
+
+  <root level="INFO">
+    <appender-ref ref="dailyRollingFileAppender"/>
+    <appender-ref ref="dailyRollingErrorFileAppender"/>
+  </root>
+</configuration>
