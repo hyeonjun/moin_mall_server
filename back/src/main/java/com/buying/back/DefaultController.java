@@ -1,8 +1,9 @@
 package com.buying.back;
 
+import com.buying.back.util.response.CommonResponse;
+import com.buying.back.util.response.CommonResponseCode;
 import java.util.Optional;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class DefaultController {
   }
 
   @GetMapping("/profile")
-  public ResponseEntity<String> profile() {
-    return ResponseEntity.ok(profile);
+  public CommonResponse<String> profile() {
+    return new CommonResponse<>(profile, CommonResponseCode.SUCCESS);
   }
 }
