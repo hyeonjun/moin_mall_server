@@ -1,24 +1,22 @@
 package com.buying.back.application.account.domain;
 
+import com.buying.back.application.account.code.type.AccountGradeType;
+import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.common.domain.Base;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,14 +42,16 @@ public class Account extends Base {
   @Column(name = "account_id")
   private Long accountId;
 
+  @Setter
   @Column(name = "email", length = 191, nullable = false, unique = true)
   private String email;
 
   @Setter
+  @Column(name = "name", length = 191, nullable = false)
   private String name;
 
   @Setter
-  @Column(name = "password", nullable = false, length = 100)
+  @Column(name = "password", length = 100, nullable = false)
   private String password;
 
   @Setter
@@ -64,13 +64,18 @@ public class Account extends Base {
   @Setter
   private LocalDateTime recentSignInDateTime;
 
-  @OneToMany(mappedBy = "account")
-  private List<Role> roles = new ArrayList<>();
+  @Enumerated(EnumType.STRING)
+  @Column(name = "role", nullable = false)
+  private RoleType roleType;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "grade", nullable = false)
+  private AccountGradeType gradeType;
 
   @Builder
-  private Account(Long accountId, String email, String name, String password, boolean activated,
+  public Account(Long accountId, String email, String name, String password, boolean activated,
     LocalDateTime birthDay, LocalDateTime signUpDateTime, LocalDateTime recentSignInDateTime,
-    List<Role> roles) {
+    RoleType roleType, AccountGradeType gradeType) {
     this.accountId = accountId;
     this.email = email;
     this.name = name;
@@ -79,7 +84,8 @@ public class Account extends Base {
     this.birthDay = birthDay;
     this.signUpDateTime = signUpDateTime;
     this.recentSignInDateTime = recentSignInDateTime;
-    this.roles = roles;
+    this.roleType = roleType;
+    this.gradeType = gradeType;
   }
 
   @Override
