@@ -1,8 +1,8 @@
 package com.buying.back.infra.config.security.loginuser;
 
 import com.buying.back.application.account.repository.AccountRepository;
-import com.buying.back.application.common.exception.code.AccountException;
-import com.buying.back.application.common.exception.code.AccountException.AccountExceptionCode;
+import com.buying.back.application.account.code.AccountException;
+import com.buying.back.application.account.code.AccountException.AccountExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
