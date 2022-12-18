@@ -38,4 +38,11 @@ public class AccountManagementController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
+  @PutMapping("/{account-id}/reset:password")
+  public CommonResponse<AccountManagementVO> resetPassword(
+    @PathVariable(value = "account-id") Long accountId) {
+    AccountManagementVO resetPassword = accountService.resetPassword(accountId);
+    return new CommonResponse<>(resetPassword, SUCCESS);
+  }
+
 }

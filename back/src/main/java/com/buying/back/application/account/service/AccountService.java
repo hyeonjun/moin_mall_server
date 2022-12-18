@@ -9,7 +9,11 @@ import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.AccountManagementVO;
+import com.buying.back.util.email.HtmlEmailType;
+import com.buying.back.util.email.provider.EmailProvider;
+import com.buying.back.util.email.template.AccountEmailTemplate;
 import com.buying.back.util.encryption.PasswordProvider;
+import com.buying.back.util.string.RandomString;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +29,7 @@ public class AccountService {
 
   private final AccountRepository accountRepository;
   private final PasswordProvider passwordProvider;
+  private final EmailProvider emailProvider;
 
   // auth
   @Transactional
@@ -62,6 +67,21 @@ public class AccountService {
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
     account.setActivated(dto.getActivated());
+    accountRepository.save(account);
+    return new AccountManagementVO(account);
+  }
+
+  public AccountManagementVO resetPassword(Long accountId) {
+    Account account = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    // TODO: 2022/12/18 비밀번호 변경 시 AWS 메일 전송
+    String password = RandomString.generateRandomPassword();
+    account.setPassword(passwordProvider.encode(password));
+
+    emailProvider.send(
+      new AccountEmailTemplate(HtmlEmailType.RESET_PASSWORD, account.getEmail(), password));
+
     accountRepository.save(account);
     return new AccountManagementVO(account);
   }
