@@ -1,6 +1,5 @@
 package com.buying.back.util.encryption;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
