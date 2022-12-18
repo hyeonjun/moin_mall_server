@@ -3,7 +3,6 @@ package com.buying.back.infra.config.security;
 import static com.buying.back.application.account.code.type.RoleType.ADMIN;
 import static com.buying.back.application.account.code.type.RoleType.USER;
 
-import com.buying.back.application.account.code.type.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +38,11 @@ public class SecurityConfig {
   }
 
   @Bean
+  public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+    return new GrantedAuthorityDefaults("");
+  }
+
+  @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
     return web -> web
       .ignoring().antMatchers("/profile", "/manage/health", "/h2-console/**",
@@ -58,14 +63,14 @@ public class SecurityConfig {
       .logout()
       .logoutRequestMatcher(new AntPathRequestMatcher(SECURITY_LOG_OUT_URL))
       .logoutSuccessHandler(logoutSuccessHandler)
-      .invalidateHttpSession(true); // 로그아웃 이후 세션 전제 삭제 여f
+      .invalidateHttpSession(true); // 로그아웃 이후 세션 전제 삭제 여부
 
     http
       .authorizeRequests()
       .antMatchers("/api/v1/sys/**").hasRole(ADMIN.getValue())
       .antMatchers("/api/v1/pub/**").hasAnyRole(USER.getValue(), ADMIN.getValue())
       .antMatchers(SECURITY_LOG_OUT_URL).authenticated()
-      .antMatchers(SECURITY_LOG_IN_URL, "/api/v1/an/**").permitAll()
+      .antMatchers(SECURITY_LOG_IN_URL, "/api/v1/auth/**").permitAll()
       .anyRequest().denyAll();
 
     http
