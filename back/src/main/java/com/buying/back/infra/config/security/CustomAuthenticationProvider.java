@@ -1,11 +1,12 @@
 package com.buying.back.infra.config.security;
 
 import com.buying.back.application.account.domain.Account;
-import com.buying.back.application.account.helper.AccountHelper;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
 import com.buying.back.util.encryption.PasswordProvider;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,7 +26,6 @@ import org.springframework.stereotype.Component;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   private final AccountRepository accountRepository;
-  private final AccountHelper accountHelper;
   private final PasswordProvider passwordProvider;
 
   @Override
@@ -46,12 +47,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     LoginUser loginUser = new LoginUser(account);
 
     return new UsernamePasswordAuthenticationToken(loginUser, loginUser.getPassword(),
-      getAuthorities(loginUser.getId()));
-  }
-
-  private Collection<GrantedAuthority> getAuthorities(Long accountId) {
-    Pageable pageable = PageRequest.of(0, 1000);
-    return new HashSet<>(accountHelper.getAssignedRoleByAccount(accountId, pageable));
+      Collections.singleton(new SimpleGrantedAuthority(account.getRoleType().getValue())));
   }
 
   @Override
