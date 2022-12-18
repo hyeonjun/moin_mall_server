@@ -1,6 +1,7 @@
 package com.buying.back.application.account.service.vo;
 
 import com.buying.back.application.account.code.type.AccountGradeType;
+import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.domain.Account;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -15,8 +16,8 @@ public class AccountDefaultVO {
   protected String name;
   protected LocalDate birthDay;
 
-  protected String role;
-  protected String grade;
+  protected RoleType role;
+  protected AccountGradeType grade;
   protected int addDiscount;
   protected int addAccumulate;
 
@@ -29,10 +30,10 @@ public class AccountDefaultVO {
 
     this.birthDay = account.getBirthDay();
 
-    this.role = account.getRoleType().getValue();
+    this.role = account.getRoleType();
 
     AccountGradeType gradeType = account.getGradeType();
-    this.grade = gradeType.getValue();
+    this.grade = gradeType;
     this.addDiscount = gradeType.getAddDiscount();
     this.addAccumulate = gradeType.getAddAccumulate();
 
@@ -40,15 +41,13 @@ public class AccountDefaultVO {
   }
 
   protected AccountDefaultVO(Long accountId, String email, String name, LocalDate birthDay,
-    String role, String grade, int addDiscount, int addAccumulate, boolean activated) {
+    RoleType role, AccountGradeType grade, boolean activated) {
     this.accountId = accountId;
     this.email = email;
     this.name = name;
     this.birthDay = birthDay;
     this.role = role;
     this.grade = grade;
-    this.addDiscount = addDiscount;
-    this.addAccumulate = addAccumulate;
     this.activated = activated;
   }
 }
