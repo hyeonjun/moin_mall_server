@@ -45,7 +45,7 @@ public class Account extends Base {
   private Long accountId;
 
   @Setter
-  @Column(name = "email", length = 191, nullable = false, unique = true)
+  @Column(name = "email", length = 191, nullable = false)
   private String email;
 
   @Setter
@@ -71,11 +71,11 @@ public class Account extends Base {
   private LocalDateTime recentPasswordUpdateDateTime;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "role", nullable = false)
+  @Column(name = "role", length = 191, nullable = false)
   private RoleType roleType;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "grade", nullable = false)
+  @Column(name = "grade", length = 191, nullable = false)
   private AccountGradeType gradeType;
 
   @Builder(builderClassName = "init", builderMethodName = "initAccount")

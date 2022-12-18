@@ -62,6 +62,12 @@ public class AccountService {
     return accountRepository.findAll(dto.getPageRequest(), dto);
   }
 
+  public AccountManagementVO getAccountByManagement(Long accountId) {
+    Account account = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+    return new AccountManagementVO(account);
+  }
+
   public AccountManagementVO activateAccount(Long accountId, UpdateActivateAccountDTO dto) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));

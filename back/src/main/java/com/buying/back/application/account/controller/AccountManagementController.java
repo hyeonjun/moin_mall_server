@@ -30,6 +30,14 @@ public class AccountManagementController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
+  @GetMapping("/{account-id}")
+  public CommonResponse<AccountManagementVO> getAccountByManagement(
+    @PathVariable(value = "account-id") Long accountId) {
+    AccountManagementVO vo = accountService.getAccountByManagement(accountId);
+    return new CommonResponse<>(vo, SUCCESS);
+  }
+
+
   @PutMapping("/activate:{account-id}")
   public CommonResponse<AccountManagementVO> activateAccount(
     @PathVariable(value = "account-id") Long accountId,
