@@ -2,7 +2,10 @@ package com.buying.back.application.account.domain;
 
 import com.buying.back.application.account.code.type.AccountGradeType;
 import com.buying.back.application.account.code.type.RoleType;
+import com.buying.back.application.account.controller.dto.CreateAccountDTO;
 import com.buying.back.application.common.domain.Base;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -58,11 +61,15 @@ public class Account extends Base {
   @Column(name = "activated", nullable = false)
   private boolean activated;
 
-  private LocalDateTime birthDay;
+  private LocalDate birthDay;
   private LocalDateTime signUpDateTime;
 
   @Setter
   private LocalDateTime recentSignInDateTime;
+
+  // TODO: 2022/12/18 비밀번호 변경한지 한달이 지난 경우 변경하라는 팝업 뜨도록 할 수 있게
+  @Setter
+  private LocalDateTime recentPasswordUpdateDateTime;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "role", nullable = false)
@@ -72,20 +79,18 @@ public class Account extends Base {
   @Column(name = "grade", nullable = false)
   private AccountGradeType gradeType;
 
-  @Builder
-  public Account(Long accountId, String email, String name, String password, boolean activated,
-    LocalDateTime birthDay, LocalDateTime signUpDateTime, LocalDateTime recentSignInDateTime,
-    RoleType roleType, AccountGradeType gradeType) {
-    this.accountId = accountId;
-    this.email = email;
-    this.name = name;
-    this.password = password;
-    this.activated = activated;
-    this.birthDay = birthDay;
-    this.signUpDateTime = signUpDateTime;
-    this.recentSignInDateTime = recentSignInDateTime;
-    this.roleType = roleType;
-    this.gradeType = gradeType;
+  @Builder(builderClassName = "init", builderMethodName = "initAccount")
+  public Account(CreateAccountDTO dto) {
+    this.email = dto.getEmail();
+    this.name = dto.getName();
+    this.password = dto.getPassword();
+    this.activated = true;
+    this.birthDay = dto.getBirthDay();
+    this.signUpDateTime = LocalDateTime.now();
+    this.recentSignInDateTime = LocalDateTime.now();
+    this.recentPasswordUpdateDateTime = LocalDateTime.now();
+    this.roleType = RoleType.USER;
+    this.gradeType = AccountGradeType.LV1;
   }
 
   @Override
