@@ -1,4 +1,4 @@
-package com.buying.back.application.account.code;
+package com.buying.back.application.account.code.exception;
 
 import com.buying.back.application.common.exception.CommonException;
 import com.buying.back.util.response.ResponseCode;
