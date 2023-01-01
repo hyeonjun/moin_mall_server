@@ -12,13 +12,14 @@ import lombok.Getter;
 @Getter
 public abstract class HtmlEmailTemplate implements HtmlTemplate {
 
-  protected static final String DEFAULT_EMAIL_SENDER = "manage@byebuying.com";
+  protected static final String DEFAULT_EMAIL_SENDER = "byebuying.manage@gmail.com";
 
   private final String fromAddress;
   private final List<String> toAddressList = new ArrayList<>();
 
   private final HtmlEmailType htmlEmailType;
   private final Map<String, Object> params = new HashMap<>();
+  private String subject;
 
   protected HtmlEmailTemplate(HtmlEmailType htmlEmailType) {
     this.fromAddress = DEFAULT_EMAIL_SENDER;
@@ -48,4 +49,7 @@ public abstract class HtmlEmailTemplate implements HtmlTemplate {
     toAddressList.add(to);
   }
 
+  public void setSubject(String subject) {
+    this.subject = String.format(this.htmlEmailType.getSubject(), subject);
+  }
 }
