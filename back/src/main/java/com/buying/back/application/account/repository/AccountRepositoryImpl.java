@@ -28,7 +28,7 @@ public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
     JPAQuery<AccountManagementVO> query = select(getAccountManagementVO())
       .from(account)
       .where(whereCondition)
-      .orderBy(account.accountId.asc());
+      .orderBy(account.id.asc());
 
     JPAQuery<Long> countQuery = select(account.count())
       .from(account)
@@ -39,7 +39,7 @@ public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
 
   private QAccountManagementVO getAccountManagementVO() {
     return new QAccountManagementVO(
-      account.accountId,
+      account.id,
       account.email,
       account.name,
       account.birthDay,

@@ -14,7 +14,7 @@ public class LoginUser extends User {
 
   public LoginUser(Account account) {
     super(account.getEmail(), account.getPassword(), Collections.emptySet());
-    this.id = account.getAccountId();
+    this.id = account.getId();
     this.email = account.getEmail();
     this.name = account.getName();
   }
