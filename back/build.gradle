@@ -39,6 +39,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     implementation 'org.springframework.session:spring-session-jdbc'
 
@@ -65,6 +66,10 @@ dependencies {
     // querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    // aws
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.336')
+    implementation 'com.amazonaws:aws-java-sdk-ses'
 }
 
 tasks.named('test') {
