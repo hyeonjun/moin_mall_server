@@ -10,7 +10,6 @@ public class InquiryMockDTO {
 
   public static CreateInquiryDTO createInquiryDTO(boolean isSuccess) {
     CreateInquiryDTO dto = new CreateInquiryDTO();
-    dto.setAccountId(1L);
     dto.setInquiryParentType(NormalInquiryTypeGroup.MEMBER);
 
     InquiryChildType childType = NormalInquiryMemberType.MEMBER_INFO;
