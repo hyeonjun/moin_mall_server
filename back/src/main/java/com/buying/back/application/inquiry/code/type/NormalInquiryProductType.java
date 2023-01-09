@@ -1,4 +1,4 @@
-package com.buying.back.application.inquiry.code;
+package com.buying.back.application.inquiry.code.type;
 
 public enum NormalInquiryProductType implements InquiryChildType {
 
