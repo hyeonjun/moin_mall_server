@@ -1,7 +1,7 @@
 package com.buying.back.application.inquiry.controller.dto;
 
-import com.buying.back.application.inquiry.code.InquiryChildType;
-import com.buying.back.application.inquiry.code.InquiryParentType;
+import com.buying.back.application.inquiry.code.type.InquiryChildType;
+import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.util.verify.VerifyLengthUtil;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
