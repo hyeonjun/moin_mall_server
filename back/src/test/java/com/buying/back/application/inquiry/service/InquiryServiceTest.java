@@ -44,7 +44,7 @@ class InquiryServiceTest {
     Account account = mock(Account.class);
     given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
 
-    InquiryVO vo = inquiryService.createInquiry(dto);
+    InquiryVO vo = inquiryService.createInquiry(1L, dto);
 
     assertEquals(dto.getTitle(), vo.getTitle());
     assertEquals(dto.getContent(), vo.getContent());
@@ -62,7 +62,7 @@ class InquiryServiceTest {
     given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
 
     assertThrows(InquiryException.class, () -> {
-      inquiryService.createInquiry(dto);
+      inquiryService.createInquiry(1L, dto);
     });
   }
 }

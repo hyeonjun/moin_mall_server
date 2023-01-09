@@ -25,8 +25,8 @@ public class InquiryService {
   private final InquiryRepository inquiryRepository;
 
   @Transactional
-  public InquiryVO createInquiry(CreateInquiryDTO dto) {
-    Account author = accountRepository.findById(dto.getAccountId())
+  public InquiryVO createInquiry(Long accountId, CreateInquiryDTO dto) {
+    Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
     // TODO: 2023/01/08 account 유형이 일반 유저가 맞는지 체크

@@ -14,8 +14,6 @@ import org.hibernate.validator.constraints.Length;
 public class CreateInquiryDTO {
 
   @NotNull
-  private Long accountId;
-  @NotNull
   private InquiryParentType inquiryParentType;
   @NotNull
   private InquiryChildType inquiryChildType;
