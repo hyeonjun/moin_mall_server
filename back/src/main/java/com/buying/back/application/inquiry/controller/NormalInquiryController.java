@@ -3,7 +3,6 @@ package com.buying.back.application.inquiry.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.CreateNormalInquiryDTO;
 import com.buying.back.application.inquiry.service.InquiryService;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import com.buying.back.util.response.CommonResponse;
