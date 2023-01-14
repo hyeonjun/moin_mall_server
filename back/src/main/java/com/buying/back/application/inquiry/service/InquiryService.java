@@ -7,7 +7,11 @@ import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.exception.InquiryException;
 import com.buying.back.application.inquiry.code.exception.InquiryException.InquiryExceptionCode;
+import com.buying.back.application.inquiry.code.type.InquiryChildType;
+import com.buying.back.application.inquiry.code.type.InquiryParentType;
+import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
@@ -31,9 +35,7 @@ public class InquiryService {
     Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
-    // TODO: 2023/01/08 account 유형이 일반 유저가 맞는지 체크
-
-    if (!dto.getInquiryParentType().childCheck(dto.getInquiryChildType())) {
+    if (validateInquiryType(dto.getInquiryParentType(), dto.getInquiryChildType())) {
       throw new InquiryException(InquiryExceptionCode.WRONG_INQUIRY_TYPE);
     }
 
@@ -53,6 +55,33 @@ public class InquiryService {
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
     return inquiryRepository.findAllByAccount(dto.getPageRequest(), author.getId());
+  }
+
+  @Transactional
+  public InquiryVO updateInquiry(Long accountId, UpdateInquiryDTO dto) {
+    Account author = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    if (validateInquiryType(dto.getInquiryParentType(), dto.getInquiryChildType())) {
+      throw new InquiryException(InquiryExceptionCode.WRONG_INQUIRY_TYPE);
+    }
+
+    Inquiry inquiry = inquiryRepository.findById(dto.getInquiryId())
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    inquiry.updateInquiry(dto);
+
+    inquiryRepository.save(inquiry);
+    return InquiryVO.valueOf(author, inquiry);
+  }
+
+  private boolean validateInquiryType(InquiryParentType inquiryParentType,
+    InquiryChildType inquiryChildType) {
+    if (!(inquiryParentType instanceof NormalInquiryGroupType)) {
+      return true;
+    }
+
+    return !inquiryParentType.childCheck(inquiryChildType);
   }
 
 }

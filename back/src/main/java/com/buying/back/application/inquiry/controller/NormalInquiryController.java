@@ -4,6 +4,7 @@ import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.service.InquiryService;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +39,13 @@ public class NormalInquiryController {
     @AuthenticationPrincipal LoginUser loginUser,
     @Valid @RequestBody PagingDTO dto) {
     Page<InquiryVO> vo = inquiryService.getInquiryByAccount(loginUser.getId(), dto);
+    return new CommonResponse<>(vo, SUCCESS);
+  }
+
+  @PutMapping
+  public CommonResponse<InquiryVO> updateInquiry(@AuthenticationPrincipal LoginUser loginUser,
+    @Valid @RequestBody UpdateInquiryDTO dto) {
+    InquiryVO vo = inquiryService.updateInquiry(loginUser.getId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
