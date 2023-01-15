@@ -61,7 +61,7 @@ public class InquiryService {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
-    if (!inquiry.getAuthor().getId().equals(accountId)) {
+    if (!inquiry.getAuthor().getId().equals(accountId) || inquiry.isDeleted()) {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
@@ -73,7 +73,7 @@ public class InquiryService {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
-    if (!inquiry.getAuthor().getId().equals(accountId)) {
+    if (!inquiry.getAuthor().getId().equals(accountId) || inquiry.isDeleted()) {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
@@ -92,7 +92,7 @@ public class InquiryService {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
-    if (!inquiry.getAuthor().getId().equals(accountId)) {
+    if (!inquiry.getAuthor().getId().equals(accountId) || inquiry.isDeleted()) {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
