@@ -19,15 +19,12 @@ import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import com.buying.back.application.mock.inquiry.InquiryMockDTO;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -98,15 +95,38 @@ class InquiryServiceTest {
   @DisplayName("일반 문의사항 수정")
   @Test
   void updateInquiry() {
+    Long accountId = 1L;
+    Long inquiryId = 1L;
     UpdateInquiryDTO dto = InquiryMockDTO.updateInquiryDTO(true);
-
-    Account account = mock(Account.class);
-    given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
 
     Inquiry inquiry = mock(Inquiry.class);
     given(inquiryRepository.findById(anyLong())).willReturn(Optional.ofNullable(inquiry));
 
-    InquiryVO vo = inquiryService.updateInquiry(1L, dto);
+    Account account = mock(Account.class);
+    assert inquiry != null;
+    given(inquiry.getAuthor()).willReturn(account);
+    given(account.getId()).willReturn(accountId);
+
+    InquiryVO vo = inquiryService.updateInquiry(accountId, inquiryId, dto);
+
+    verify(inquiryRepository).save(any());
+  }
+
+  @DisplayName("일반 문의사항 삭제")
+  @Test
+  void deleteInquiry() {
+    Long accountId = 1L;
+    Long inquiryId = 1L;
+
+    Inquiry inquiry = mock(Inquiry.class);
+    given(inquiryRepository.findById(anyLong())).willReturn(Optional.ofNullable(inquiry));
+
+    Account account = mock(Account.class);
+    assert inquiry != null;
+    given(inquiry.getAuthor()).willReturn(account);
+    given(account.getId()).willReturn(accountId);
+
+    inquiryService.deleteInquiry(accountId, inquiryId);
 
     verify(inquiryRepository).save(any());
   }
