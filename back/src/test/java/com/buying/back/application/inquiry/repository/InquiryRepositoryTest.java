@@ -28,24 +28,25 @@ public class InquiryRepositoryTest {
     Page<InquiryVO> page = inquiryRepository.findAllByAccount(dto.getPageRequest(), accountId);
     /*
     select
-      account1_.account_id as col_0_0_,
-      account1_.name as col_1_0_,
-      inquiry0_.inquiry_id as col_2_0_,
-      inquiry0_.created_date_time as col_3_0_,
-      inquiry0_.updated_date_time as col_4_0_,
-      inquiry0_.title as col_5_0_,
-      inquiry0_.content as col_6_0_,
-      inquiry0_.inquiry_parent_type as col_7_0_,
-      inquiry0_.inquiry_child_type as col_8_0_
+        account1_.account_id as col_0_0_,
+        account1_.name as col_1_0_,
+        inquiry0_.inquiry_id as col_2_0_,
+        inquiry0_.created_date_time as col_3_0_,
+        inquiry0_.updated_date_time as col_4_0_,
+        inquiry0_.title as col_5_0_,
+        inquiry0_.content as col_6_0_,
+        inquiry0_.inquiry_parent_type as col_7_0_,
+        inquiry0_.inquiry_child_type as col_8_0_
     from
-      inquiry inquiry0_
+        inquiry inquiry0_
     inner join
-      account account1_
-        on inquiry0_.inquiry_author_id=account1_.account_id
+        account account1_
+            on inquiry0_.inquiry_author_id=account1_.account_id
     where
-      inquiry0_.inquiry_author_id=?
+        inquiry0_.inquiry_author_id=?
+        and inquiry0_.deleted=?
     order by
-      inquiry0_.inquiry_id desc limit ?
+        inquiry0_.inquiry_id desc limit ?
      */
     assertNotNull(page);
   }
