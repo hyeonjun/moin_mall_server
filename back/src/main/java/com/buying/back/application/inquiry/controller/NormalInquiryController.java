@@ -37,10 +37,18 @@ public class NormalInquiryController {
   }
 
   @GetMapping
-  public CommonResponse<Page<InquiryVO>> getInquiryByAccount(
+  public CommonResponse<Page<InquiryVO>> getInquiryListByAccount(
     @AuthenticationPrincipal LoginUser loginUser,
     @Valid @RequestBody PagingDTO dto) {
-    Page<InquiryVO> vo = inquiryService.getInquiryByAccount(loginUser.getId(), dto);
+    Page<InquiryVO> vo = inquiryService.getInquiryListByAccount(loginUser.getId(), dto);
+    return new CommonResponse<>(vo, SUCCESS);
+  }
+
+  @GetMapping("/{inquiry-id}")
+  public CommonResponse<InquiryVO> getInquiryDetailByAccount(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @PathVariable(value = "inquiry-id") Long inquiryId) {
+    InquiryVO vo = inquiryService.getInquiryDetailByAccount(loginUser.getId(), inquiryId);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
