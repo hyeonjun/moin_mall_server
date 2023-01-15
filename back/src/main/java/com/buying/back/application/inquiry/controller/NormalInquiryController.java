@@ -13,7 +13,9 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,11 +44,19 @@ public class NormalInquiryController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
-  @PutMapping
+  @PutMapping("/{inquiry-id}")
   public CommonResponse<InquiryVO> updateInquiry(@AuthenticationPrincipal LoginUser loginUser,
+    @PathVariable(value = "inquiry-id") Long inquiryId,
     @Valid @RequestBody UpdateInquiryDTO dto) {
-    InquiryVO vo = inquiryService.updateInquiry(loginUser.getId(), dto);
+    InquiryVO vo = inquiryService.updateInquiry(loginUser.getId(), inquiryId, dto);
     return new CommonResponse<>(vo, SUCCESS);
+  }
+
+  @DeleteMapping("/{inquiry-id}")
+  public CommonResponse<Void> deleteInquiry(@AuthenticationPrincipal LoginUser loginUser,
+    @PathVariable(value = "inquiry-id") Long inquiryId) {
+    inquiryService.deleteInquiry(loginUser.getId(), inquiryId);
+    return new CommonResponse<>(SUCCESS);
   }
 
 }
