@@ -58,21 +58,35 @@ public class InquiryService {
   }
 
   @Transactional
-  public InquiryVO updateInquiry(Long accountId, UpdateInquiryDTO dto) {
-    Account author = accountRepository.findById(accountId)
-      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+  public InquiryVO updateInquiry(Long accountId, Long inquiryId, UpdateInquiryDTO dto) {
+    Inquiry inquiry = inquiryRepository.findById(inquiryId)
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    if (inquiry.getAuthor().getId().equals(accountId)) {
+      throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
+    }
 
     if (validateInquiryType(dto.getInquiryParentType(), dto.getInquiryChildType())) {
       throw new InquiryException(InquiryExceptionCode.WRONG_INQUIRY_TYPE);
     }
 
-    Inquiry inquiry = inquiryRepository.findById(dto.getInquiryId())
-      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
-
     inquiry.updateInquiry(dto);
 
     inquiryRepository.save(inquiry);
-    return InquiryVO.valueOf(author, inquiry);
+    return InquiryVO.valueOf(inquiry.getAuthor(), inquiry);
+  }
+
+  @Transactional
+  public void deleteInquiry(Long accountId, Long inquiryId) {
+    Inquiry inquiry = inquiryRepository.findById(inquiryId)
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    if (!inquiry.getAuthor().getId().equals(accountId)) {
+      throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
+    }
+
+    inquiry.setDeleted(true);
+    inquiryRepository.save(inquiry);
   }
 
   private boolean validateInquiryType(InquiryParentType inquiryParentType,
