@@ -58,6 +58,9 @@ public class Inquiry extends Base {
   @Column(name = "content", length = 1000,nullable = false)
   private String content;
 
+  @Setter
+  private boolean deleted;
+
   // TODO: 2023/01/08 사진 관련 Entity 추가 후 매핑
   // TODO: 2023/01/08 답변 엔티티를 따로 만들어서 할 것인지?
 
