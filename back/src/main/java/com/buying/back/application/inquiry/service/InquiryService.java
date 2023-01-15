@@ -31,7 +31,7 @@ public class InquiryService {
   private final InquiryRepository inquiryRepository;
 
   @Transactional
-  public InquiryVO createInquiry(Long accountId, CreateInquiryDTO dto) {
+  public InquiryVO createNormalInquiry(Long accountId, CreateInquiryDTO dto) {
     Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
@@ -50,14 +50,14 @@ public class InquiryService {
     return InquiryVO.valueOf(author, inquiry);
   }
 
-  public Page<InquiryVO> getInquiryListByAccount(Long accountId, PagingDTO dto) {
+  public Page<InquiryVO> getMyInquiryList(Long accountId, PagingDTO dto) {
     Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
     return inquiryRepository.findAllByAccount(dto.getPageRequest(), author.getId());
   }
 
-  public InquiryVO getInquiryDetailByAccount(Long accountId, Long inquiryId) {
+  public InquiryVO getMyInquiryDetail(Long accountId, Long inquiryId) {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
@@ -69,7 +69,7 @@ public class InquiryService {
   }
 
   @Transactional
-  public InquiryVO updateInquiry(Long accountId, Long inquiryId, UpdateInquiryDTO dto) {
+  public InquiryVO updateMyInquiry(Long accountId, Long inquiryId, UpdateInquiryDTO dto) {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
@@ -88,7 +88,7 @@ public class InquiryService {
   }
 
   @Transactional
-  public void deleteInquiry(Long accountId, Long inquiryId) {
+  public void deleteMyInquiry(Long accountId, Long inquiryId) {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 

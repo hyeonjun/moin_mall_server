@@ -30,40 +30,40 @@ public class NormalInquiryController {
   private final InquiryService inquiryService;
 
   @PostMapping
-  public CommonResponse<InquiryVO> createInquiry(@AuthenticationPrincipal LoginUser loginUser,
+  public CommonResponse<InquiryVO> createNormalInquiry(@AuthenticationPrincipal LoginUser loginUser,
     @Valid @RequestBody CreateInquiryDTO dto) {
-    InquiryVO vo = inquiryService.createInquiry(loginUser.getId(), dto);
+    InquiryVO vo = inquiryService.createNormalInquiry(loginUser.getId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
   @GetMapping
-  public CommonResponse<Page<InquiryVO>> getInquiryListByAccount(
+  public CommonResponse<Page<InquiryVO>> getMyInquiryList(
     @AuthenticationPrincipal LoginUser loginUser,
     @Valid @RequestBody PagingDTO dto) {
-    Page<InquiryVO> vo = inquiryService.getInquiryListByAccount(loginUser.getId(), dto);
+    Page<InquiryVO> vo = inquiryService.getMyInquiryList(loginUser.getId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
   @GetMapping("/{inquiry-id}")
-  public CommonResponse<InquiryVO> getInquiryDetailByAccount(
+  public CommonResponse<InquiryVO> getMyInquiryDetail(
     @AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "inquiry-id") Long inquiryId) {
-    InquiryVO vo = inquiryService.getInquiryDetailByAccount(loginUser.getId(), inquiryId);
+    InquiryVO vo = inquiryService.getMyInquiryDetail(loginUser.getId(), inquiryId);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
   @PutMapping("/{inquiry-id}")
-  public CommonResponse<InquiryVO> updateInquiry(@AuthenticationPrincipal LoginUser loginUser,
+  public CommonResponse<InquiryVO> updateMyInquiry(@AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "inquiry-id") Long inquiryId,
     @Valid @RequestBody UpdateInquiryDTO dto) {
-    InquiryVO vo = inquiryService.updateInquiry(loginUser.getId(), inquiryId, dto);
+    InquiryVO vo = inquiryService.updateMyInquiry(loginUser.getId(), inquiryId, dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
   @DeleteMapping("/{inquiry-id}")
-  public CommonResponse<Void> deleteInquiry(@AuthenticationPrincipal LoginUser loginUser,
+  public CommonResponse<Void> deleteMyInquiry(@AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "inquiry-id") Long inquiryId) {
-    inquiryService.deleteInquiry(loginUser.getId(), inquiryId);
+    inquiryService.deleteMyInquiry(loginUser.getId(), inquiryId);
     return new CommonResponse<>(SUCCESS);
   }
 

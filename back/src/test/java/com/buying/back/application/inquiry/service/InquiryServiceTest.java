@@ -45,13 +45,13 @@ class InquiryServiceTest {
 
   @DisplayName("일반 문의사항 생성 - 성공")
   @Test
-  void createInquiryTest_SUCCESS() {
+  void createNormalInquiryTest_SUCCESS() {
     CreateInquiryDTO dto = InquiryMockDTO.createInquiryDTO(true);
 
     Account account = mock(Account.class);
     given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
 
-    InquiryVO vo = inquiryService.createInquiry(1L, dto);
+    InquiryVO vo = inquiryService.createNormalInquiry(1L, dto);
 
     verify(inquiryRepository).save(any());
 
@@ -64,20 +64,20 @@ class InquiryServiceTest {
 
   @DisplayName("일반 문의사항 생성 - 잘못된 문의사항 유형 예외")
   @Test
-  void createInquiryTest_WRONG_INQUIRY_TYPE_EXCEPTION() {
+  void createNormalInquiryTest_WRONG_INQUIRY_TYPE_EXCEPTION() {
     CreateInquiryDTO dto = InquiryMockDTO.createInquiryDTO(false);
 
     Account account = mock(Account.class);
     given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
 
     assertThrows(InquiryException.class, () -> {
-      inquiryService.createInquiry(1L, dto);
+      inquiryService.createNormalInquiry(1L, dto);
     });
   }
 
   @DisplayName("일반 문의사항 페이징 조회")
   @Test
-  void getInquiryListByAccountTest() {
+  void getInquiryMyListTest() {
     PagingDTO dto = new PagingDTO();
 
     Account account = mock(Account.class);
@@ -88,13 +88,13 @@ class InquiryServiceTest {
         return new PageImpl<>(list);
     });
 
-    Page<InquiryVO> vo = inquiryService.getInquiryListByAccount(1L, dto);
+    Page<InquiryVO> vo = inquiryService.getMyInquiryList(1L, dto);
     assertNotNull(vo);
   }
 
   @DisplayName("일반 문의사항 상세 조회")
   @Test
-  void getInquiryDetailByAccountTest() {
+  void getMyInquiryDetailTest() {
     Long accountId = 1L;
     Long inquiryId = 1L;
 
@@ -106,13 +106,13 @@ class InquiryServiceTest {
     given(inquiry.getAuthor()).willReturn(account);
     given(account.getId()).willReturn(accountId);
 
-    InquiryVO vo = inquiryService.getInquiryDetailByAccount(accountId, inquiryId);
+    InquiryVO vo = inquiryService.getMyInquiryDetail(accountId, inquiryId);
     assertNotNull(vo);
   }
 
   @DisplayName("일반 문의사항 수정")
   @Test
-  void updateInquiryTest() {
+  void updateMyInquiryTest() {
     Long accountId = 1L;
     Long inquiryId = 1L;
     UpdateInquiryDTO dto = InquiryMockDTO.updateInquiryDTO(true);
@@ -125,14 +125,14 @@ class InquiryServiceTest {
     given(inquiry.getAuthor()).willReturn(account);
     given(account.getId()).willReturn(accountId);
 
-    InquiryVO vo = inquiryService.updateInquiry(accountId, inquiryId, dto);
+    InquiryVO vo = inquiryService.updateMyInquiry(accountId, inquiryId, dto);
 
     verify(inquiryRepository).save(any());
   }
 
   @DisplayName("일반 문의사항 삭제")
   @Test
-  void deleteInquiryTest() {
+  void deleteMyInquiryTest() {
     Long accountId = 1L;
     Long inquiryId = 1L;
 
@@ -144,7 +144,7 @@ class InquiryServiceTest {
     given(inquiry.getAuthor()).willReturn(account);
     given(account.getId()).willReturn(accountId);
 
-    inquiryService.deleteInquiry(accountId, inquiryId);
+    inquiryService.deleteMyInquiry(accountId, inquiryId);
 
     verify(inquiryRepository).save(any());
   }
