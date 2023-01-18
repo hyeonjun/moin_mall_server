@@ -63,6 +63,9 @@ public class Inquiry extends Base {
 
   // TODO: 2023/01/08 사진 관련 Entity 추가 후 매핑
   // TODO: 2023/01/08 답변 엔티티를 따로 만들어서 할 것인지?
+  @Setter
+  @Column(name = "answer", length = 1000)
+  private String answer;
 
   @Builder(builderClassName = "init", builderMethodName = "initInquiry")
   public Inquiry(CreateInquiryDTO dto, Account author) {
