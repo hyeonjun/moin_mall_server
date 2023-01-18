@@ -14,6 +14,7 @@ import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
+import com.buying.back.application.inquiry.service.vo.InquiryDetailVO;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class InquiryService {
   private final InquiryRepository inquiryRepository;
 
   @Transactional
-  public InquiryVO createNormalInquiry(Long accountId, CreateInquiryDTO dto) {
+  public InquiryDetailVO createNormalInquiry(Long accountId, CreateInquiryDTO dto) {
     Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
@@ -47,7 +48,7 @@ public class InquiryService {
       .build();
 
     inquiryRepository.save(inquiry);
-    return InquiryVO.valueOf(author, inquiry);
+    return InquiryDetailVO.valueOf(author, inquiry);
   }
 
   public Page<InquiryVO> getMyInquiryList(Long accountId, PagingDTO dto) {
@@ -57,7 +58,7 @@ public class InquiryService {
     return inquiryRepository.findAllByAccount(dto.getPageRequest(), author.getId());
   }
 
-  public InquiryVO getMyInquiryDetail(Long accountId, Long inquiryId) {
+  public InquiryDetailVO getMyInquiryDetail(Long accountId, Long inquiryId) {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
@@ -65,11 +66,11 @@ public class InquiryService {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
-    return InquiryVO.valueOf(inquiry.getAuthor(), inquiry);
+    return InquiryDetailVO.valueOf(inquiry.getAuthor(), inquiry);
   }
 
   @Transactional
-  public InquiryVO updateMyInquiry(Long accountId, Long inquiryId, UpdateInquiryDTO dto) {
+  public InquiryDetailVO updateMyInquiry(Long accountId, Long inquiryId, UpdateInquiryDTO dto) {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
@@ -84,7 +85,7 @@ public class InquiryService {
     inquiry.updateInquiry(dto);
 
     inquiryRepository.save(inquiry);
-    return InquiryVO.valueOf(inquiry.getAuthor(), inquiry);
+    return InquiryDetailVO.valueOf(inquiry.getAuthor(), inquiry);
   }
 
   @Transactional
