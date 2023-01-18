@@ -2,8 +2,9 @@ package com.buying.back.application.account.code.type;
 
 public enum RoleType {
 
-  ADMIN("ADMIN"),
-  USER("USER");
+  SYSTEM("SYSTEM"),
+  USER("USER"),
+  BRAND("BRAND");
 
   private final String value;
 
