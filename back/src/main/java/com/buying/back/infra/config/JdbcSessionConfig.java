@@ -13,23 +13,15 @@ import org.springframework.session.web.context.AbstractHttpSessionApplicationIni
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@Profile({"local", "test"})
 @EnableJdbcHttpSession
 public class JdbcSessionConfig extends AbstractHttpSessionApplicationInitializer {
 
-  @Profile("local")
   @Bean
   public EmbeddedDatabase dataSourceH2() {
     return new EmbeddedDatabaseBuilder()
       .setType(EmbeddedDatabaseType.H2)
       .addScript("org/springframework/session/jdbc/schema-h2.sql").build();
-  }
-
-  @Profile({"dev", "prd"})
-  @Bean
-  public EmbeddedDatabase dataSourceMySql() {
-    return new EmbeddedDatabaseBuilder()
-      .setType(EmbeddedDatabaseType.H2)
-      .addScript("org/springframework/session/jdbc/schema-mysql.sql").build();
   }
 
   @Bean
