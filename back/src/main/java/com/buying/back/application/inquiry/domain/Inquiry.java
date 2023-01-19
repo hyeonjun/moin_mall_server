@@ -3,6 +3,7 @@ package com.buying.back.application.inquiry.domain;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.ReplyInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Objects;
@@ -81,6 +82,10 @@ public class Inquiry extends Base {
     this.inquiryChildType = dto.getInquiryChildType().getChildCode();
     this.title = dto.getTitle();
     this.content = dto.getContent();
+  }
+
+  public void replyInquiry(ReplyInquiryDTO dto) {
+    this.answer = dto.getAnswer();
   }
 
   @Override

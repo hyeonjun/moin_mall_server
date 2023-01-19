@@ -1,5 +1,7 @@
 package com.buying.back.application.inquiry.service;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
 import com.buying.back.application.account.domain.Account;
@@ -11,6 +13,7 @@ import com.buying.back.application.inquiry.code.type.InquiryChildType;
 import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.ReplyInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
@@ -66,7 +69,7 @@ public class InquiryService {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
-    return InquiryDetailVO.valueOf(inquiry.getAuthor(), inquiry);
+    return InquiryDetailVO.valueOf(inquiry);
   }
 
   @Transactional
@@ -85,7 +88,7 @@ public class InquiryService {
     inquiry.updateInquiry(dto);
 
     inquiryRepository.save(inquiry);
-    return InquiryDetailVO.valueOf(inquiry.getAuthor(), inquiry);
+    return InquiryDetailVO.valueOf(inquiry);
   }
 
   @Transactional
@@ -93,12 +96,35 @@ public class InquiryService {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
-    if (!inquiry.getAuthor().getId().equals(accountId) || inquiry.isDeleted()) {
+    if (!inquiry.getAuthor().getId().equals(accountId)) {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
+    }
+
+    if (inquiry.isDeleted()) {
+      throw new InquiryException(InquiryExceptionCode.ALREADY_DELETED);
     }
 
     inquiry.setDeleted(true);
     inquiryRepository.save(inquiry);
+  }
+
+  @Transactional
+  public InquiryDetailVO replyToInquiry(ReplyInquiryDTO dto) {
+    Inquiry inquiry = inquiryRepository.findById(dto.getInquiryId())
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    if (inquiry.isDeleted()) {
+      throw new InquiryException(InquiryExceptionCode.ALREADY_DELETED);
+    }
+
+    if (hasText(inquiry.getAnswer())) {
+      throw new InquiryException(InquiryExceptionCode.ALREADY_REPLY_ANSWER);
+    }
+
+    inquiry.replyInquiry(dto);
+    inquiryRepository.save(inquiry);
+
+    return InquiryDetailVO.valueOf(inquiry);
   }
 
   private boolean validateInquiryType(InquiryParentType inquiryParentType,
