@@ -3,7 +3,7 @@ package com.buying.back.application.account.code.type;
 public enum RoleType {
 
   SYSTEM("SYSTEM"),
-  USER("USER"),
+  NORMAL("NORMAL"),
   BRAND("BRAND");
 
   private final String value;

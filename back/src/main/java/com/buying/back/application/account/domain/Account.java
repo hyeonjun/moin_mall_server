@@ -87,7 +87,7 @@ public class Account extends Base {
     this.signUpDateTime = LocalDateTime.now();
     this.recentSignInDateTime = LocalDateTime.now();
     this.recentPasswordUpdateDateTime = LocalDateTime.now();
-    this.roleType = RoleType.USER;
+    this.roleType = RoleType.NORMAL;
     this.gradeType = AccountGradeType.LV1;
   }
 

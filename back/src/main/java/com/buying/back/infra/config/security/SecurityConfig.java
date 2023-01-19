@@ -1,7 +1,7 @@
 package com.buying.back.infra.config.security;
 
-import static com.buying.back.application.account.code.type.RoleType.ADMIN;
-import static com.buying.back.application.account.code.type.RoleType.USER;
+import static com.buying.back.application.account.code.type.RoleType.SYSTEM;
+import static com.buying.back.application.account.code.type.RoleType.NORMAL;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -67,8 +67,8 @@ public class SecurityConfig {
 
     http
       .authorizeRequests()
-      .antMatchers("/api/v1/sys/**").hasRole(ADMIN.getValue())
-      .antMatchers("/api/v1/pub/**").hasAnyRole(USER.getValue(), ADMIN.getValue())
+      .antMatchers("/api/v1/sys/**").hasRole(SYSTEM.getValue())
+      .antMatchers("/api/v1/pub/**").hasAnyRole(NORMAL.getValue(), SYSTEM.getValue())
       .antMatchers(SECURITY_LOG_OUT_URL).authenticated()
       .antMatchers(SECURITY_LOG_IN_URL, "/api/v1/auth/**").permitAll()
       .anyRequest().denyAll();
