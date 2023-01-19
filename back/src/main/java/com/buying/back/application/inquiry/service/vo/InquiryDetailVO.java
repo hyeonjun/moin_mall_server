@@ -20,6 +20,10 @@ public class InquiryDetailVO extends InquiryDefaultVO {
     super(author, inquiry);
   }
 
+  public static InquiryDetailVO valueOf(Inquiry inquiry) {
+    return InquiryDetailVO.valueOf(inquiry.getAuthor(), inquiry);
+  }
+
   // TODO: 2023/01/08 사진 VO
   public static InquiryDetailVO valueOf(Account author, Inquiry inquiry) {
     InquiryDetailVO vo = new InquiryDetailVO(author, inquiry);
