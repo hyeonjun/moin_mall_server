@@ -4,6 +4,8 @@ import com.buying.back.application.account.code.type.AccountGradeType;
 import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.domain.Account;
 import java.time.LocalDate;
+
+import com.buying.back.application.account.domain.Brand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +25,7 @@ public class AccountDefaultVO {
 
   protected boolean activated;
 
+  protected Brand brand;
   public AccountDefaultVO(Account account) {
     this.accountId = account.getId();
     this.email = account.getEmail();
@@ -38,10 +41,12 @@ public class AccountDefaultVO {
     this.addAccumulate = gradeType.getAddAccumulate();
 
     this.activated = account.isActivated();
+
+    this.brand = account.getBrand();
   }
 
   protected AccountDefaultVO(Long accountId, String email, String name, LocalDate birthDay,
-    RoleType role, AccountGradeType grade, boolean activated) {
+    RoleType role, AccountGradeType grade, boolean activated, Brand brand) {
     this.accountId = accountId;
     this.email = email;
     this.name = name;
@@ -49,5 +54,6 @@ public class AccountDefaultVO {
     this.role = role;
     this.grade = grade;
     this.activated = activated;
+    this.brand = brand;
   }
 }
