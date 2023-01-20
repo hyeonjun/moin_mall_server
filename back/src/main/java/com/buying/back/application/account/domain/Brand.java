@@ -1,20 +1,19 @@
 package com.buying.back.application.account.domain;
 
+import com.buying.back.application.account.controller.dto.CreateBrandDTO;
 import com.buying.back.application.common.domain.Base;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(
         name = "brand",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "businessRegistrationNumber")
+                @UniqueConstraint(columnNames = "company_registration_number")
         }
 )
 @Getter
@@ -29,19 +28,23 @@ public class Brand extends Base {
     @Column(name = "brand_name", length = 100, nullable = false)
     private String brandName;
 
-    @Column(name = "Business_registration_number", nullable = false)
-    private Long businessRegistrationNumber;
+    @Column(name = "president" , length = 191, nullable = false)
+    private String president;
 
-    @Column(name = "site_domain")
-    private String domain;
+    @Column(name = "company_registration_number", nullable = false)
+    private String companyRegistrationNumber;
 
-    private String logo;
+    @Column(name = "site_url")
+    private String url;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", length = 191, nullable = false)
-    private String brandRoleType;
-
-
-
+    @Builder(builderClassName = "init" , builderMethodName = "init")
+    public Brand(CreateBrandDTO dto) {
+        this.brandName = dto.getBrandName();
+        this.president = dto.getPresident();
+        this.companyRegistrationNumber = dto.getCompanyRegistrationNumber();
+        if(dto.getSiteUrl() != null)
+            this.url = dto.getSiteUrl();
+        else this.url = null;
+    }
 
 }
