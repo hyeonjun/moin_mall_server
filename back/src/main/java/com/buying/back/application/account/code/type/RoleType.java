@@ -4,7 +4,8 @@ public enum RoleType {
 
   SYSTEM("SYSTEM"),
   NORMAL("NORMAL"),
-  BRAND("BRAND");
+  BRAND_ADMIN("BRAND_ADMIN"),
+  BRAND_CREW("BRAND_CREW");
 
   private final String value;
 
