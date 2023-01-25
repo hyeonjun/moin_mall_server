@@ -86,7 +86,8 @@ public class AccountService {
     account.setPassword(passwordProvider.encode(password));
 
     emailProvider.send(
-      new AccountEmailTemplate(HtmlEmailType.RESET_PASSWORD, account.getEmail(), password));
+      new AccountEmailTemplate(HtmlEmailType.RESET_PASSWORD, account.getName(),
+        account.getEmail(), password));
 
     accountRepository.save(account);
     return new AccountManagementVO(account);
