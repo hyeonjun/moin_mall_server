@@ -3,6 +3,7 @@ package com.buying.back.application.inquiry.domain;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -63,6 +64,13 @@ public class Inquiry extends Base {
   @Builder(builderClassName = "init", builderMethodName = "initInquiry")
   public Inquiry(CreateInquiryDTO dto, Account author) {
     this.author = author;
+    this.inquiryParentType = dto.getInquiryParentType().getParentCode();
+    this.inquiryChildType = dto.getInquiryChildType().getChildCode();
+    this.title = dto.getTitle();
+    this.content = dto.getContent();
+  }
+
+  public void updateInquiry(UpdateInquiryDTO dto) {
     this.inquiryParentType = dto.getInquiryParentType().getParentCode();
     this.inquiryChildType = dto.getInquiryChildType().getChildCode();
     this.title = dto.getTitle();

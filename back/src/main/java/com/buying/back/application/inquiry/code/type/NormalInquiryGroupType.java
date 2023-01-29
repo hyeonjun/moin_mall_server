@@ -18,7 +18,7 @@ import static com.buying.back.application.inquiry.code.type.NormalInquiryShippin
 import java.util.Arrays;
 import java.util.List;
 
-public enum NormalInquiryTypeGroup implements InquiryParentType {
+public enum NormalInquiryGroupType implements InquiryParentType {
 
   MEMBER("회원", Arrays.asList(SIGN_UP, MEMBER_INFO, MEMBERSHIP_WITHDRAWAL, MEMBER_ETC)),
 
@@ -36,7 +36,7 @@ public enum NormalInquiryTypeGroup implements InquiryParentType {
   private final String content;
   private final List<InquiryChildType> childList;
 
-  NormalInquiryTypeGroup(String content, List<InquiryChildType> childList) {
+  NormalInquiryGroupType(String content, List<InquiryChildType> childList) {
     this.content = content;
     this.childList = childList;
   }

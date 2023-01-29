@@ -14,6 +14,8 @@ import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.exception.InquiryException;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import com.buying.back.application.mock.inquiry.InquiryMockDTO;
@@ -91,5 +93,21 @@ class InquiryServiceTest {
 
     Page<InquiryVO> vo = inquiryService.getInquiryByAccount(1L, dto);
     assertNotNull(vo);
+  }
+
+  @DisplayName("일반 문의사항 수정")
+  @Test
+  void updateInquiry() {
+    UpdateInquiryDTO dto = InquiryMockDTO.updateInquiryDTO(true);
+
+    Account account = mock(Account.class);
+    given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
+
+    Inquiry inquiry = mock(Inquiry.class);
+    given(inquiryRepository.findById(anyLong())).willReturn(Optional.ofNullable(inquiry));
+
+    InquiryVO vo = inquiryService.updateInquiry(1L, dto);
+
+    verify(inquiryRepository).save(any());
   }
 }
