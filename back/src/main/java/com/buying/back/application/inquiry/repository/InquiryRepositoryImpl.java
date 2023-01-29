@@ -24,13 +24,15 @@ public class InquiryRepositoryImpl extends CustomQuerydslRepositorySupport
     JPAQuery<InquiryVO> query = select(getInquiryVO())
       .from(inquiry)
       .innerJoin(inquiry.author, account)
-      .where(inquiry.author.id.eq(accountId))
+      .where(inquiry.author.id.eq(accountId)
+        .and(inquiry.deleted.isFalse()))
       .orderBy(inquiry.id.desc());
 
     JPAQuery<Long> countQuery = select(inquiry.count())
       .from(inquiry)
       .innerJoin(inquiry.author, account)
-      .where(inquiry.author.id.eq(accountId));
+      .where(inquiry.author.id.eq(accountId)
+        .and(inquiry.deleted.isFalse()));
 
     return applyPagination(pageable, query, countQuery);
   }
