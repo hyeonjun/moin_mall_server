@@ -3,6 +3,7 @@ package com.buying.back.application.inquiry.domain;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.ReplyInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Objects;
@@ -63,6 +64,9 @@ public class Inquiry extends Base {
 
   // TODO: 2023/01/08 사진 관련 Entity 추가 후 매핑
   // TODO: 2023/01/08 답변 엔티티를 따로 만들어서 할 것인지?
+  @Setter
+  @Column(name = "answer", length = 1000)
+  private String answer;
 
   @Builder(builderClassName = "init", builderMethodName = "initInquiry")
   public Inquiry(CreateInquiryDTO dto, Account author) {
@@ -78,6 +82,10 @@ public class Inquiry extends Base {
     this.inquiryChildType = dto.getInquiryChildType().getChildCode();
     this.title = dto.getTitle();
     this.content = dto.getContent();
+  }
+
+  public void replyInquiry(ReplyInquiryDTO dto) {
+    this.answer = dto.getAnswer();
   }
 
   @Override

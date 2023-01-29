@@ -17,6 +17,7 @@ import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
+import com.buying.back.application.inquiry.service.vo.InquiryDetailVO;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import com.buying.back.application.mock.inquiry.InquiryMockDTO;
 import java.util.List;
@@ -51,7 +52,7 @@ class InquiryServiceTest {
     Account account = mock(Account.class);
     given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
 
-    InquiryVO vo = inquiryService.createNormalInquiry(1L, dto);
+    InquiryDetailVO vo = inquiryService.createNormalInquiry(1L, dto);
 
     verify(inquiryRepository).save(any());
 
@@ -106,7 +107,7 @@ class InquiryServiceTest {
     given(inquiry.getAuthor()).willReturn(account);
     given(account.getId()).willReturn(accountId);
 
-    InquiryVO vo = inquiryService.getMyInquiryDetail(accountId, inquiryId);
+    InquiryDetailVO vo = inquiryService.getMyInquiryDetail(accountId, inquiryId);
     assertNotNull(vo);
   }
 
@@ -125,7 +126,7 @@ class InquiryServiceTest {
     given(inquiry.getAuthor()).willReturn(account);
     given(account.getId()).willReturn(accountId);
 
-    InquiryVO vo = inquiryService.updateMyInquiry(accountId, inquiryId, dto);
+    InquiryDetailVO vo = inquiryService.updateMyInquiry(accountId, inquiryId, dto);
 
     verify(inquiryRepository).save(any());
   }

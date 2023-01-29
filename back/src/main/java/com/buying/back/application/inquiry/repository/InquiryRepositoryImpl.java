@@ -45,9 +45,8 @@ public class InquiryRepositoryImpl extends CustomQuerydslRepositorySupport
       inquiry.createdDateTime,
       inquiry.updatedDateTime,
       inquiry.title,
-      inquiry.content,
       inquiry.inquiryParentType,
-      inquiry.inquiryChildType
+      inquiry.answer.isNotNull()
     );
   }
 }
