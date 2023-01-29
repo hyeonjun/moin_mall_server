@@ -50,11 +50,22 @@ public class InquiryService {
     return InquiryVO.valueOf(author, inquiry);
   }
 
-  public Page<InquiryVO> getInquiryByAccount(Long accountId, PagingDTO dto) {
+  public Page<InquiryVO> getInquiryListByAccount(Long accountId, PagingDTO dto) {
     Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
     return inquiryRepository.findAllByAccount(dto.getPageRequest(), author.getId());
+  }
+
+  public InquiryVO getInquiryDetailByAccount(Long accountId, Long inquiryId) {
+    Inquiry inquiry = inquiryRepository.findById(inquiryId)
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    if (!inquiry.getAuthor().getId().equals(accountId)) {
+      throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
+    }
+
+    return InquiryVO.valueOf(inquiry.getAuthor(), inquiry);
   }
 
   @Transactional

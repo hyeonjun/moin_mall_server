@@ -45,7 +45,7 @@ class InquiryServiceTest {
 
   @DisplayName("일반 문의사항 생성 - 성공")
   @Test
-  void createInquiry_SUCCESS() {
+  void createInquiryTest_SUCCESS() {
     CreateInquiryDTO dto = InquiryMockDTO.createInquiryDTO(true);
 
     Account account = mock(Account.class);
@@ -64,7 +64,7 @@ class InquiryServiceTest {
 
   @DisplayName("일반 문의사항 생성 - 잘못된 문의사항 유형 예외")
   @Test
-  void createInquiry_WRONG_INQUIRY_TYPE_EXCEPTION() {
+  void createInquiryTest_WRONG_INQUIRY_TYPE_EXCEPTION() {
     CreateInquiryDTO dto = InquiryMockDTO.createInquiryDTO(false);
 
     Account account = mock(Account.class);
@@ -77,7 +77,7 @@ class InquiryServiceTest {
 
   @DisplayName("일반 문의사항 페이징 조회")
   @Test
-  void getInquiryByAccount() {
+  void getInquiryListByAccountTest() {
     PagingDTO dto = new PagingDTO();
 
     Account account = mock(Account.class);
@@ -88,13 +88,31 @@ class InquiryServiceTest {
         return new PageImpl<>(list);
     });
 
-    Page<InquiryVO> vo = inquiryService.getInquiryByAccount(1L, dto);
+    Page<InquiryVO> vo = inquiryService.getInquiryListByAccount(1L, dto);
+    assertNotNull(vo);
+  }
+
+  @DisplayName("일반 문의사항 상세 조회")
+  @Test
+  void getInquiryDetailByAccountTest() {
+    Long accountId = 1L;
+    Long inquiryId = 1L;
+
+    Inquiry inquiry = mock(Inquiry.class);
+    given(inquiryRepository.findById(anyLong())).willReturn(Optional.ofNullable(inquiry));
+
+    Account account = mock(Account.class);
+    assert inquiry != null;
+    given(inquiry.getAuthor()).willReturn(account);
+    given(account.getId()).willReturn(accountId);
+
+    InquiryVO vo = inquiryService.getInquiryDetailByAccount(accountId, inquiryId);
     assertNotNull(vo);
   }
 
   @DisplayName("일반 문의사항 수정")
   @Test
-  void updateInquiry() {
+  void updateInquiryTest() {
     Long accountId = 1L;
     Long inquiryId = 1L;
     UpdateInquiryDTO dto = InquiryMockDTO.updateInquiryDTO(true);
@@ -114,7 +132,7 @@ class InquiryServiceTest {
 
   @DisplayName("일반 문의사항 삭제")
   @Test
-  void deleteInquiry() {
+  void deleteInquiryTest() {
     Long accountId = 1L;
     Long inquiryId = 1L;
 
