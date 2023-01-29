@@ -4,6 +4,7 @@ import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.repository.AccountRepository;
+import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.exception.InquiryException;
 import com.buying.back.application.inquiry.code.exception.InquiryException.InquiryExceptionCode;
 import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
@@ -12,6 +13,7 @@ import com.buying.back.application.inquiry.repository.InquiryRepository;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,13 @@ public class InquiryService {
 
     inquiryRepository.save(inquiry);
     return InquiryVO.valueOf(author, inquiry);
+  }
+
+  public Page<InquiryVO> getInquiryByAccount(Long accountId, PagingDTO dto) {
+    Account author = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    return inquiryRepository.findAllByAccount(dto.getPageRequest(), author.getId());
   }
 
 }
