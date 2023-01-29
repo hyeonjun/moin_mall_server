@@ -27,7 +27,6 @@ public class InquiryMockDTO {
 
   public static UpdateInquiryDTO updateInquiryDTO(boolean isSuccess) {
     UpdateInquiryDTO dto = new UpdateInquiryDTO();
-    dto.setInquiryId(1L);
 
     InquiryParentType parentType = NormalInquiryGroupType.MEMBER;
     if (!isSuccess) {
