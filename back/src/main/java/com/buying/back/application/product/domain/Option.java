@@ -6,15 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,27 +22,30 @@ public class Option {
     @Id @Column(name = "option_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long productId;
-    @Column(length = 191, nullable = false)
     private String name;
-    private int order;
-
-    // 크게 변경점이 일어나지 않을 것으로 판단 양방향 설정함
-    // 쿼리 수를 줄이기 위함, 조회의 간편함
-    // 단점 : N + 1 문제 해결을 요함
-    @OneToMany(mappedBy = "option", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private final List<OptionDetail> details = new ArrayList<>();
+    private String value;
+    private Integer orderBy;
+    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product product;
 
     @Builder
-    public Option(Long productId, String name, int order) {
-        this.productId = productId;
+    private Option(String name, String value, Integer orderBy, Product product) {
         this.name = name;
-        this.order = order;
+        this.value = value;
+        this.orderBy = orderBy;
+        this.product = product;
     }
 
-    public static Option create(OptionDto.Create create) {
+    public static Option create(OptionDto.Create dto) {
         return Option.builder()
-                .name(create.getOptionName())
+                .name(dto.getOptionName())
+                .value(dto.getOptionValue())
+                .orderBy(dto.getOrderBy())
                 .build();
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

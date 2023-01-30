@@ -18,9 +18,11 @@ import javax.persistence.Table;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-    indexes = {
-        @Index(columnList = "name")
-    }
+        indexes = {
+                @Index(columnList = "name"),
+                @Index(columnList = "categoryId"),
+                @Index(columnList = "brandId")
+        }
 )
 @Entity
 public class Product extends Base {
@@ -28,25 +30,22 @@ public class Product extends Base {
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 191, nullable = false)
-    private String name;
-    @Column(nullable = false)
     private Long categoryId;
-    @Column(nullable = false)
     private Long brandId;
+    private String name;
 
     @Builder
-    private Product(String name, Long categoryId, Long brandId) {
-        this.name = name;
+    private Product(Long categoryId, Long brandId, String name) {
         this.categoryId = categoryId;
         this.brandId = brandId;
+        this.name = name;
     }
 
-    public static Product createProduct(ProductDto.Create create) {
+    public static Product create(ProductDto.Create dto) {
         return Product.builder()
-                .name(create.getName())
-                .brandId(create.getBrandId())
-                .categoryId(create.getCategoryId())
+                .name(dto.getName())
+                .brandId(dto.getBrandId())
+                .categoryId(dto.getCategoryId())
                 .build();
     }
 }

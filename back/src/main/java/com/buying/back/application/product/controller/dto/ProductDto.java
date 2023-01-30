@@ -15,6 +15,6 @@ public class ProductDto {
         private String name;
         private Long brandId;
         private Long categoryId;
-        private List<OptionDto.Create> options;
+        private List<ItemDto.Create> itemsDto;
     }
 }
