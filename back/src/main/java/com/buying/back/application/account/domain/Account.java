@@ -42,9 +42,8 @@ public class Account extends Base {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "account_id")
-  private Long accountId;
+  private Long id;
 
-  @Setter
   @Column(name = "email", length = 191, nullable = false)
   private String email;
 
@@ -101,11 +100,11 @@ public class Account extends Base {
       return false;
     }
     Account that = (Account) obj;
-    return Objects.equals(getAccountId(), that.getAccountId());
+    return Objects.equals(getId(), that.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(accountId);
+    return Objects.hash(id);
   }
 }

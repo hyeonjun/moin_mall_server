@@ -24,7 +24,7 @@ public class AccountDefaultVO {
   protected boolean activated;
 
   public AccountDefaultVO(Account account) {
-    this.accountId = account.getAccountId();
+    this.accountId = account.getId();
     this.email = account.getEmail();
     this.name = account.getName();
 
