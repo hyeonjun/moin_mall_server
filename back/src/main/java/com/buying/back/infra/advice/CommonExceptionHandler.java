@@ -77,13 +77,16 @@ public class CommonExceptionHandler {
         Object value = error.getRejectedValue();
         String details = error.getDefaultMessage();
         String code = error.getCode();
-        String[] arguments = Arrays.stream(Objects.requireNonNull(error.getArguments()))
-          .filter(x -> !(x instanceof Flag[]))
-          .skip(1)
-          .flatMap(o -> o instanceof Object[] ? Arrays.stream((Object[]) o) : Stream.of(o))
-          .map(Object::toString)
-          .toArray(String[]::new);
-        ArrayUtils.reverse(arguments);
+        String[] arguments = null;
+        if (Objects.nonNull(error.getArguments())) {
+          arguments = Arrays.stream(error.getArguments())
+            .filter(x -> !(x instanceof Flag[]))
+            .skip(1)
+            .flatMap(o -> o instanceof Object[] ? Arrays.stream((Object[]) o) : Stream.of(o))
+            .map(Object::toString)
+            .toArray(String[]::new);
+          ArrayUtils.reverse(arguments);
+        }
         invalidInputList.add(InvalidInputVO.valueOf(field, value, details, code, arguments));
       }
       return new CommonResponse(invalidInputList,
