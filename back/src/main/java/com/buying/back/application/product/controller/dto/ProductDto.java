@@ -17,4 +17,9 @@ public class ProductDto {
         private Long categoryId;
         private List<ItemDto.Create> itemsDto;
     }
+
+    @Data
+    public static class Update {
+        private Long categoryId;
+    }
 }
