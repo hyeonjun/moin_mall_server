@@ -1,4 +1,4 @@
-package com.buying.back.application.inquiry.controller.dto;
+package com.buying.back.application.inquiry.controller.dto.management;
 
 import com.buying.back.util.verify.VerifyLengthUtil;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
-public class ReplyInquiryDTO {
+public class ReplyInquiryManagementDTO {
 
   @NotNull
   private Long inquiryId;
