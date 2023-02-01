@@ -8,6 +8,7 @@ import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.repository.ItemRepository;
 import com.buying.back.application.product.repository.OptionRepository;
 import com.buying.back.application.product.repository.ProductRepository;
+import com.buying.back.application.product.service.vo.ProductDefaultVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ItemRepository itemRepository;
     private final OptionRepository optionRepository;
+    private final ProductItemHelperService productItemHelperService;
 
     @Transactional
     public Product createProduct(ProductDto.Create dto) {
@@ -33,8 +35,6 @@ public class ProductService {
         List<Item> items = itemsDto.stream().map(itemDto -> {
             StringBuilder itemName = new StringBuilder();
             StringBuilder itemOptions = new StringBuilder();
-
-            itemName.append(product.getName()).append("/");
 
             List<Option> options = itemDto.getOptionsDto().stream().map(info -> {
                 itemName.append(info.getOptionValue())
@@ -57,6 +57,17 @@ public class ProductService {
         itemRepository.saveAll(items);
 
         return product;
+    }
+
+    @Transactional
+    public ProductDefaultVO updateProduct(Long productId, ProductDto.Update dto) {
+        productItemHelperService.updateItems(dto.getItemsDto());
+
+        Product product = productRepository.findById(productId).orElseThrow();
+        product.update(dto);
+        productRepository.save(product);
+
+        return new ProductDefaultVO();
     }
 }
 
