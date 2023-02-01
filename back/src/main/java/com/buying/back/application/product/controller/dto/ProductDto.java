@@ -13,6 +13,7 @@ public class ProductDto {
         * Product - Option - Stock
         * */
         private String name;
+        private Integer price;
         private Long brandId;
         private Long categoryId;
         private List<ItemDto.Create> itemsDto;
@@ -20,6 +21,9 @@ public class ProductDto {
 
     @Data
     public static class Update {
+        private String name;
         private Long categoryId;
+        private Integer price;
+        private List<ItemDto.Update> itemsDto;
     }
 }
