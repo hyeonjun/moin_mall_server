@@ -33,12 +33,13 @@ public class Product extends Base {
     private Long categoryId;
     private Long brandId;
     private String name;
-
+    private Integer price;
     @Builder
-    private Product(Long categoryId, Long brandId, String name) {
+    private Product(Long categoryId, Long brandId, String name, Integer price) {
         this.categoryId = categoryId;
         this.brandId = brandId;
         this.name = name;
+        this.price = price;
     }
 
     public static Product create(ProductDto.Create dto) {
@@ -46,6 +47,13 @@ public class Product extends Base {
                 .name(dto.getName())
                 .brandId(dto.getBrandId())
                 .categoryId(dto.getCategoryId())
+                .price(dto.getPrice())
                 .build();
+    }
+
+    public void update(ProductDto.Update dto) {
+        this.name = dto.getName();
+        this.price = dto.getPrice();
+        this.categoryId = dto.getCategoryId();
     }
 }
