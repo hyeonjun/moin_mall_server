@@ -55,6 +55,15 @@ public class Item {
                 .build();
     }
 
+    public Item update(ItemDto.Update dto) {
+        this.name = dto.getName();
+        this.price = dto.getPrice();
+        this.quantity = dto.getQuantity();
+        this.discountPrice = dto.getDiscountPrice();
+        this.discountRate = dto.getDiscountRate();
+        return this;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }
