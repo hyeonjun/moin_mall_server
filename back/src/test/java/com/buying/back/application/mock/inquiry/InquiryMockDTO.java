@@ -6,6 +6,7 @@ import com.buying.back.application.inquiry.code.type.NormalInquiryMemberType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryProductType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import java.time.LocalDate;
@@ -39,6 +40,32 @@ public class InquiryMockDTO {
 
     dto.setTitle("test inquiry title");
     dto.setContent("test inquiry content");
+    return dto;
+  }
+
+  public static SearchInquiryNormalDTO searchInquiryNormalDTO() {
+    SearchInquiryNormalDTO dto = new SearchInquiryNormalDTO();
+
+    dto.setCreatedDateFrom(LocalDate.now());
+    dto.setCreatedDateTo(LocalDate.now());
+    dto.setReplied(Boolean.FALSE);
+    dto.setInquiryParentType(NormalInquiryGroupType.MEMBER);
+    dto.setInquiryChildType(NormalInquiryMemberType.MEMBER_INFO);
+
+    return dto;
+  }
+
+  public static SearchInquiryManagementDTO searchInquiryManagementDTO() {
+    SearchInquiryManagementDTO dto = new SearchInquiryManagementDTO();
+
+    dto.setCreatedDateFrom(LocalDate.now());
+    dto.setCreatedDateTo(LocalDate.now());
+    dto.setDeleted(Boolean.FALSE);
+    dto.setReplied(Boolean.FALSE);
+    dto.setInquiryParentType(NormalInquiryGroupType.MEMBER);
+    dto.setInquiryChildType(NormalInquiryMemberType.MEMBER_INFO);
+    dto.setAuthorEmail("test");
+
     return dto;
   }
 

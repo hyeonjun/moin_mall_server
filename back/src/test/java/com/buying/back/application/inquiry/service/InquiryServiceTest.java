@@ -14,6 +14,7 @@ import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.exception.InquiryException;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
@@ -79,11 +80,11 @@ class InquiryServiceTest {
   @DisplayName("일반 문의사항 페이징 조회")
   @Test
   void getInquiryMyListTest() {
-    PagingDTO dto = new PagingDTO();
+    SearchInquiryNormalDTO dto = InquiryMockDTO.searchInquiryNormalDTO();
 
     Account account = mock(Account.class);
     given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
-    given(inquiryRepository.findAllByAccount(any(), anyLong()))
+    given(inquiryRepository.findAllByAccount(any(), any()))
       .willAnswer(invocation -> {
         List<InquiryVO> list = List.of(new InquiryVO());
         return new PageImpl<>(list);

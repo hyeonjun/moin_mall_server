@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryMemberType;
+import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import com.buying.back.application.inquiry.repository.param.SearchInquiryListParam;
 import com.buying.back.application.inquiry.service.vo.InquiryManagementVO;
@@ -29,10 +30,12 @@ public class InquiryRepositoryTest {
 
   @Test
   void findAllByAccount() {
-    PagingDTO dto = new PagingDTO();
-    Long accountId = 1L;
+    SearchInquiryNormalDTO dto = InquiryMockDTO.searchInquiryNormalDTO();
+    SearchInquiryListParam param = SearchInquiryListParam.valueOf(dto);
+    param.setDeleted(false);
+    param.setAuthorId(1L);
 
-    Page<InquiryVO> page = inquiryRepository.findAllByAccount(dto.getPageRequest(), accountId);
+    Page<InquiryVO> page = inquiryRepository.findAllByAccount(dto.getPageRequest(), param);
     /*
     select
         account1_.account_id as col_0_0_,
@@ -49,8 +52,15 @@ public class InquiryRepositoryTest {
         account account1_
             on inquiry0_.inquiry_author_id=account1_.account_id
     where
-        account1_.account_id=?
+        inquiry0_.created_date_time>=?
+        and inquiry0_.created_date_time<?
         and inquiry0_.deleted=?
+        and (
+            inquiry0_.answer is null
+        )
+        and inquiry0_.inquiry_parent_type=?
+        and inquiry0_.inquiry_child_type=?
+        and account1_.account_id=?
     order by
         inquiry0_.inquiry_id desc limit ?
      */
@@ -81,8 +91,7 @@ public class InquiryRepositoryTest {
         account account1_
             on inquiry0_.inquiry_author_id=account1_.account_id
     where
-        inquiry0_.inquiry_id=?
-        and inquiry0_.created_date_time>=?
+        inquiry0_.created_date_time>=?
         and inquiry0_.created_date_time<?
         and inquiry0_.deleted=?
         and (
