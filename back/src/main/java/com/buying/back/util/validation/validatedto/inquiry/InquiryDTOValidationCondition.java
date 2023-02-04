@@ -12,7 +12,7 @@ public class InquiryDTOValidationCondition {
     InquiryParentType inquiryParentType, InquiryChildType inquiryChildType) {
     if (Objects.nonNull(inquiryChildType) && Objects.isNull(inquiryParentType)) {
       errors.rejectValue("inquiryChildType", NotBlank.class.getSimpleName(),
-        "principalRepaymentAccountBranchName is not blank");
+        "inquiryChildType is not blank");
     }
   }
 
