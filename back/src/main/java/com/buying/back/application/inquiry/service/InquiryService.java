@@ -12,12 +12,15 @@ import com.buying.back.application.inquiry.code.exception.InquiryException.Inqui
 import com.buying.back.application.inquiry.code.type.InquiryChildType;
 import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
-import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.ReplyInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.management.ReplyInquiryManagementDTO;
+import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
+import com.buying.back.application.inquiry.repository.param.SearchInquiryListParam;
 import com.buying.back.application.inquiry.service.vo.InquiryDetailVO;
+import com.buying.back.application.inquiry.service.vo.InquiryManagementVO;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +37,13 @@ public class InquiryService {
   private final AccountRepository accountRepository;
   private final InquiryRepository inquiryRepository;
 
+  // normal user service
   @Transactional
   public InquiryDetailVO createNormalInquiry(Long accountId, CreateInquiryDTO dto) {
     Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
-    if (validateInquiryType(dto.getInquiryParentType(), dto.getInquiryChildType())) {
+    if (validateInquiryType(dto.getInquiryParentType())) {
       throw new InquiryException(InquiryExceptionCode.WRONG_INQUIRY_TYPE);
     }
 
@@ -81,7 +85,7 @@ public class InquiryService {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
-    if (validateInquiryType(dto.getInquiryParentType(), dto.getInquiryChildType())) {
+    if (validateInquiryType(dto.getInquiryParentType())) {
       throw new InquiryException(InquiryExceptionCode.WRONG_INQUIRY_TYPE);
     }
 
@@ -108,8 +112,9 @@ public class InquiryService {
     inquiryRepository.save(inquiry);
   }
 
+  // management service
   @Transactional
-  public InquiryDetailVO replyToInquiry(ReplyInquiryDTO dto) {
+  public InquiryDetailVO replyToInquiry(ReplyInquiryManagementDTO dto) {
     Inquiry inquiry = inquiryRepository.findById(dto.getInquiryId())
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
 
@@ -127,13 +132,12 @@ public class InquiryService {
     return InquiryDetailVO.valueOf(inquiry);
   }
 
-  private boolean validateInquiryType(InquiryParentType inquiryParentType,
-    InquiryChildType inquiryChildType) {
-    if (!(inquiryParentType instanceof NormalInquiryGroupType)) {
-      return true;
-    }
-
-    return !inquiryParentType.childCheck(inquiryChildType);
+  public Page<InquiryManagementVO> getInquiryList(SearchInquiryManagementDTO dto) {
+    return inquiryRepository.findAllByManagement(dto.getPageRequest(),
+      SearchInquiryListParam.valueOf(dto));
   }
 
+  private boolean validateInquiryType(InquiryParentType inquiryParentType) {
+    return !(inquiryParentType instanceof NormalInquiryGroupType);
+  }
 }

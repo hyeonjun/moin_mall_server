@@ -5,8 +5,10 @@ import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryMemberType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryProductType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
-import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
+import java.time.LocalDate;
 
 public class InquiryMockDTO {
 

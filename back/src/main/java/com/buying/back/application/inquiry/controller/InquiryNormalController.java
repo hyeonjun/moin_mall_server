@@ -3,8 +3,8 @@ package com.buying.back.application.inquiry.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.common.dto.PagingDTO;
-import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.service.InquiryService;
 import com.buying.back.application.inquiry.service.vo.InquiryDetailVO;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
@@ -39,7 +39,7 @@ public class InquiryNormalController {
   @GetMapping
   public CommonResponse<Page<InquiryVO>> getMyInquiryList(
     @AuthenticationPrincipal LoginUser loginUser,
-    @Valid @RequestBody PagingDTO dto) {
+    @Valid PagingDTO dto) {
     Page<InquiryVO> vo = inquiryService.getMyInquiryList(loginUser.getId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
@@ -60,7 +60,7 @@ public class InquiryNormalController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
-  @PutMapping("/{inquiry-id}")
+  @PutMapping("/{inquiry-id}:delete")
   public CommonResponse<Void> deleteMyInquiry(@AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "inquiry-id") Long inquiryId) {
     inquiryService.deleteMyInquiry(loginUser.getId(), inquiryId);

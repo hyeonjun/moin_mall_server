@@ -15,6 +15,8 @@ import static com.buying.back.application.inquiry.code.type.NormalInquiryProduct
 import static com.buying.back.application.inquiry.code.type.NormalInquiryShippingType.SHIPPING_ETC;
 import static com.buying.back.application.inquiry.code.type.NormalInquiryShippingType.SHIPPING_INFO;
 
+import com.buying.back.application.inquiry.code.exception.InquiryException;
+import com.buying.back.application.inquiry.code.exception.InquiryException.InquiryExceptionCode;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,5 +62,12 @@ public enum NormalInquiryGroupType implements InquiryParentType {
   public boolean childCheck(InquiryChildType childType) {
     return this.getChildList().stream()
       .anyMatch(child -> child == childType);
+  }
+
+  public static NormalInquiryGroupType of(String value) {
+    return Arrays.stream(values())
+      .filter(type -> type.getParentCode().equals(value))
+      .findFirst()
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.WRONG_INQUIRY_TYPE));
   }
 }

@@ -2,9 +2,9 @@ package com.buying.back.application.inquiry.domain;
 
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.common.domain.Base;
-import com.buying.back.application.inquiry.controller.dto.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.ReplyInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.management.ReplyInquiryManagementDTO;
+import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -84,7 +84,7 @@ public class Inquiry extends Base {
     this.content = dto.getContent();
   }
 
-  public void replyInquiry(ReplyInquiryDTO dto) {
+  public void replyInquiry(ReplyInquiryManagementDTO dto) {
     this.answer = dto.getAnswer();
   }
 
