@@ -5,10 +5,8 @@ import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.util.validation.validatedto.ValidateDTO;
 import com.buying.back.util.validation.validatedto.inquiry.InquiryDTOValidationCondition;
 import com.buying.back.util.verify.VerifyLengthUtil;
-import java.net.URL;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -17,8 +15,6 @@ import org.springframework.validation.Errors;
 @Getter
 @Setter
 public class CreateInquiryDTO implements ValidateDTO {
-
-  private URL url;
 
   @NotNull
   private InquiryParentType inquiryParentType;
