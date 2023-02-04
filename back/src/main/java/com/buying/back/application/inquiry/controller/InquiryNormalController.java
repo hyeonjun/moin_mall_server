@@ -4,6 +4,7 @@ import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.service.InquiryService;
 import com.buying.back.application.inquiry.service.vo.InquiryDetailVO;
@@ -39,7 +40,7 @@ public class InquiryNormalController {
   @GetMapping
   public CommonResponse<Page<InquiryVO>> getMyInquiryList(
     @AuthenticationPrincipal LoginUser loginUser,
-    @Valid PagingDTO dto) {
+    @Valid SearchInquiryNormalDTO dto) {
     Page<InquiryVO> vo = inquiryService.getMyInquiryList(loginUser.getId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }

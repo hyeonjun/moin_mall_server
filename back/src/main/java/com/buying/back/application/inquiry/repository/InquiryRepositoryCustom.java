@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface InquiryRepositoryCustom {
 
-  Page<InquiryVO> findAllByAccount(Pageable pageable, Long accountId);
+  Page<InquiryVO> findAllByAccount(Pageable pageable, SearchInquiryListParam param);
 
   Page<InquiryManagementVO> findAllByManagement(Pageable pageable, SearchInquiryListParam param);
 

@@ -36,18 +36,4 @@ public class InquiryDtoObjectMapperTest {
     assertEquals(inquiryChildType, NormalInquiryMemberType.MEMBER_INFO);
   }
 
-  @Test
-  void SearchInquiryManagementDtoTest() throws JsonProcessingException {
-    SearchInquiryManagementDTO dto = InquiryMockDTO.searchInquiryManagementDTO();
-    String json = objectMapper.writeValueAsString(dto);
-    System.out.println(json);
-
-    SearchInquiryManagementDTO dto2 = objectMapper.readValue(json, SearchInquiryManagementDTO.class);
-    InquiryParentType inquiryParentType = dto2.getInquiryParentType();
-    InquiryChildType inquiryChildType = dto2.getInquiryChildType();
-
-    assertEquals(inquiryParentType, NormalInquiryGroupType.MEMBER);
-    assertEquals(inquiryChildType, NormalInquiryMemberType.MEMBER_INFO);
-  }
-
 }

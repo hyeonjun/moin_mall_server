@@ -26,20 +26,19 @@ public class InquiryRepositoryImpl extends CustomQuerydslRepositorySupport
   }
 
   @Override
-  public Page<InquiryVO> findAllByAccount(Pageable pageable, Long accountId) {
+  public Page<InquiryVO> findAllByAccount(Pageable pageable, SearchInquiryListParam param) {
+    BooleanBuilder whereCondition = getInquiryWhereCondition(param);
 
     JPAQuery<InquiryVO> query = select(getInquiryVO())
       .from(inquiry)
       .innerJoin(inquiry.author, account)
-      .where(account.id.eq(accountId)
-        .and(inquiry.deleted.isFalse()))
+      .where(whereCondition)
       .orderBy(inquiry.id.desc());
 
     JPAQuery<Long> countQuery = select(inquiry.count())
       .from(inquiry)
       .innerJoin(inquiry.author, account)
-      .where(account.id.eq(accountId)
-        .and(inquiry.deleted.isFalse()));
+      .where(whereCondition);
 
     return applyPagination(pageable, query, countQuery);
   }
@@ -92,10 +91,6 @@ public class InquiryRepositoryImpl extends CustomQuerydslRepositorySupport
 
   private BooleanBuilder getInquiryWhereCondition(SearchInquiryListParam param) {
     BooleanBuilder whereCondition = new BooleanBuilder();
-
-    if (Objects.nonNull(param.getInquiryId())) {
-      whereCondition.and(inquiry.id.eq(param.getInquiryId()));
-    }
 
     if (Objects.nonNull(param.getCreatedDateFrom())) {
       whereCondition.and(inquiry.createdDateTime.goe(
