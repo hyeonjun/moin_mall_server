@@ -42,19 +42,4 @@ public class InquiryMockDTO {
     return dto;
   }
 
-  public static SearchInquiryManagementDTO searchInquiryManagementDTO() {
-    SearchInquiryManagementDTO dto = new SearchInquiryManagementDTO();
-
-    dto.setInquiryId(1L);
-    dto.setCreatedDateFrom(LocalDate.now());
-    dto.setCreatedDateTo(LocalDate.now());
-    dto.setDeleted(Boolean.FALSE);
-    dto.setReplied(Boolean.FALSE);
-    dto.setInquiryParentType(NormalInquiryGroupType.MEMBER);
-//    dto.setInquiryChildType(NormalInquiryMemberType.MEMBER_INFO);
-    dto.setAuthorEmail("test");
-
-    return dto;
-  }
-
 }
