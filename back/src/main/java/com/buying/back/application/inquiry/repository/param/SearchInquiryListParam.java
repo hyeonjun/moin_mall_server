@@ -2,6 +2,7 @@ package com.buying.back.application.inquiry.repository.param;
 
 import com.buying.back.application.inquiry.code.type.InquiryChildType;
 import com.buying.back.application.inquiry.code.type.InquiryParentType;
+import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -10,8 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SearchInquiryListParam {
-
-  private Long inquiryId;
 
   private LocalDate createdDateFrom;
   private LocalDate createdDateTo;
@@ -25,9 +24,18 @@ public class SearchInquiryListParam {
   private Long authorId;
   private String authorEmail;
 
+  public static SearchInquiryListParam valueOf(SearchInquiryNormalDTO dto) {
+    SearchInquiryListParam param = new SearchInquiryListParam();
+    param.setCreatedDateFrom(dto.getCreatedDateFrom());
+    param.setCreatedDateTo(dto.getCreatedDateTo());
+    param.setReplied(dto.getReplied());
+    param.setInquiryParentType(dto.getInquiryParentType());
+    param.setInquiryChildType(dto.getInquiryChildType());
+    return param;
+  }
+
   public static SearchInquiryListParam valueOf(SearchInquiryManagementDTO dto) {
     SearchInquiryListParam param = new SearchInquiryListParam();
-    param.setInquiryId(dto.getInquiryId());
     param.setCreatedDateFrom(dto.getCreatedDateFrom());
     param.setCreatedDateTo(dto.getCreatedDateTo());
     param.setDeleted(dto.getDeleted());

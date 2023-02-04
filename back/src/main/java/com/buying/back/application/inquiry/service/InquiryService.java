@@ -13,6 +13,7 @@ import com.buying.back.application.inquiry.code.type.InquiryChildType;
 import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.management.ReplyInquiryManagementDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
@@ -58,11 +59,14 @@ public class InquiryService {
     return InquiryDetailVO.valueOf(author, inquiry);
   }
 
-  public Page<InquiryVO> getMyInquiryList(Long accountId, PagingDTO dto) {
+  public Page<InquiryVO> getMyInquiryList(Long accountId, SearchInquiryNormalDTO dto) {
     Account author = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
-    return inquiryRepository.findAllByAccount(dto.getPageRequest(), author.getId());
+    SearchInquiryListParam param = SearchInquiryListParam.valueOf(dto);
+    param.setDeleted(false);
+    param.setAuthorId(author.getId());
+    return inquiryRepository.findAllByAccount(dto.getPageRequest(), param);
   }
 
   public InquiryDetailVO getMyInquiryDetail(Long accountId, Long inquiryId) {
