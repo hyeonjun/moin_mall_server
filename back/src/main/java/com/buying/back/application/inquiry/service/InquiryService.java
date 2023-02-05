@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -89,6 +90,10 @@ public class InquiryService {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
+    if (StringUtils.hasText(inquiry.getAnswer())) {
+      throw new InquiryException(InquiryExceptionCode.ALREADY_REPLY_ANSWER);
+    }
+
     if (validateInquiryType(dto.getInquiryParentType())) {
       throw new InquiryException(InquiryExceptionCode.WRONG_INQUIRY_TYPE);
     }
@@ -106,6 +111,10 @@ public class InquiryService {
 
     if (!inquiry.getAuthor().getId().equals(accountId)) {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
+    }
+
+    if (StringUtils.hasText(inquiry.getAnswer())) {
+      throw new InquiryException(InquiryExceptionCode.ALREADY_REPLY_ANSWER);
     }
 
     if (inquiry.isDeleted()) {
