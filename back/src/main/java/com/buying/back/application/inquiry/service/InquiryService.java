@@ -6,16 +6,14 @@ import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.repository.AccountRepository;
-import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.exception.InquiryException;
 import com.buying.back.application.inquiry.code.exception.InquiryException.InquiryExceptionCode;
-import com.buying.back.application.inquiry.code.type.InquiryChildType;
 import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
-import com.buying.back.application.inquiry.controller.dto.management.ReplyInquiryManagementDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
+import com.buying.back.application.inquiry.controller.dto.management.ReplyInquiryManagementDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
@@ -28,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -90,7 +87,7 @@ public class InquiryService {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
-    if (StringUtils.hasText(inquiry.getAnswer())) {
+    if (hasText(inquiry.getAnswer())) {
       throw new InquiryException(InquiryExceptionCode.ALREADY_REPLY_ANSWER);
     }
 
@@ -113,7 +110,7 @@ public class InquiryService {
       throw new InquiryException(InquiryExceptionCode.NOT_AUTHORIZED);
     }
 
-    if (StringUtils.hasText(inquiry.getAnswer())) {
+    if (hasText(inquiry.getAnswer())) {
       throw new InquiryException(InquiryExceptionCode.ALREADY_REPLY_ANSWER);
     }
 
@@ -172,6 +169,7 @@ public class InquiryService {
     return InquiryDetailVO.valueOf(inquiry);
   }
 
+  @Transactional
   public void deleteInquiry(Long inquiryId) {
     Inquiry inquiry = inquiryRepository.findById(inquiryId)
       .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
