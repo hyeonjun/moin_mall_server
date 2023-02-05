@@ -148,6 +148,18 @@ public class InquiryService {
     return InquiryDetailVO.valueOf(inquiry);
   }
 
+  public void deleteInquiry(Long inquiryId) {
+    Inquiry inquiry = inquiryRepository.findById(inquiryId)
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    if (inquiry.isDeleted()) {
+      throw new InquiryException(InquiryExceptionCode.ALREADY_DELETED);
+    }
+
+    inquiry.setDeleted(true);
+    inquiryRepository.save(inquiry);
+  }
+
   private boolean validateInquiryType(InquiryParentType inquiryParentType) {
     return !(inquiryParentType instanceof NormalInquiryGroupType);
   }

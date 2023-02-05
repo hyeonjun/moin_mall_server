@@ -45,5 +45,11 @@ public class InquiryManagementController {
     return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
+  @PutMapping("/{inquiry-id}")
+  public CommonResponse<Void> deleteInquiry(@PathVariable(value = "inquiry-id") Long inquiryId) {
+    inquiryService.deleteInquiry(inquiryId);
+    return new CommonResponse<>(CommonResponseCode.SUCCESS);
+  }
+
 
 }
