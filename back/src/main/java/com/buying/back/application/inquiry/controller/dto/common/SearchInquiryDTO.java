@@ -14,7 +14,7 @@ import org.springframework.validation.Errors;
 
 @Getter
 @Setter
-public class SearchInquiryNormalDTO extends PagingDTO implements ValidateDTO {
+public class SearchInquiryDTO extends PagingDTO implements ValidateDTO {
 
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate createdDateFrom;
@@ -26,7 +26,6 @@ public class SearchInquiryNormalDTO extends PagingDTO implements ValidateDTO {
 
   private InquiryParentType inquiryParentType;
   private InquiryChildType inquiryChildType;
-
   @Override
   public void validate(Errors e) {
     InquiryDTOValidationCondition.childTypeNeedParentType(

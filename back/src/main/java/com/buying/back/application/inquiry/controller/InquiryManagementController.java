@@ -31,6 +31,20 @@ public class InquiryManagementController {
     return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
+  @PutMapping("/reply:update")
+  public CommonResponse<InquiryDetailVO> replyUpdateInquiry(
+    @Valid @RequestBody ReplyInquiryManagementDTO dto) {
+    InquiryDetailVO vo = inquiryService.replyUpdateInquiry(dto);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
+  }
+
+  @PutMapping("/{inquiry-id}/reply:delete")
+  public CommonResponse<InquiryDetailVO> replyDeleteInquiry(
+    @PathVariable(value = "inquiry-id") Long inquiryId) {
+    InquiryDetailVO vo = inquiryService.replyDeleteInquiry(inquiryId);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
+  }
+
   @GetMapping
   public CommonResponse<Page<InquiryManagementVO>> getInquiryList(
     @Valid SearchInquiryManagementDTO dto) {
@@ -45,7 +59,7 @@ public class InquiryManagementController {
     return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
-  @PutMapping("/{inquiry-id}")
+  @PutMapping("/{inquiry-id}:delete")
   public CommonResponse<Void> deleteInquiry(@PathVariable(value = "inquiry-id") Long inquiryId) {
     inquiryService.deleteInquiry(inquiryId);
     return new CommonResponse<>(CommonResponseCode.SUCCESS);

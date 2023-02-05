@@ -11,10 +11,9 @@ import static org.mockito.Mockito.verify;
 
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.repository.AccountRepository;
-import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.exception.InquiryException;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
+import com.buying.back.application.inquiry.controller.dto.normal.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.domain.Inquiry;
 import com.buying.back.application.inquiry.repository.InquiryRepository;
