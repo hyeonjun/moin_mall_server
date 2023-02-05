@@ -7,7 +7,6 @@ import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryMemberType;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import com.buying.back.application.mock.inquiry.InquiryMockDTO;
 import com.buying.back.infra.config.ObjectMapperConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;

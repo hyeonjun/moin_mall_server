@@ -2,9 +2,8 @@ package com.buying.back.application.inquiry.controller;
 
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
-import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
+import com.buying.back.application.inquiry.controller.dto.normal.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.service.InquiryService;
 import com.buying.back.application.inquiry.service.vo.InquiryDetailVO;

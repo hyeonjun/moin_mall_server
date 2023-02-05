@@ -2,7 +2,7 @@ package com.buying.back.application.inquiry.repository.param;
 
 import com.buying.back.application.inquiry.code.type.InquiryChildType;
 import com.buying.back.application.inquiry.code.type.InquiryParentType;
-import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
+import com.buying.back.application.inquiry.controller.dto.normal.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import java.time.LocalDate;
 import lombok.Getter;

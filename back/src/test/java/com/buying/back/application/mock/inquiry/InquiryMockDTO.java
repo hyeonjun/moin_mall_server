@@ -6,7 +6,7 @@ import com.buying.back.application.inquiry.code.type.NormalInquiryMemberType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryProductType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
+import com.buying.back.application.inquiry.controller.dto.normal.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import java.time.LocalDate;
