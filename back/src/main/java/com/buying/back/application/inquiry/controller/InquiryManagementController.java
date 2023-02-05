@@ -31,6 +31,13 @@ public class InquiryManagementController {
     return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
+  @PutMapping("/reply:update")
+  public CommonResponse<InquiryDetailVO> replyUpdateInquiry(
+    @Valid @RequestBody ReplyInquiryManagementDTO dto) {
+    InquiryDetailVO vo = inquiryService.replyUpdateInquiry(dto);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
+  }
+
   @GetMapping
   public CommonResponse<Page<InquiryManagementVO>> getInquiryList(
     @Valid SearchInquiryManagementDTO dto) {
