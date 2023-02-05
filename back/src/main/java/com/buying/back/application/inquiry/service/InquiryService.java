@@ -151,6 +151,21 @@ public class InquiryService {
     return InquiryDetailVO.valueOf(inquiry);
   }
 
+  @Transactional
+  public InquiryDetailVO replyDeleteInquiry(Long inquiryId) {
+    Inquiry inquiry = inquiryRepository.findById(inquiryId)
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    if (inquiry.isDeleted()) {
+      throw new InquiryException(InquiryExceptionCode.ALREADY_DELETED);
+    }
+
+    inquiry.setAnswer(null);
+    inquiryRepository.save(inquiry);
+
+    return InquiryDetailVO.valueOf(inquiry);
+  }
+
   public Page<InquiryManagementVO> getInquiryList(SearchInquiryManagementDTO dto) {
     return inquiryRepository.findAllByManagement(dto.getPageRequest(),
       SearchInquiryListParam.valueOf(dto));
