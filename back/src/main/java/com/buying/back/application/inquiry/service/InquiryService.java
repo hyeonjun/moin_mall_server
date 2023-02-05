@@ -141,6 +141,13 @@ public class InquiryService {
       SearchInquiryListParam.valueOf(dto));
   }
 
+  public InquiryDetailVO getInquiryDetail(Long inquiryId) {
+    Inquiry inquiry = inquiryRepository.findById(inquiryId)
+      .orElseThrow(() -> new InquiryException(InquiryExceptionCode.NOT_FOUND_INQUIRY));
+
+    return InquiryDetailVO.valueOf(inquiry);
+  }
+
   private boolean validateInquiryType(InquiryParentType inquiryParentType) {
     return !(inquiryParentType instanceof NormalInquiryGroupType);
   }

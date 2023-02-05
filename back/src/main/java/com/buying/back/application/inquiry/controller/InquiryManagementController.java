@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +37,13 @@ public class InquiryManagementController {
     Page<InquiryManagementVO> page = inquiryService.getInquiryList(dto);
     return new CommonResponse<>(page, CommonResponseCode.SUCCESS);
   }
+
+  @GetMapping("/{inquiry-id}")
+  public CommonResponse<InquiryDetailVO> getInquiryDetail(
+    @PathVariable(value = "inquiry-id") Long inquiryId) {
+    InquiryDetailVO vo = inquiryService.getInquiryDetail(inquiryId);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
+  }
+
 
 }
