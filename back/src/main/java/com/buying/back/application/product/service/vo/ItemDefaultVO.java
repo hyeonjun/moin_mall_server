@@ -1,7 +1,13 @@
 package com.buying.back.application.product.service.vo;
 
+import com.buying.back.application.product.domain.Item;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Getter
+@NoArgsConstructor
 public class ItemDefaultVO {
     private Long id;
     private String name;
@@ -11,13 +17,13 @@ public class ItemDefaultVO {
     private Integer discountRate;
     private List<ItemOptionVO> options;
 
-    public ItemDefaultVO(Long id, String name, Integer price, Integer quantity, Integer discountPrice, Integer discountRate, List<ItemOptionVO> options) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.discountPrice = discountPrice;
-        this.discountRate = discountRate;
+    public ItemDefaultVO(Item item, List<ItemOptionVO> options) {
+        this.id = item.getId();
+        this.name = item.getName();
+        this.price = item.getPrice();
+        this.quantity = item.getQuantity();
+        this.discountPrice = item.getDiscountPrice();
+        this.discountRate = item.getDiscountRate();
         this.options = options;
     }
 }
