@@ -38,6 +38,13 @@ public class InquiryManagementController {
     return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
+  @PutMapping("/{inquiry-id}/reply:delete")
+  public CommonResponse<InquiryDetailVO> replyDeleteInquiry(
+    @PathVariable(value = "inquiry-id") Long inquiryId) {
+    InquiryDetailVO vo = inquiryService.replyDeleteInquiry(inquiryId);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
+  }
+
   @GetMapping
   public CommonResponse<Page<InquiryManagementVO>> getInquiryList(
     @Valid SearchInquiryManagementDTO dto) {
