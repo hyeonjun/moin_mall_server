@@ -11,7 +11,7 @@ import com.buying.back.application.inquiry.code.exception.InquiryException.Inqui
 import com.buying.back.application.inquiry.code.type.InquiryParentType;
 import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
 import com.buying.back.application.inquiry.controller.dto.common.CreateInquiryDTO;
-import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
+import com.buying.back.application.inquiry.controller.dto.normal.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.common.UpdateInquiryDTO;
 import com.buying.back.application.inquiry.controller.dto.management.ReplyInquiryManagementDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;

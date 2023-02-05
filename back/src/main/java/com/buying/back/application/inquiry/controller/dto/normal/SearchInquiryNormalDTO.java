@@ -1,4 +1,4 @@
-package com.buying.back.application.inquiry.controller.dto.common;
+package com.buying.back.application.inquiry.controller.dto.normal;
 
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.inquiry.code.type.InquiryChildType;

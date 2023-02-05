@@ -2,16 +2,12 @@ package com.buying.back.application.inquiry.repository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.buying.back.application.common.dto.PagingDTO;
-import com.buying.back.application.inquiry.code.type.NormalInquiryGroupType;
-import com.buying.back.application.inquiry.code.type.NormalInquiryMemberType;
-import com.buying.back.application.inquiry.controller.dto.common.SearchInquiryNormalDTO;
+import com.buying.back.application.inquiry.controller.dto.normal.SearchInquiryNormalDTO;
 import com.buying.back.application.inquiry.controller.dto.management.SearchInquiryManagementDTO;
 import com.buying.back.application.inquiry.repository.param.SearchInquiryListParam;
 import com.buying.back.application.inquiry.service.vo.InquiryManagementVO;
 import com.buying.back.application.inquiry.service.vo.InquiryVO;
 import com.buying.back.application.mock.inquiry.InquiryMockDTO;
-import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
