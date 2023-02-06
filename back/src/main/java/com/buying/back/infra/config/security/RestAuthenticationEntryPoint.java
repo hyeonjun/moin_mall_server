@@ -1,5 +1,6 @@
 package com.buying.back.infra.config.security;
 
+import com.buying.back.application.common.exception.code.AuthenticationException.AuthenticationExceptionCode;
 import com.buying.back.util.response.CommonResponse;
 import com.buying.back.util.response.CommonResponseCode;
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     AuthenticationException authException) throws IOException, ServletException {
     MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
     CommonResponse<CommonResponseCode> responseData =
-      new CommonResponse<>(CommonResponseCode.SUCCESS);
+      new CommonResponse<>(AuthenticationExceptionCode.NOT_AUTHORIZED);
     response.setStatus(200);
     jsonConverter.write(responseData, MediaType.APPLICATION_JSON,
       new ServletServerHttpResponse(response));
