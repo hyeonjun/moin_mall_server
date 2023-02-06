@@ -5,6 +5,7 @@ import com.buying.back.application.product.domain.Item;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.repository.ItemRepository;
 import com.buying.back.application.product.repository.ProductRepository;
+import com.buying.back.application.product.service.vo.ItemDefaultVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,14 @@ import java.util.stream.Collectors;
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final ProductRepository productRepository;
 
+    public List<Item> getAllByProduct(Product product) {
+        return itemRepository.findAllByProductId(product);
+    }
+
+    public List<ItemDefaultVO> getItemsByProduct(Product product) {
+        return itemRepository.findItemsByProductId(product);
+    }
     @Transactional
     public Item createItem(Product product, ItemDto.Create dto) {
         Item item = Item.create(dto);
@@ -33,7 +40,11 @@ public class ItemService {
     }
 
 
-    public void updateItems(List<ItemDto.Update> itemsDto) {
+    public Item updateItems(ItemDto.Update itemDto) {
         // TODO: 2023-02-02 updateItems 작성
+        return itemRepository.save(
+                    itemRepository.findById(itemDto.getItemId()).orElseThrow(() -> new RuntimeException("NOT FOUND ITEM"))
+                        .update(itemDto)
+                );
     }
 }
