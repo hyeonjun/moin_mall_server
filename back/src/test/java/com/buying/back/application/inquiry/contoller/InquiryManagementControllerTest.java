@@ -36,6 +36,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -69,13 +70,15 @@ public class InquiryManagementControllerTest {
   @Autowired
   private PasswordProvider passwordProvider;
   @Autowired
+  private Environment environment;
+  @Autowired
   private ObjectMapper objectMapper;
 
   @BeforeEach
   public void setUp(WebApplicationContext webApplicationContext) {
 
-    Authentication auth = new MockAuthProvider(accountRepository, passwordProvider)
-      .authenticate("test@test.com", "1234", RoleType.ADMIN);
+    Authentication auth = new MockAuthProvider(accountRepository, passwordProvider, environment)
+      .authenticate("test@test.com", "1234", RoleType.SYSTEM);
     SecurityContextHolder.getContext().setAuthentication(auth);
 
     this.mockMvc = MockMvcBuilders

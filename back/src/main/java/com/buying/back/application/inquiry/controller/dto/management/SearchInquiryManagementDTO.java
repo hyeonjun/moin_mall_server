@@ -10,6 +10,8 @@ public class SearchInquiryManagementDTO extends SearchInquiryDTO {
 
   private Boolean replied;
 
+  private Boolean deleted;
+
   private String authorEmail;
 
 }

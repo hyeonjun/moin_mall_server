@@ -91,6 +91,20 @@ public class Account extends Base {
     this.gradeType = AccountGradeType.LV1;
   }
 
+  @Builder(builderClassName = "test", builderMethodName = "testAccount")
+  public Account(Long id, String email, String name, String password,
+                 RoleType roleType) {
+    this.id = id;
+    this.email = email;
+    this.name = name;
+    this.password = password;
+    this.birthDay = LocalDate.now();
+    this.signUpDateTime = LocalDateTime.now();
+    this.recentSignInDateTime = LocalDateTime.now();
+    this.recentPasswordUpdateDateTime = LocalDateTime.now();
+    this.roleType = roleType;
+  }
+
   @Builder(builderClassName = "initBrandAccount" , builderMethodName = "initBrandAccount")
   public Account(CreateBrandDTO dto, Brand brand) {
     this.brand = brand;

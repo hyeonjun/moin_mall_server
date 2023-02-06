@@ -32,7 +32,7 @@ public class InquiryNormalController {
   @PostMapping
   public CommonResponse<InquiryDetailVO> createNormalInquiry(@AuthenticationPrincipal LoginUser loginUser,
     @Valid @RequestBody CreateInquiryDTO dto) {
-    InquiryDetailVO vo = inquiryService.createNormalInquiry(loginUser.getId(), dto);
+    InquiryDetailVO vo = inquiryService.createNormalInquiry(loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
@@ -40,7 +40,7 @@ public class InquiryNormalController {
   public CommonResponse<Page<InquiryVO>> getMyInquiryList(
     @AuthenticationPrincipal LoginUser loginUser,
     @Valid SearchInquiryNormalDTO dto) {
-    Page<InquiryVO> vo = inquiryService.getMyInquiryList(loginUser.getId(), dto);
+    Page<InquiryVO> vo = inquiryService.getMyInquiryList(loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
@@ -48,7 +48,7 @@ public class InquiryNormalController {
   public CommonResponse<InquiryDetailVO> getMyInquiryDetail(
     @AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "inquiry-id") Long inquiryId) {
-    InquiryDetailVO vo = inquiryService.getMyInquiryDetail(loginUser.getId(), inquiryId);
+    InquiryDetailVO vo = inquiryService.getMyInquiryDetail(loginUser.getAccountId(), inquiryId);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
@@ -56,14 +56,14 @@ public class InquiryNormalController {
   public CommonResponse<InquiryDetailVO> updateMyInquiry(@AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "inquiry-id") Long inquiryId,
     @Valid @RequestBody UpdateInquiryDTO dto) {
-    InquiryDetailVO vo = inquiryService.updateMyInquiry(loginUser.getId(), inquiryId, dto);
+    InquiryDetailVO vo = inquiryService.updateMyInquiry(loginUser.getAccountId(), inquiryId, dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
   @PutMapping("/{inquiry-id}:delete")
   public CommonResponse<Void> deleteMyInquiry(@AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "inquiry-id") Long inquiryId) {
-    inquiryService.deleteMyInquiry(loginUser.getId(), inquiryId);
+    inquiryService.deleteMyInquiry(loginUser.getAccountId(), inquiryId);
     return new CommonResponse<>(SUCCESS);
   }
 
