@@ -8,13 +8,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.net.URL;
 
 @Entity
 @Table(
-        name = "brand",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "company_registration_number")
-        }
+  name = "brand",
+  uniqueConstraints = {
+    @UniqueConstraint(columnNames = "business_number")
+  },
+  indexes = {
+    @Index(columnList = "business_number")
+  }
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,23 +32,20 @@ public class Brand extends Base {
     @Column(name = "brand_name", length = 100, nullable = false)
     private String brandName;
 
-    @Column(name = "president" , length = 191, nullable = false)
-    private String president;
+    @Column(name = "representative_name" , length = 191, nullable = false)
+    private String representativeName;
 
-    @Column(name = "company_registration_number", nullable = false)
-    private String companyRegistrationNumber;
+    @Column(name = "business_number", nullable = false)
+    private String businessNumber;
 
-    @Column(name = "site_url")
+    @Column(name = "url")
     private String url;
 
-    @Builder(builderClassName = "init" , builderMethodName = "init")
+    @Builder(builderClassName = "initBrand" , builderMethodName = "initBrand")
     public Brand(CreateBrandDTO dto) {
         this.brandName = dto.getBrandName();
-        this.president = dto.getPresident();
-        this.companyRegistrationNumber = dto.getCompanyRegistrationNumber();
-        if(dto.getSiteUrl() != null)
-            this.url = dto.getSiteUrl();
-        else this.url = null;
+        this.representativeName = dto.getRepresentativeName();
+        this.businessNumber = dto.getBusinessNumber();
+        this.url = dto.getUrl();
     }
-
 }

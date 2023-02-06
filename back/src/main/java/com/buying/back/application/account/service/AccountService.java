@@ -33,7 +33,7 @@ public class AccountService {
 
   // auth
   @Transactional
-  public AccountDefaultVO createAccount(CreateAccountDTO dto) {
+  public AccountDefaultVO createNormalAccount(CreateAccountDTO dto) {
     Account account = accountRepository.findByEmail(dto.getEmail())
       .orElse(null);
 

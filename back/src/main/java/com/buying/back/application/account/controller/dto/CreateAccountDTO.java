@@ -25,7 +25,6 @@ public class CreateAccountDTO {
   @NotBlank
   @Length(min = 1, max = VerifyLengthUtil.MAX_PASSWORD_LENGTH)
   private String password;
-  @NotNull
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate birthDay;
 

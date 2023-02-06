@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,7 +65,8 @@ public class Account extends Base {
   private LocalDateTime recentPasswordUpdateDateTime;
 
   @ManyToOne
-  @JoinColumn(name = "brand_id")
+  @JoinColumn(name = "account_brand_id", referencedColumnName = "brand_id")
+  @JsonBackReference
   private Brand brand;
 
   @Enumerated(EnumType.STRING)
@@ -72,10 +74,10 @@ public class Account extends Base {
   private RoleType roleType;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "grade", length = 191, nullable = false)
+  @Column(name = "grade", length = 191)
   private AccountGradeType gradeType;
 
-  @Builder(builderClassName = "init", builderMethodName = "initAccount")
+  @Builder(builderClassName = "initNormal", builderMethodName = "initAccount")
   public Account(CreateAccountDTO dto) {
     this.email = dto.getEmail();
     this.name = dto.getName();
@@ -89,18 +91,17 @@ public class Account extends Base {
     this.gradeType = AccountGradeType.LV1;
   }
 
-  @Builder(builderClassName = "initBrand" , builderMethodName = "initBrand")
+  @Builder(builderClassName = "initBrandAccount" , builderMethodName = "initBrandAccount")
   public Account(CreateBrandDTO dto, Brand brand) {
     this.brand = brand;
     this.email = dto.getEmail();
     this.name = dto.getName();
     this.password = dto.getPassword();
-    this.activated = false;
+    this.activated = true;
     this.signUpDateTime = LocalDateTime.now();
     this.recentSignInDateTime = LocalDateTime.now();
-    this.recentPasswordUpdateDateTime = LocalDateTime.now();
-    this.roleType = RoleType.valueOf(dto.getRoleType());
-    this.gradeType = AccountGradeType.LV1;
+    this.recentPasswordUpdateDateTime = null;
+    this.roleType = dto.getRoleType();
   }
   @Override
   public boolean equals(Object obj) {
