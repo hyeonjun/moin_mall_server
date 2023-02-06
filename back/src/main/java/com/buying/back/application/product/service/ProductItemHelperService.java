@@ -20,4 +20,8 @@ public class ProductItemHelperService {
     public void updateItems(List<ItemDto.Update> dto) {
         itemService.updateItems(dto);
     }
+
+    public void deleteItemByProduct(Product product) {
+        itemService.deleteByProduct(product);
+    }
 }

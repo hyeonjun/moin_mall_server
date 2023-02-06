@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final ProductRepository productRepository;
 
     @Transactional
     public Item createItem(Product product, ItemDto.Create dto) {
@@ -32,8 +31,13 @@ public class ItemService {
         return itemRepository.saveAll(itemsDto.stream().map(Item::create).collect(Collectors.toList()));
     }
 
-
+    @Transactional
     public void updateItems(List<ItemDto.Update> itemsDto) {
         // TODO: 2023-02-02 updateItems 작성
+    }
+
+    @Transactional
+    public void deleteByProduct(Product product) {
+        itemRepository.deleteByProduct(product);
     }
 }

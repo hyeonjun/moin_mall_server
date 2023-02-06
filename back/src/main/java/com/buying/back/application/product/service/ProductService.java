@@ -10,6 +10,7 @@ import com.buying.back.application.product.service.vo.ItemDefaultVO;
 import com.buying.back.application.product.service.vo.ItemOptionVO;
 import com.buying.back.application.product.service.vo.OptionDefaultVO;
 import com.buying.back.application.product.service.vo.ProductDefaultVO;
+import com.buying.back.util.response.CommonResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,29 +59,6 @@ public class ProductService {
             return new ItemDefaultVO(productItemHelperService.createItem(product, itemDto), itemOptionsVO);
         }).collect(Collectors.toList());
 
-        /*List<Item> items = itemsDto.stream().map(itemDto -> {
-            StringBuilder itemName = new StringBuilder();
-            StringBuilder itemOptions = new StringBuilder();
-
-            List<Option> options = itemDto.getOptionsDto().stream().map(info -> {
-                itemName.append(info.getOptionValue())
-                        .append("/");
-                Option option = Option.create(info);
-                option.setProduct(product);
-                return option;
-            }).collect(Collectors.toList());
-
-            optionRepository.saveAll(options);
-            options.forEach(option -> itemOptions.append(option.getId()).append("/"));
-
-            itemDto.setName(itemName.toString());
-            itemDto.setOptions(itemOptions.toString());
-
-            Item item = Item.create(itemDto);
-            item.setProduct(product);
-            return item;
-        }).collect(Collectors.toList());
-        itemRepository.saveAll(items);*/
         List<OptionDefaultVO> optionDefaultVOList = productOptions.stream().distinct().collect(Collectors.toList());
 
         return new ProductDefaultVO(product, itemDefaultVOList, optionDefaultVOList);
@@ -106,11 +84,15 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(Long productId) {
+    public CommonResponseCode deleteProduct(Long productId) {
+        // TODO: 2023-02-06 Soft Delete 로 변경
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("NOT FOND PRODUCT"));
-        optionRepository.deleteByProduct(product);
-        itemRepository.deleteByProduct(product);
+
+        productOptionHelperService.deleteOptionByProduct(product);
+        productItemHelperService.deleteItemByProduct(product);
         productRepository.delete(product);
+
+        return CommonResponseCode.SUCCESS;
     }
 }
 

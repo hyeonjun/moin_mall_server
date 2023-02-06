@@ -13,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ProductOptionHelperService {
-    private final OptionRepository optionRepository;
     private final OptionService optionService;
 
     public Option createOption(Product product, OptionDto.Create optionDto) {
@@ -22,5 +21,9 @@ public class ProductOptionHelperService {
 
     public List<Option> createOptionAll(Product product, List<OptionDto.Create> optionsDto) {
         return optionService.createAll(product, optionsDto);
+    }
+
+    public void deleteOptionByProduct(Product product) {
+        optionService.deleteByProduct(product);
     }
 }
