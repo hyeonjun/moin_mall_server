@@ -24,4 +24,8 @@ public class ProductDefaultVO {
         this.items = items;
         this.options = options;
     }
+
+    public void add(ItemDefaultVO itemDefaultVO) {
+        items.add(itemDefaultVO);
+    }
 }

@@ -2,7 +2,6 @@ package com.buying.back.application.product.controller;
 
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.domain.Product;
-import com.buying.back.application.product.repository.ProductRepository;
 import com.buying.back.application.product.service.ProductService;
 import com.buying.back.application.product.service.vo.ProductDefaultVO;
 import com.buying.back.util.response.CommonResponse;
@@ -28,7 +27,7 @@ public class ProductController {
 
     @Operation(summary = "상품 수정", description = "상품 정보 수정 아이템은 수정 불가")
     @PostMapping("/{product_id}")
-    public CommonResponse<Product> updateProduct(@PathVariable("product_id") Long productId, @RequestBody ProductDto.Update dto) {
+    public CommonResponse<ProductDefaultVO> updateProduct(@PathVariable("product_id") Long productId, @RequestBody ProductDto.Update dto) {
         /*
          * 카테고리는 수정 가능
          * 브랜드는 수정 불가능
@@ -37,8 +36,8 @@ public class ProductController {
          * 기존 옵션에 추가 옵션만 가능
          * 아이템은 재고, 가격, 할인가, 할인율, 상품상태(추가예정) 만 가능하게
          */
-        productService.updateProduct(productId, dto);
-        return new CommonResponse<>(null, CommonResponseCode.SUCCESS);
+        ProductDefaultVO productDefaultVO = productService.updateProduct(productId, dto);
+        return new CommonResponse<>(productDefaultVO, CommonResponseCode.SUCCESS);
     }
 
     @DeleteMapping("/{product_id}")

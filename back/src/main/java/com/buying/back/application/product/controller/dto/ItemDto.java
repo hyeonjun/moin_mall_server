@@ -26,6 +26,5 @@ public class ItemDto {
         private Integer price;
         private Integer discountPrice;
         private Integer discountRate;
-        private List<OptionDto.Update> optionsDto;
     }
 }

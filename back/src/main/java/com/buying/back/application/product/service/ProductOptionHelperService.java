@@ -3,10 +3,9 @@ package com.buying.back.application.product.service;
 import com.buying.back.application.product.controller.dto.OptionDto;
 import com.buying.back.application.product.domain.Option;
 import com.buying.back.application.product.domain.Product;
-import com.buying.back.application.product.repository.OptionRepository;
+import com.buying.back.application.product.service.vo.OptionDefaultVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +13,10 @@ import java.util.List;
 @Service
 public class ProductOptionHelperService {
     private final OptionService optionService;
+
+    public List<OptionDefaultVO> getProductOptions(Product product) {
+        return optionService.getProductOptions(product);
+    }
 
     public Option createOption(Product product, OptionDto.Create optionDto) {
         return optionService.create(product, optionDto);

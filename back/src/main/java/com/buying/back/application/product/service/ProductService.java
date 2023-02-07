@@ -2,6 +2,7 @@ package com.buying.back.application.product.service;
 
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
+import com.buying.back.application.product.domain.Item;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.repository.ItemRepository;
 import com.buying.back.application.product.repository.OptionRepository;
@@ -10,7 +11,6 @@ import com.buying.back.application.product.service.vo.ItemDefaultVO;
 import com.buying.back.application.product.service.vo.ItemOptionVO;
 import com.buying.back.application.product.service.vo.OptionDefaultVO;
 import com.buying.back.application.product.service.vo.ProductDefaultVO;
-import com.buying.back.util.response.CommonResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +29,12 @@ public class ProductService {
     private final ProductItemHelperService productItemHelperService;
     private final ProductOptionHelperService productOptionHelperService;
 
+    public void getProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("NOT FOUND PRODUCT"));
+
+
+    }
+
     @Transactional
     public ProductDefaultVO createProduct(ProductDto.Create dto) {
         List<ItemDto.Create> itemsDto = dto.getItemsDto();
@@ -36,8 +42,36 @@ public class ProductService {
         Product product = Product.create(dto);
         productRepository.save(product);
 
-        List<OptionDefaultVO> productOptions = new ArrayList<>();
+        return createItemsAndOptions(product, itemsDto);
+    }
 
+    @Transactional
+    public ProductDefaultVO updateProduct(Long productId, ProductDto.Update dto) {
+        Product product = productRepository.findById(productId).orElseThrow();
+        product.update(dto);
+        productRepository.save(product);
+
+        List<ItemDto.Create> newItemsDto = dto.getNewItemsDto();
+        if(!newItemsDto.isEmpty()) {
+            createItemsAndOptions(product, newItemsDto);
+        }
+        dto.getItemsDto().forEach(productItemHelperService::updateItems);
+
+        List<ItemDefaultVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
+        List<OptionDefaultVO> productOptions = productOptionHelperService.getProductOptions(product);
+        return new ProductDefaultVO(product, itemsByProduct, productOptions);
+    }
+
+    @Transactional
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("NOT FOND PRODUCT"));
+        optionRepository.deleteByProduct(product);
+        itemRepository.deleteByProduct(product);
+        productRepository.delete(product);
+    }
+
+    private ProductDefaultVO createItemsAndOptions(Product product, List<ItemDto.Create> itemsDto) {
+        List<OptionDefaultVO> productOptions = new ArrayList<>();
         List<ItemDefaultVO> itemDefaultVOList = itemsDto.stream().map(itemDto -> {
             StringBuilder itemOptions = new StringBuilder();
 
@@ -62,37 +96,6 @@ public class ProductService {
         List<OptionDefaultVO> optionDefaultVOList = productOptions.stream().distinct().collect(Collectors.toList());
 
         return new ProductDefaultVO(product, itemDefaultVOList, optionDefaultVOList);
-    }
-
-    @Transactional
-    public ProductDefaultVO updateProduct(Long productId, ProductDto.Update dto) {
-        // productItemHelperService.updateItems(dto.getItemsDto());
-        // TODO: 2023-02-02 나중에 리팩토링
-        dto.getItemsDto().forEach(itemDto -> {
-            itemRepository.save(
-                    itemRepository.findById(itemDto.getItemId())
-                            .orElseThrow()
-                            .update(itemDto)
-            );
-        });
-
-        Product product = productRepository.findById(productId).orElseThrow();
-        product.update(dto);
-        productRepository.save(product);
-
-        return new ProductDefaultVO();
-    }
-
-    @Transactional
-    public CommonResponseCode deleteProduct(Long productId) {
-        // TODO: 2023-02-06 Soft Delete 로 변경
-        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("NOT FOND PRODUCT"));
-
-        productOptionHelperService.deleteOptionByProduct(product);
-        productItemHelperService.deleteItemByProduct(product);
-        productRepository.delete(product);
-
-        return CommonResponseCode.SUCCESS;
     }
 }
 

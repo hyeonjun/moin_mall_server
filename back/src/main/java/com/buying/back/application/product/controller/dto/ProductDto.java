@@ -25,5 +25,6 @@ public class ProductDto {
         private Long categoryId;
         private Integer price;
         private List<ItemDto.Update> itemsDto;
+        private List<ItemDto.Create> newItemsDto;
     }
 }
