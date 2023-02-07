@@ -47,4 +47,8 @@ public class ItemService {
                         .update(itemDto)
                 );
     }
+
+    public void deleteByProduct(Product product) {
+        itemRepository.deleteByProduct(product);
+    }
 }

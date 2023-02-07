@@ -1,6 +1,5 @@
 package com.buying.back.application.product.controller.dto;
 
-import com.buying.back.application.product.code.ItemStatus;
 import lombok.Data;
 
 import java.util.List;

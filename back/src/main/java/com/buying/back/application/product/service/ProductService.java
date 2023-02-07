@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ItemRepository itemRepository;
-    private final OptionRepository optionRepository;
     private final ProductItemHelperService productItemHelperService;
     private final ProductOptionHelperService productOptionHelperService;
 
@@ -65,8 +63,8 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("NOT FOND PRODUCT"));
-        optionRepository.deleteByProduct(product);
-        itemRepository.deleteByProduct(product);
+        productItemHelperService.deleteItemByProduct(product);
+        productOptionHelperService.deleteOptionByProduct(product);
         productRepository.delete(product);
     }
 
