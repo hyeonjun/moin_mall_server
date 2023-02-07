@@ -27,4 +27,9 @@ public class ProductDto {
         private List<ItemDto.Update> itemsDto;
         private List<ItemDto.Create> newItemsDto;
     }
+
+    @Data
+    public static class FindAll {
+
+    }
 }

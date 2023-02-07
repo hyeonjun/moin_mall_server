@@ -10,9 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface OptionRepository extends JpaRepository<Option, Long> {
+public interface OptionRepository extends JpaRepository<Option, Long>, OptionQueryRepository {
     void deleteByProduct(Product product);
-    List<OptionDefaultVO> findDistinctByProduct(Product product);
 
     @Query(value = "select option from Option option where option.id in :ids")
     List<ItemOptionVO> findOptionsByIdIn(@Param("ids") List<Long> ids);

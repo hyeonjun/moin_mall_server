@@ -20,7 +20,7 @@ public class OptionService {
     private final OptionRepository optionRepository;
 
     public List<OptionDefaultVO> getProductOptions(Product product) {
-        return optionRepository.findDistinctByProduct(product);
+        return optionRepository.findDistinctNameByProduct(product);
     }
 
     public List<ItemOptionVO> getItemOptions(List<Long> ids) {

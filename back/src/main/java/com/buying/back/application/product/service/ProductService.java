@@ -2,10 +2,7 @@ package com.buying.back.application.product.service;
 
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
-import com.buying.back.application.product.domain.Item;
 import com.buying.back.application.product.domain.Product;
-import com.buying.back.application.product.repository.ItemRepository;
-import com.buying.back.application.product.repository.OptionRepository;
 import com.buying.back.application.product.repository.ProductRepository;
 import com.buying.back.application.product.service.vo.ItemDefaultVO;
 import com.buying.back.application.product.service.vo.ItemOptionVO;
@@ -27,10 +24,13 @@ public class ProductService {
     private final ProductItemHelperService productItemHelperService;
     private final ProductOptionHelperService productOptionHelperService;
 
-    public void getProduct(Long productId) {
+    public ProductDefaultVO getProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("NOT FOUND PRODUCT"));
 
+        List<ItemDefaultVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
+        List<OptionDefaultVO> productOptions = productOptionHelperService.getProductOptions(product);
 
+        return new ProductDefaultVO(product, itemsByProduct, productOptions);
     }
 
     @Transactional
