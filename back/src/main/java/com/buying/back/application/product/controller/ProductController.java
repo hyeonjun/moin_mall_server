@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/pub/product")
@@ -27,14 +29,14 @@ public class ProductController {
 
     @Operation(summary = "상품 등록", description = "상품에 대한 옵션과 각 옵션별 아이템들을 등록합니다.")
     @PostMapping
-    public CommonResponse<ProductDefaultVO> createProduct(@RequestBody ProductDto.Create dto) {
+    public CommonResponse<ProductDefaultVO> createProduct(@RequestBody @Valid ProductDto.Create dto) {
         ProductDefaultVO product = productService.createProduct(dto);
         return new CommonResponse<>(product, CommonResponseCode.SUCCESS);
     }
 
     @Operation(summary = "상품 수정", description = "상품 정보 수정, 옵션 수정 불가")
     @PatchMapping("/{product_id}")
-    public CommonResponse<ProductDefaultVO> updateProduct(@PathVariable("product_id") Long productId, @RequestBody ProductDto.Update dto) {
+    public CommonResponse<ProductDefaultVO> updateProduct(@PathVariable("product_id") Long productId, @RequestBody @Valid ProductDto.Update dto) {
         /*
          * 카테고리는 수정 가능
          * 브랜드는 수정 불가능
