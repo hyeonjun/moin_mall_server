@@ -22,7 +22,7 @@ public class AccountController {
   @GetMapping("/my-information")
   public CommonResponse<AccountDefaultVO> getMyInformation(
     @AuthenticationPrincipal LoginUser loginUser) {
-    AccountDefaultVO vo = accountService.getMyInformation(loginUser.getId());
+    AccountDefaultVO vo = accountService.getMyInformation(loginUser.getAccountId());
     return new CommonResponse<>(vo, SUCCESS);
   }
 }

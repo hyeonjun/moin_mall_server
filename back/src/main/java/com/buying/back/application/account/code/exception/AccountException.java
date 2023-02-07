@@ -20,7 +20,8 @@ public class AccountException extends CommonException {
   public enum AccountExceptionCode implements ResponseCode {
     INVALID_ACCOUNT("AEC-001", "invalid account"),
     ALREADY_EXIST_ACCOUNT("AEC-002", "already exist account"),
-    NOT_FOUND_ACCOUNT("AEC-003", "account not found");
+    NOT_FOUND_ACCOUNT("AEC-003", "account not found"),
+    NOT_CHANGE_PASSWORD("AEC-004", "Password not changed");
 
     private final String code;
     private final String message;

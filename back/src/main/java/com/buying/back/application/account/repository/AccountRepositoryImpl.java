@@ -47,7 +47,8 @@ public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
       account.gradeType,
       account.activated,
       account.signUpDateTime,
-      account.recentSignInDateTime
+      account.recentSignInDateTime,
+      account.brand
     );
   }
 

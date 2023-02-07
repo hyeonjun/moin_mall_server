@@ -1,8 +1,5 @@
 package com.buying.back.infra.config.security;
 
-import static com.buying.back.application.account.code.type.RoleType.ADMIN;
-import static com.buying.back.application.account.code.type.RoleType.USER;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import static com.buying.back.application.account.code.type.RoleType.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -67,8 +66,9 @@ public class SecurityConfig {
 
     http
       .authorizeRequests()
-      .antMatchers("/api/v1/sys/**").hasRole(ADMIN.getValue())
-      .antMatchers("/api/v1/pub/**").hasAnyRole(USER.getValue(), ADMIN.getValue())
+      .antMatchers("/api/v1/sys/**").hasRole(SYSTEM.getValue())
+      .antMatchers("/api/v1/pub/**").hasAnyRole(NORMAL.getValue(), SYSTEM.getValue(),
+                    BRAND_ADMIN.getValue(), BRAND_CREW.getValue())
       .antMatchers(SECURITY_LOG_OUT_URL).authenticated()
       .antMatchers(SECURITY_LOG_IN_URL, "/api/v1/auth/**").permitAll()
       .anyRequest().denyAll();
