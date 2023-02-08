@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class OptionDto {
     @Data
@@ -16,14 +17,14 @@ public class OptionDto {
         @NotBlank
         @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
         private String optionValue;
-        @NotBlank
+        @NotNull
         @Min(0)
         private Integer orderBy;
     }
 
     @Data
     public static class Update {
-        @NotBlank
+        @NotNull
         private Long optionId;
         @NotBlank
         @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)

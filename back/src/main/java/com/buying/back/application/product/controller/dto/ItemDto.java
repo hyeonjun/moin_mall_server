@@ -8,21 +8,22 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ItemDto {
 
     @Data
     public static class Create {
-        @NotBlank(message = "상품명은 필수 값입니다.")
+        @NotNull(message = "상품명은 필수 값입니다.")
         @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
         private String name;
         @JsonIgnore
         private String options;
-        @NotBlank
+        @NotNull
         @Min(value = 0, message = "Item 재고 수량은 0 보다 작을 수 없습니다.")
         private Integer quantity;
-        @NotBlank
+        @NotNull
         @Min(value = 0, message = "가격은 0 보다 커야합니다.")
         private Integer price;
         @Min(value = 0)
@@ -35,15 +36,15 @@ public class ItemDto {
 
     @Data
     public static class Update {
-        @NotBlank
+        @NotNull
         private Long itemId;
         @NotBlank
         @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
         private String name;
-        @NotBlank
+        @NotNull
         @Min(value = 0, message = "Item 재고 수량은 0 보다 작을 수 없습니다.")
         private Integer quantity;
-        @NotBlank
+        @NotNull
         @Min(value = 0, message = "가격은 0 보다 커야합니다.")
         private Integer price;
         @Min(value = 0)
