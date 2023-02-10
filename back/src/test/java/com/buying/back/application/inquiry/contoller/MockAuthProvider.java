@@ -1,17 +1,13 @@
 package com.buying.back.application.inquiry.contoller;
 
 import com.buying.back.application.account.code.type.RoleType;
-import com.buying.back.application.account.controller.dto.CreateAccountDTO;
 import com.buying.back.application.account.domain.Account;
-import com.buying.back.application.account.domain.Brand;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.infra.config.security.CustomAuthenticationProvider;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
 import com.buying.back.util.encryption.PasswordProvider;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;

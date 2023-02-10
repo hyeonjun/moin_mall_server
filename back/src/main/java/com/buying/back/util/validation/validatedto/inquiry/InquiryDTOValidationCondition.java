@@ -20,7 +20,7 @@ public class InquiryDTOValidationCondition {
     InquiryParentType inquiryParentType, InquiryChildType inquiryChildType) {
     if (Objects.nonNull(inquiryParentType) && Objects.nonNull(inquiryChildType)) {
       if (!inquiryParentType.childCheck(inquiryChildType)) {
-        errors.rejectValue("inquiryParentType", "NotMatches",
+        errors.rejectValue("inquiryParentType", "MisMatch",
           "inquiryChildType and inquiryChildType types do not match");
       }
     }

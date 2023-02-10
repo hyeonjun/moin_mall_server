@@ -26,7 +26,6 @@ public class AccountDefaultVO {
 
   protected boolean activated;
 
-  protected Brand brand;
   public AccountDefaultVO(Account account) {
     this.accountId = account.getId();
     this.email = account.getEmail();
@@ -44,12 +43,10 @@ public class AccountDefaultVO {
       }
     );
     this.activated = account.isActivated();
-
-    this.brand = account.getBrand();
   }
 
   protected AccountDefaultVO(Long accountId, String email, String name, LocalDate birthDay,
-    RoleType role, AccountGradeType grade, boolean activated, Brand brand) {
+    RoleType role, AccountGradeType grade, boolean activated) {
     this.accountId = accountId;
     this.email = email;
     this.name = name;
@@ -57,6 +54,5 @@ public class AccountDefaultVO {
     this.role = role;
     this.grade = grade;
     this.activated = activated;
-    this.brand = brand;
   }
 }

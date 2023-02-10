@@ -1,4 +1,4 @@
-package com.buying.back.application.account.controller.dto;
+package com.buying.back.application.account.controller.dto.management;
 
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
