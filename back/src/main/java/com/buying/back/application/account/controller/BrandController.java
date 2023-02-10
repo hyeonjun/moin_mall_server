@@ -1,31 +1,29 @@
 package com.buying.back.application.account.controller;
 
-import com.buying.back.application.account.controller.dto.CreateAccountDTO;
-import com.buying.back.application.account.controller.dto.CreateBrandDTO;
-import com.buying.back.application.account.controller.dto.UpdatePasswordBrandAccountDTO;
+import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
+
 import com.buying.back.application.account.service.BrandService;
-import com.buying.back.application.account.service.vo.AccountDefaultVO;
+import com.buying.back.application.account.service.vo.BrandAccountVO;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
 import com.buying.back.util.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
-import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/brands")
+@RequestMapping("/api/v1/brd/brands")
 @RequiredArgsConstructor
 public class BrandController {
 
   private final BrandService brandService;
 
-
-  @PutMapping("/account/password")
-  public CommonResponse<AccountDefaultVO> essentialUpdatePassword(@AuthenticationPrincipal LoginUser loginUser, UpdatePasswordBrandAccountDTO dto){
-    AccountDefaultVO vo = brandService.essentialUpdatePassword(loginUser.getAccountId(), dto);
+  @GetMapping("/my-information")
+  public CommonResponse<BrandAccountVO> getBrandAccountMyInformation(
+    @AuthenticationPrincipal LoginUser loginUser) {
+    BrandAccountVO vo = brandService.getBrandAccountMyInformation(
+      loginUser.getBrandId(), loginUser.getAccountId());
     return new CommonResponse<>(vo, SUCCESS);
   }
 }

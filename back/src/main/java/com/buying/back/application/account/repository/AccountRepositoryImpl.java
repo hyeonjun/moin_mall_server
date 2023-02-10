@@ -2,7 +2,7 @@ package com.buying.back.application.account.repository;
 
 import static com.buying.back.application.account.domain.QAccount.account;
 
-import com.buying.back.application.account.controller.dto.SearchAccountManagementDTO;
+import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.service.vo.AccountManagementVO;
 import com.buying.back.application.account.service.vo.QAccountManagementVO;

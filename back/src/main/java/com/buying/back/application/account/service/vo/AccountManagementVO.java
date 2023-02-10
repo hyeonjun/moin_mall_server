@@ -26,8 +26,8 @@ public class AccountManagementVO extends AccountDefaultVO {
   @QueryProjection
   public AccountManagementVO(Long accountId, String email, String name, LocalDate birthDay,
                              RoleType role, AccountGradeType grade, boolean activated,
-                             LocalDateTime signUpDateTime, LocalDateTime recentSignInDateTime, Brand brand) {
-    super(accountId, email, name, birthDay, role, grade, activated,brand);
+                             LocalDateTime signUpDateTime, LocalDateTime recentSignInDateTime) {
+    super(accountId, email, name, birthDay, role, grade, activated);
     this.signUpDateTime = signUpDateTime;
     this.recentSignInDateTime = recentSignInDateTime;
   }

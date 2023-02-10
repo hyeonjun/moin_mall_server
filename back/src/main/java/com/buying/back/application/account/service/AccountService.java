@@ -2,9 +2,9 @@ package com.buying.back.application.account.service;
 
 import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
-import com.buying.back.application.account.controller.dto.CreateAccountDTO;
-import com.buying.back.application.account.controller.dto.SearchAccountManagementDTO;
-import com.buying.back.application.account.controller.dto.UpdateActivateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
+import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
@@ -42,7 +42,7 @@ public class AccountService {
     }
 
     dto.setPassword(passwordProvider.encode(dto.getPassword()));
-    account = Account.initAccount()
+    account = Account.initNormalAccount()
       .dto(dto)
       .build();
     accountRepository.save(account);

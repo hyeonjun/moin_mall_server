@@ -67,8 +67,9 @@ public class SecurityConfig {
     http
       .authorizeRequests()
       .antMatchers("/api/v1/sys/**").hasRole(SYSTEM.getValue())
-      .antMatchers("/api/v1/pub/**").hasAnyRole(NORMAL.getValue(), SYSTEM.getValue(),
-                    BRAND_ADMIN.getValue(), BRAND_CREW.getValue())
+      .antMatchers("/api/v1/pub/**").hasAnyRole(NORMAL.getValue(), SYSTEM.getValue())
+      .antMatchers("/api/v1/brd/**").hasAnyRole(
+        BRAND_ADMIN.getValue(), BRAND_CREW.getValue())
       .antMatchers(SECURITY_LOG_OUT_URL).authenticated()
       .antMatchers(SECURITY_LOG_IN_URL, "/api/v1/auth/**").permitAll()
       .anyRequest().denyAll();

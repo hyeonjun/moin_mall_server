@@ -2,8 +2,8 @@ package com.buying.back.application.account.controller;
 
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
-import com.buying.back.application.account.controller.dto.SearchAccountManagementDTO;
-import com.buying.back.application.account.controller.dto.UpdateActivateAccountDTO;
+import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
+import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.service.AccountService;
 import com.buying.back.application.account.service.vo.AccountManagementVO;
 import com.buying.back.util.response.CommonResponse;

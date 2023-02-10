@@ -2,15 +2,25 @@ package com.buying.back.application.account.domain;
 
 import com.buying.back.application.account.code.type.AccountGradeType;
 import com.buying.back.application.account.code.type.RoleType;
-import com.buying.back.application.account.controller.dto.CreateAccountDTO;
-import com.buying.back.application.account.controller.dto.CreateBrandDTO;
+import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.brand.CreateBrandDTO;
 import com.buying.back.application.common.domain.Base;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -77,7 +87,7 @@ public class Account extends Base {
   @Column(name = "grade", length = 191)
   private AccountGradeType gradeType;
 
-  @Builder(builderClassName = "initNormal", builderMethodName = "initAccount")
+  @Builder(builderClassName = "initNormal", builderMethodName = "initNormalAccount")
   public Account(CreateAccountDTO dto) {
     this.email = dto.getEmail();
     this.name = dto.getName();
@@ -93,7 +103,7 @@ public class Account extends Base {
 
   @Builder(builderClassName = "test", builderMethodName = "testAccount")
   public Account(Long id, String email, String name, String password,
-                 RoleType roleType) {
+    RoleType roleType) {
     this.id = id;
     this.email = email;
     this.name = name;
@@ -106,17 +116,18 @@ public class Account extends Base {
   }
 
   @Builder(builderClassName = "initBrandAccount" , builderMethodName = "initBrandAccount")
-  public Account(CreateBrandDTO dto, Brand brand) {
+  public Account(CreateBrandDTO dto, Brand brand, RoleType roleType) {
     this.brand = brand;
-    this.email = dto.getEmail();
-    this.name = dto.getName();
-    this.password = dto.getPassword();
+    this.email = dto.getAccountEmail();
+    this.name = dto.getAccountName();
+    this.password = dto.getAccountPassword();
     this.activated = true;
     this.signUpDateTime = LocalDateTime.now();
     this.recentSignInDateTime = LocalDateTime.now();
-    this.recentPasswordUpdateDateTime = null;
-    this.roleType = dto.getRoleType();
+    this.recentPasswordUpdateDateTime = LocalDateTime.now();
+    this.roleType = roleType;
   }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

@@ -1,4 +1,4 @@
-package com.buying.back.application.account.controller.dto;
+package com.buying.back.application.account.controller.dto.management;
 
 import com.buying.back.application.account.code.type.AccountGradeType;
 import com.buying.back.application.account.code.type.RoleType;
