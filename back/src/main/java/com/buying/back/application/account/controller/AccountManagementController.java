@@ -5,7 +5,8 @@ import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.service.AccountService;
-import com.buying.back.application.account.service.vo.AccountManagementVO;
+import com.buying.back.application.account.service.vo.BrandEnterpriseListVO;
+import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
 import com.buying.back.util.response.CommonResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,31 +26,31 @@ public class AccountManagementController {
   private final AccountService accountService;
 
   @GetMapping
-  public CommonResponse<Page<AccountManagementVO>> getAccountList(SearchAccountManagementDTO dto) {
-    Page<AccountManagementVO> vo = accountService.getAccountList(dto);
+  public CommonResponse<Page<NormalAccountManagementVO>> getNormalAccountList(SearchAccountManagementDTO dto) {
+    Page<NormalAccountManagementVO> vo = accountService.getNormalAccountList(dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
   @GetMapping("/{account-id}")
-  public CommonResponse<AccountManagementVO> getAccountByManagement(
+  public CommonResponse<NormalAccountManagementVO> getNormalAccountByManagement(
     @PathVariable(value = "account-id") Long accountId) {
-    AccountManagementVO vo = accountService.getAccountByManagement(accountId);
+    NormalAccountManagementVO vo = accountService.getNormalAccountByManagement(accountId);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
 
   @PutMapping("/activate:{account-id}")
-  public CommonResponse<AccountManagementVO> activateAccount(
+  public CommonResponse<NormalAccountManagementVO> activateNormalAccount(
     @PathVariable(value = "account-id") Long accountId,
     @Valid @RequestBody UpdateActivateAccountDTO dto) {
-    AccountManagementVO vo = accountService.activateAccount(accountId, dto);
+    NormalAccountManagementVO vo = accountService.activateNormalAccount(accountId, dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 
   @PutMapping("/{account-id}/reset:password")
-  public CommonResponse<AccountManagementVO> resetPassword(
+  public CommonResponse<NormalAccountManagementVO> resetNormalPassword(
     @PathVariable(value = "account-id") Long accountId) {
-    AccountManagementVO resetPassword = accountService.resetPassword(accountId);
+    NormalAccountManagementVO resetPassword = accountService.resetNormalPassword(accountId);
     return new CommonResponse<>(resetPassword, SUCCESS);
   }
 

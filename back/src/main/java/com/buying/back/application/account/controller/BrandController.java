@@ -3,7 +3,7 @@ package com.buying.back.application.account.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.account.service.BrandService;
-import com.buying.back.application.account.service.vo.BrandAccountVO;
+import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
 import com.buying.back.util.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ public class BrandController {
   private final BrandService brandService;
 
   @GetMapping("/my-information")
-  public CommonResponse<BrandAccountVO> getBrandAccountMyInformation(
+  public CommonResponse<BrandAccountDetailVO> getBrandAccountMyInformation(
     @AuthenticationPrincipal LoginUser loginUser) {
-    BrandAccountVO vo = brandService.getBrandAccountMyInformation(
+    BrandAccountDetailVO vo = brandService.getBrandAccountMyInformation(
       loginUser.getBrandId(), loginUser.getAccountId());
     return new CommonResponse<>(vo, SUCCESS);
   }

@@ -4,8 +4,8 @@ import static com.buying.back.application.account.domain.QAccount.account;
 
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.domain.Account;
-import com.buying.back.application.account.service.vo.AccountManagementVO;
-import com.buying.back.application.account.service.vo.QAccountManagementVO;
+import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
+import com.buying.back.application.account.service.vo.QNormalAccountManagementVO;
 import com.buying.back.util.querydsl.CustomQuerydslRepositorySupport;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -16,16 +16,15 @@ import org.springframework.data.domain.Pageable;
 public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
   implements AccountRepositoryCustom {
 
-
   public AccountRepositoryImpl() {
     super(Account.class);
   }
 
   @Override
-  public Page<AccountManagementVO> findAll(Pageable pageable, SearchAccountManagementDTO dto) {
+  public Page<NormalAccountManagementVO> findAll(Pageable pageable, SearchAccountManagementDTO dto) {
     BooleanBuilder whereCondition = getAccountWhereCondition(dto);
 
-    JPAQuery<AccountManagementVO> query = select(getAccountManagementVO())
+    JPAQuery<NormalAccountManagementVO> query = select(getAccountManagementVO())
       .from(account)
       .where(whereCondition)
       .orderBy(account.id.asc());
@@ -37,8 +36,8 @@ public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
     return applyPagination(pageable, query, countQuery);
   }
 
-  private QAccountManagementVO getAccountManagementVO() {
-    return new QAccountManagementVO(
+  private QNormalAccountManagementVO getAccountManagementVO() {
+    return new QNormalAccountManagementVO(
       account.id,
       account.email,
       account.name,
@@ -47,8 +46,7 @@ public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
       account.gradeType,
       account.activated,
       account.signUpDateTime,
-      account.recentSignInDateTime,
-      account.brand
+      account.recentSignInDateTime
     );
   }
 
