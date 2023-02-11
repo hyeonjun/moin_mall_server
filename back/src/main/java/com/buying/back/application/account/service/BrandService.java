@@ -7,17 +7,22 @@ import com.buying.back.application.account.code.exception.BrandException.BrandEx
 import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandCrewAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandAdminAccountDTO;
+import com.buying.back.application.account.controller.dto.management.SearchBrandEnterpriseManagementDTO;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.domain.Brand;
 import com.buying.back.application.account.helper.BrandAccountHelper;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.account.repository.BrandRepository;
-import com.buying.back.application.account.service.vo.BrandAccountVO;
+import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
+import com.buying.back.application.account.service.vo.BrandAccountManagementVO;
 import com.buying.back.application.account.service.vo.BrandDetailVO;
+import com.buying.back.application.account.service.vo.BrandEnterpriseManagementVO;
+import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.util.encryption.PasswordProvider;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,11 +55,11 @@ public class BrandService {
     brandRepository.save(brand);
     Account account = brandAccountHelper.createBrandAdminAccount(dto, brand, RoleType.BRAND_ADMIN);
 
-    return new BrandAccountVO(brand, account);
+    return new BrandAccountDetailVO(brand, account);
   }
 
   @Transactional
-  public BrandAccountVO createBrandCrewAccount(CreateBrandCrewAccountDTO dto) {
+  public BrandAccountDetailVO createBrandCrewAccount(CreateBrandCrewAccountDTO dto) {
     Brand brand = brandRepository.findByBusinessNumber(dto.getBusinessNumber())
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
@@ -64,17 +69,26 @@ public class BrandService {
 
     Account account = brandAccountHelper.createBrandAdminAccount(dto, brand, RoleType.BRAND_CREW);
 
-    return new BrandAccountVO(brand, account);
+    return new BrandAccountDetailVO(brand, account);
   }
 
-  public BrandAccountVO getBrandAccountMyInformation(Long brandId, Long accountId) {
+  public BrandAccountDetailVO getBrandAccountMyInformation(Long brandId, Long accountId) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
-    return new BrandAccountVO(brand, account);
+    return new BrandAccountDetailVO(brand, account);
+  }
+
+  // management
+  public Page<BrandEnterpriseManagementVO> getBrandEnterpriseList(SearchBrandEnterpriseManagementDTO dto) {
+    return brandRepository.findAllEnterprise(dto.getPageRequest(), dto);
+  }
+
+  public Page<BrandAccountManagementVO> getBrandAccountList(Long brandId, PagingDTO dto) {
+    return brandRepository.findAllAccountByBrandId(dto.getPageRequest(), brandId);
   }
 
 }

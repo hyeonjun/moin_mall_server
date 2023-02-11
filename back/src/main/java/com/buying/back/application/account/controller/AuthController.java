@@ -8,7 +8,7 @@ import com.buying.back.application.account.controller.dto.brand.CreateBrandCrewA
 import com.buying.back.application.account.service.AccountService;
 import com.buying.back.application.account.service.BrandService;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
-import com.buying.back.application.account.service.vo.BrandAccountVO;
+import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
 import com.buying.back.application.account.service.vo.BrandDetailVO;
 import com.buying.back.util.response.CommonResponse;
 import javax.validation.Valid;
@@ -34,8 +34,8 @@ public class AuthController {
   }
 
   @PostMapping("/brands/create:account")
-  public CommonResponse<BrandAccountVO> createBrandAccount(@Valid @RequestBody CreateBrandCrewAccountDTO dto) {
-    BrandAccountVO vo = brandService.createBrandCrewAccount(dto);
+  public CommonResponse<BrandAccountDetailVO> createBrandAccount(@Valid @RequestBody CreateBrandCrewAccountDTO dto) {
+    BrandAccountDetailVO vo = brandService.createBrandCrewAccount(dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 

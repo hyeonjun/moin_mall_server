@@ -8,7 +8,7 @@ import com.buying.back.application.account.controller.dto.management.UpdateActiv
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
-import com.buying.back.application.account.service.vo.AccountManagementVO;
+import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
 import com.buying.back.util.email.HtmlEmailType;
 import com.buying.back.util.email.provider.EmailProvider;
 import com.buying.back.util.email.template.AccountEmailTemplate;
@@ -58,26 +58,26 @@ public class AccountService {
   }
 
   // management
-  public Page<AccountManagementVO> getAccountList(SearchAccountManagementDTO dto) {
+  public Page<NormalAccountManagementVO> getNormalAccountList(SearchAccountManagementDTO dto) {
     return accountRepository.findAll(dto.getPageRequest(), dto);
   }
 
-  public AccountManagementVO getAccountByManagement(Long accountId) {
+  public NormalAccountManagementVO getNormalAccountByManagement(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
-    return new AccountManagementVO(account);
+    return new NormalAccountManagementVO(account);
   }
 
-  public AccountManagementVO activateAccount(Long accountId, UpdateActivateAccountDTO dto) {
+  public NormalAccountManagementVO activateNormalAccount(Long accountId, UpdateActivateAccountDTO dto) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
     account.setActivated(dto.getActivated());
     accountRepository.save(account);
-    return new AccountManagementVO(account);
+    return new NormalAccountManagementVO(account);
   }
 
-  public AccountManagementVO resetPassword(Long accountId) {
+  public NormalAccountManagementVO resetNormalPassword(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
@@ -90,7 +90,7 @@ public class AccountService {
         account.getEmail(), password));
 
     accountRepository.save(account);
-    return new AccountManagementVO(account);
+    return new NormalAccountManagementVO(account);
   }
 
 }

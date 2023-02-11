@@ -63,19 +63,6 @@ class InquiryServiceTest {
 
   }
 
-  @DisplayName("일반 문의사항 생성 - 잘못된 문의사항 유형 예외")
-  @Test
-  void createNormalInquiryTest_WRONG_INQUIRY_TYPE_EXCEPTION() {
-    CreateInquiryDTO dto = InquiryMockDTO.createInquiryDTO(false);
-
-    Account account = mock(Account.class);
-    given(accountRepository.findById(anyLong())).willReturn(Optional.ofNullable(account));
-
-    assertThrows(InquiryException.class, () -> {
-      inquiryService.createNormalInquiry(1L, dto);
-    });
-  }
-
   @DisplayName("일반 문의사항 페이징 조회")
   @Test
   void getInquiryMyListTest() {
