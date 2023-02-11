@@ -1,11 +1,14 @@
 package com.buying.back.application.account.repository;
 
+import static com.buying.back.application.account.domain.QAccount.account;
 import static com.buying.back.application.account.domain.QBrand.brand;
 
 import com.buying.back.application.account.controller.dto.management.SearchBrandEnterpriseManagementDTO;
 import com.buying.back.application.account.domain.Brand;
-import com.buying.back.application.account.service.vo.BrandEnterpriseListVO;
-import com.buying.back.application.account.service.vo.QBrandEnterpriseListVO;
+import com.buying.back.application.account.service.vo.BrandAccountManagementVO;
+import com.buying.back.application.account.service.vo.BrandEnterpriseManagementVO;
+import com.buying.back.application.account.service.vo.QBrandAccountManagementVO;
+import com.buying.back.application.account.service.vo.QBrandEnterpriseManagementVO;
 import com.buying.back.util.querydsl.CustomQuerydslRepositorySupport;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -22,11 +25,11 @@ public class BrandRepositoryImpl extends CustomQuerydslRepositorySupport
   }
 
   @Override
-  public Page<BrandEnterpriseListVO> findAllEnterprise(Pageable pageable,
+  public Page<BrandEnterpriseManagementVO> findAllEnterprise(Pageable pageable,
     SearchBrandEnterpriseManagementDTO dto) {
     BooleanBuilder whereCondition = getBrandEnterpriseWhereCondition(dto);
 
-    JPAQuery<BrandEnterpriseListVO> query = select(getBrandEnterpriseVO())
+    JPAQuery<BrandEnterpriseManagementVO> query = select(getBrandEnterpriseVO())
       .from(brand)
       .where(whereCondition)
       .orderBy(brand.id.asc());
@@ -38,8 +41,24 @@ public class BrandRepositoryImpl extends CustomQuerydslRepositorySupport
     return applyPagination(pageable, query, countQuery);
   }
 
-  private QBrandEnterpriseListVO getBrandEnterpriseVO() {
-    return new QBrandEnterpriseListVO(
+  @Override
+  public Page<BrandAccountManagementVO> findAllAccountByBrandId(Pageable pageable, Long brandId) {
+    JPAQuery<BrandAccountManagementVO> query = select(getBrandAccountVO())
+      .from(brand)
+      .leftJoin(account).on(account.brand.id.eq(brand.id))
+      .where(brand.id.eq(brandId))
+      .orderBy(account.id.asc());
+
+    JPAQuery<Long> countQuery = select(account.count())
+      .from(brand)
+      .leftJoin(account).on(account.brand.id.eq(brand.id))
+      .where(brand.id.eq(brandId));
+
+    return applyPagination(pageable, query, countQuery);
+  }
+
+  private QBrandEnterpriseManagementVO getBrandEnterpriseVO() {
+    return new QBrandEnterpriseManagementVO(
       brand.id,
       brand.brandName,
       brand.url,
@@ -48,6 +67,18 @@ public class BrandRepositoryImpl extends CustomQuerydslRepositorySupport
       brand.activated
     );
   }
+
+  private QBrandAccountManagementVO getBrandAccountVO() {
+    return new QBrandAccountManagementVO(
+      account.id,
+      account.email,
+      account.name,
+      account.roleType,
+      account.activated,
+      account.recentSignInDateTime
+    );
+  }
+
 
   private BooleanBuilder getBrandEnterpriseWhereCondition(SearchBrandEnterpriseManagementDTO dto) {
     BooleanBuilder whereCondition = new BooleanBuilder();

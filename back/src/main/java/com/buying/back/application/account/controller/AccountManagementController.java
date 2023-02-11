@@ -5,7 +5,6 @@ import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.service.AccountService;
-import com.buying.back.application.account.service.vo.BrandEnterpriseListVO;
 import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
 import com.buying.back.util.response.CommonResponse;
 import javax.validation.Valid;

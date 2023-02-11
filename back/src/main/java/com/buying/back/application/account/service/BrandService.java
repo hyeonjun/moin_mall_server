@@ -14,8 +14,10 @@ import com.buying.back.application.account.helper.BrandAccountHelper;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.account.repository.BrandRepository;
 import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
+import com.buying.back.application.account.service.vo.BrandAccountManagementVO;
 import com.buying.back.application.account.service.vo.BrandDetailVO;
-import com.buying.back.application.account.service.vo.BrandEnterpriseListVO;
+import com.buying.back.application.account.service.vo.BrandEnterpriseManagementVO;
+import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.util.encryption.PasswordProvider;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -81,8 +83,12 @@ public class BrandService {
   }
 
   // management
-  public Page<BrandEnterpriseListVO> getBrandEnterpriseList(SearchBrandEnterpriseManagementDTO dto) {
+  public Page<BrandEnterpriseManagementVO> getBrandEnterpriseList(SearchBrandEnterpriseManagementDTO dto) {
     return brandRepository.findAllEnterprise(dto.getPageRequest(), dto);
+  }
+
+  public Page<BrandAccountManagementVO> getBrandAccountList(Long brandId, PagingDTO dto) {
+    return brandRepository.findAllAccountByBrandId(dto.getPageRequest(), brandId);
   }
 
 }

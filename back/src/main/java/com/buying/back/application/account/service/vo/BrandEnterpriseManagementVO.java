@@ -1,13 +1,12 @@
 package com.buying.back.application.account.service.vo;
 
-import com.buying.back.application.account.domain.Brand;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BrandEnterpriseListVO {
+public class BrandEnterpriseManagementVO {
 
   private Long brandId;
   private String brandName;
@@ -19,7 +18,7 @@ public class BrandEnterpriseListVO {
   private Boolean activated;
 
   @QueryProjection
-  public BrandEnterpriseListVO(Long brandId, String brandName, String url,
+  public BrandEnterpriseManagementVO(Long brandId, String brandName, String url,
     String representativeName,
     String representativeEmail, Boolean activated) {
     this.brandId = brandId;
