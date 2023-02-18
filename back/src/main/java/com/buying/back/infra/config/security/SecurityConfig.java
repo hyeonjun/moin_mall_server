@@ -124,19 +124,4 @@ public class SecurityConfig {
     return filter;
   }
 
-  @Profile({"local", "dev"})
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-
-    configuration.addAllowedOrigin("*");
-    configuration.addAllowedHeader("*");
-    configuration.addAllowedMethod("*");
-    configuration.setAllowCredentials(false);
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
-
 }
