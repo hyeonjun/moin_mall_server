@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/pub/product")
+@RequestMapping("/api/v1/pub/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
