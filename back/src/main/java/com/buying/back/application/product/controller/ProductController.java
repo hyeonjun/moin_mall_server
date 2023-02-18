@@ -35,7 +35,7 @@ public class ProductController {
     }
 
     @Operation(summary = "상품 수정", description = "상품 정보 수정, 옵션 수정 불가")
-    @PatchMapping("/{product-id}")
+    @PutMapping("/{product-id}")
     public CommonResponse<ProductDefaultVO> updateProduct(@PathVariable("product-id") Long productId, @RequestBody @Valid ProductDto.Update dto) {
         /*
          * 카테고리는 수정 가능
