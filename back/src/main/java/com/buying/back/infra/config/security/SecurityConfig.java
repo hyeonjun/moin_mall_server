@@ -123,7 +123,7 @@ public class SecurityConfig {
     return filter;
   }
 
-  @Profile(value = {"local", "dev"})
+  @Profile({"local", "dev"})
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
