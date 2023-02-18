@@ -21,8 +21,8 @@ public class ProductController {
     private final ProductService productService;
 
     @Operation(summary = "상품 단건 조회", description = "상품에 대한 각 옵션과 각 옵션별 아이템들을 조회합니다.")
-    @GetMapping("/{product_id}")
-    public CommonResponse<ProductDefaultVO> getProduct(@PathVariable("product_id") Long productId) {
+    @GetMapping("/{product-id}")
+    public CommonResponse<ProductDefaultVO> getProduct(@PathVariable("product-id") Long productId) {
         ProductDefaultVO productVO = productService.getProduct(productId);
         return new CommonResponse<>(productVO, CommonResponseCode.SUCCESS);
     }
@@ -35,8 +35,8 @@ public class ProductController {
     }
 
     @Operation(summary = "상품 수정", description = "상품 정보 수정, 옵션 수정 불가")
-    @PatchMapping("/{product_id}")
-    public CommonResponse<ProductDefaultVO> updateProduct(@PathVariable("product_id") Long productId, @RequestBody @Valid ProductDto.Update dto) {
+    @PatchMapping("/{product-id}")
+    public CommonResponse<ProductDefaultVO> updateProduct(@PathVariable("product-id") Long productId, @RequestBody @Valid ProductDto.Update dto) {
         /*
          * 카테고리는 수정 가능
          * 브랜드는 수정 불가능
@@ -49,8 +49,8 @@ public class ProductController {
     }
 
     @Operation(summary = "상품 삭제", description = "상품에 대한 옵션들과 각 옵션별 아이템들을 삭제합니다.")
-    @DeleteMapping("/{product_id}")
-    public CommonResponse<Product> deleteProduct(@PathVariable("product_id") Long productId) {
+    @DeleteMapping("/{product-id}")
+    public CommonResponse<Product> deleteProduct(@PathVariable("product-id") Long productId) {
         productService.deleteProduct(productId);
 
         return new CommonResponse<>(null, CommonResponseCode.SUCCESS);
