@@ -1,6 +1,7 @@
 package com.buying.back.infra.config.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import static com.buying.back.application.account.code.type.RoleType.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
   public static final String SECURITY_LOG_IN_URL = "/api/login";
@@ -122,6 +124,22 @@ public class SecurityConfig {
       e.printStackTrace();
     }
     return filter;
+  }
+
+  @Profile({"local", "dev"})
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    log.info("security cors config");
+    CorsConfiguration configuration = new CorsConfiguration();
+
+    configuration.addAllowedOrigin("*");
+    configuration.addAllowedHeader("*");
+    configuration.addAllowedMethod("*");
+    configuration.setAllowCredentials(false);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
   }
 
 }
