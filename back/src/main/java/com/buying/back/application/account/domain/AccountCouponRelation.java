@@ -3,6 +3,8 @@ package com.buying.back.application.account.domain;
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.coupon.domain.Coupon;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,12 +41,22 @@ public class AccountCouponRelation extends Base {
   @JsonBackReference
   private Coupon coupon;
 
+  @Column(name = "coupon_issued_date", nullable = false)
+  private LocalDate couponIssuedDate;
+  @Column(name = "expiration_date", nullable = false)
+  private LocalDate expirationDate;
+
+  @Setter
+  private LocalDateTime usedDateTime;
+
   @Setter
   private boolean used;
 
   public AccountCouponRelation(Account account, Coupon coupon) {
     this.account = account;
     this.coupon = coupon;
+    this.couponIssuedDate = LocalDate.now();
+    this.expirationDate = LocalDate.now().plusDays(coupon.getExpirationPeriod());
   }
 
   @Override

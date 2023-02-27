@@ -8,6 +8,7 @@ import com.buying.back.application.account.controller.dto.management.UpdateActiv
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.helper.AccountCouponHelper;
 import com.buying.back.application.account.repository.AccountRepository;
+import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
 import com.buying.back.application.common.dto.PagingDTO;
@@ -61,7 +62,7 @@ public class AccountService {
     return new AccountDefaultVO(account);
   }
 
-  public Page<CouponVO> getMyCouponList(Long loginUserId, PagingDTO dto) {
+  public Page<AccountCouponVO> getMyCouponList(Long loginUserId, PagingDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
     return accountCouponHelper.getCouponListByAccount(dto, account);

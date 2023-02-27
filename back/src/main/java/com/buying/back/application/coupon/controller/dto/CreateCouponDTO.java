@@ -29,6 +29,5 @@ public class CreateCouponDTO {
   @Digits(integer = 19, fraction = 0)
   private BigDecimal orderMinimumAmount;
   @NotNull
-  @DateTimeFormat(iso = ISO.DATE)
-  private LocalDate expirationDate;
+  private Integer expirationPeriod;
 }

@@ -1,10 +1,12 @@
 package com.buying.back.application.coupon.repository;
 
 import static com.buying.back.application.account.domain.QAccount.account;
-import static com.buying.back.application.coupon.domain.QAccountCouponRelation.accountCouponRelation;
+import static com.buying.back.application.account.domain.QAccountCouponRelation.accountCouponRelation;
 import static com.buying.back.application.coupon.domain.QCoupon.coupon;
 
 import com.buying.back.application.account.domain.Account;
+import com.buying.back.application.account.service.vo.AccountCouponVO;
+import com.buying.back.application.account.service.vo.QAccountCouponVO;
 import com.buying.back.application.coupon.controller.dto.SearchCouponDTO;
 import com.buying.back.application.coupon.domain.Coupon;
 import com.buying.back.application.coupon.service.vo.CouponVO;
@@ -30,7 +32,7 @@ public class CouponRepositoryImpl extends CustomQuerydslRepositorySupport
     JPAQuery<CouponVO> query = select(getCouponVO())
       .from(coupon)
       .where(whereCondition)
-      .orderBy(coupon.expirationDate.desc());
+      .orderBy(coupon.id.desc());
 
     JPAQuery<Long> countQuery = select(coupon.count())
       .from(coupon)
@@ -40,14 +42,14 @@ public class CouponRepositoryImpl extends CustomQuerydslRepositorySupport
   }
 
   @Override
-  public Page<CouponVO> findAllByAccount(Pageable pageable, Account byAccount) {
-    JPAQuery<CouponVO> query = select(getCouponVO())
+  public Page<AccountCouponVO> findAllAccountCoupon(Pageable pageable, Account byAccount) {
+    JPAQuery<AccountCouponVO> query = select(getAccountCouponVO())
       .from(coupon)
       .innerJoin(accountCouponRelation).on(coupon.eq(accountCouponRelation.coupon))
       .innerJoin(accountCouponRelation.account, account)
       .where(account.eq(byAccount)
         .and(coupon.activated.isTrue()))
-      .orderBy(coupon.expirationDate.desc());
+      .orderBy(coupon.id.desc());
 
     JPAQuery<Long> countQuery = select(coupon.count())
       .from(coupon)
@@ -65,8 +67,21 @@ public class CouponRepositoryImpl extends CustomQuerydslRepositorySupport
       coupon.name,
       coupon.discountPercent,
       coupon.orderMinimumAmount,
-      coupon.expirationDate,
+      coupon.expirationPeriod,
       coupon.activated
+    );
+  }
+
+  private QAccountCouponVO getAccountCouponVO() {
+    return new QAccountCouponVO(
+      accountCouponRelation.id,
+      coupon.name,
+      coupon.discountPercent,
+      coupon.orderMinimumAmount,
+      accountCouponRelation.couponIssuedDate,
+      accountCouponRelation.expirationDate,
+      accountCouponRelation.used,
+      accountCouponRelation.usedDateTime
     );
   }
 
@@ -77,8 +92,8 @@ public class CouponRepositoryImpl extends CustomQuerydslRepositorySupport
       whereCondition.and(coupon.activated.eq(dto.getActivated()));
     }
 
-    if (Objects.nonNull(dto.getExpirationDate())) {
-      whereCondition.and(coupon.expirationDate.goe(dto.getExpirationDate()));
+    if (Objects.nonNull(dto.getExpirationPeriod())) {
+      whereCondition.and(coupon.expirationPeriod.goe(dto.getExpirationPeriod()));
     }
 
     return whereCondition;

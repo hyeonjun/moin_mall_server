@@ -12,7 +12,6 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 public class SearchCouponDTO extends PagingDTO {
 
   private Boolean activated;
-  @DateTimeFormat(iso = ISO.DATE)
-  private LocalDate expirationDate;
+  private Integer expirationPeriod;
 
 }

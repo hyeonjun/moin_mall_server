@@ -3,6 +3,7 @@ package com.buying.back.application.account.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.account.service.AccountService;
+import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.coupon.service.vo.CouponVO;
@@ -32,9 +33,9 @@ public class AccountController {
   }
 
   @GetMapping("/coupons/my-coupon-list")
-  public CommonResponse<Page<CouponVO>> getMyCouponList(@AuthenticationPrincipal LoginUser loginUser,
+  public CommonResponse<Page<AccountCouponVO>> getMyCouponList(@AuthenticationPrincipal LoginUser loginUser,
     @Valid PagingDTO dto) {
-    Page<CouponVO> list = accountService.getMyCouponList(loginUser.getAccountId(), dto);
+    Page<AccountCouponVO> list = accountService.getMyCouponList(loginUser.getAccountId(), dto);
     return new CommonResponse<>(list, CommonResponseCode.SUCCESS);
   }
 }

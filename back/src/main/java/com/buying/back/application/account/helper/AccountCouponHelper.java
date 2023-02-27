@@ -8,6 +8,7 @@ import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.domain.AccountCouponRelation;
 import com.buying.back.application.account.repository.AccountCouponRelationRepository;
 import com.buying.back.application.account.repository.AccountRepository;
+import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.application.coupon.code.exception.CouponException;
 import com.buying.back.application.coupon.code.exception.CouponException.CouponExceptionCode;
@@ -49,8 +50,8 @@ public class AccountCouponHelper {
     accountCouponRelationRepository.save(relation);
   }
 
-  public Page<CouponVO> getCouponListByAccount(PagingDTO dto, Account account) {
-    return couponRepository.findAllByAccount(dto.getPageRequest(), account);
+  public Page<AccountCouponVO> getCouponListByAccount(PagingDTO dto, Account account) {
+    return couponRepository.findAllAccountCoupon(dto.getPageRequest(), account);
   }
 
 }

@@ -39,8 +39,8 @@ public class Coupon extends Base {
   private BigDecimal orderMinimumAmount;
 
   @Setter
-  @Column(name = "expiration_date", nullable = false)
-  private LocalDate expirationDate;
+  @Column(name = "expiration_period", nullable = false)
+  private int expirationPeriod;
 
   @Setter
   private boolean activated;
@@ -53,7 +53,7 @@ public class Coupon extends Base {
     this.name=dto.getName();
     this.discountPercent=dto.getDiscountPercent();
     this.orderMinimumAmount=dto.getOrderMinimumAmount();
-    this.expirationDate=dto.getExpirationDate();
+    this.expirationPeriod=dto.getExpirationPeriod();
     this.activated=true;
   }
 

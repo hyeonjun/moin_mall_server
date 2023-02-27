@@ -14,7 +14,6 @@ public class UpdateCouponDTO {
   @NotNull
   private Boolean activated;
   @NotNull
-  @DateTimeFormat(iso = ISO.DATE)
-  private LocalDate expirationDate;
+  private Integer expirationPeriod;
 
 }
