@@ -29,6 +29,8 @@ public class Coupon extends Base {
   @Column(name = "coupon_id")
   private Long id;
 
+  // TODO: 2023/02/27 coupon code 컬럼 추가: yyyyMMdd_Keyword
+
   @Column(name = "coupon_name", nullable = false, unique = true)
   private String name;
 
