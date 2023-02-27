@@ -26,7 +26,7 @@ public class CouponService {
 
   @Transactional
   public CouponVO createCoupon(CreateCouponDTO dto) {
-    Coupon coupon = couponRepository.findByName(dto.getName())
+    Coupon coupon = couponRepository.findByNameStartsWith(dto.getName())
       .orElse(null);
 
     if (Objects.nonNull(coupon)) {
@@ -50,11 +50,7 @@ public class CouponService {
     Coupon coupon = couponRepository.findById(couponId)
       .orElseThrow(() -> new CouponException(CouponExceptionCode.NOT_FOUND_COUPON));
 
-    if (dto.getExpirationDate().compareTo(coupon.getExpirationDate()) < 1) {
-      throw new CouponException(CouponExceptionCode.INVALID_COUPON);
-    }
-
-    coupon.setExpirationDate(dto.getExpirationDate());
+    coupon.setExpirationPeriod(dto.getExpirationPeriod());
 
     if (Boolean.TRUE.equals(dto.getActivated())) {
       coupon.setActivated(dto.getActivated());

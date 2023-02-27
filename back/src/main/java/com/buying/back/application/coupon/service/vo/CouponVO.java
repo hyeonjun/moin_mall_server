@@ -17,17 +17,17 @@ public class CouponVO {
   private String name;
   private BigDecimal discountPercent;
   private BigDecimal orderMinimumAmount;
-  private LocalDate expirationDate;
+  private int expirationPeriod;
   private boolean activated;
 
   @QueryProjection
   public CouponVO(Long id, String name, BigDecimal discountPercent, BigDecimal orderMinimumAmount,
-    LocalDate expirationDate, boolean activated) {
+    int expirationPeriod, boolean activated) {
     this.id = id;
     this.name = name;
     this.discountPercent = discountPercent;
     this.orderMinimumAmount = orderMinimumAmount;
-    this.expirationDate = expirationDate;
+    this.expirationPeriod = expirationPeriod;
     this.activated = activated;
   }
 
@@ -37,7 +37,7 @@ public class CouponVO {
     vo.setName(coupon.getName());
     vo.setDiscountPercent(coupon.getDiscountPercent());
     vo.setOrderMinimumAmount(coupon.getOrderMinimumAmount());
-    vo.setExpirationDate(coupon.getExpirationDate());
+    vo.setExpirationPeriod(coupon.getExpirationPeriod());
     vo.setActivated(coupon.isActivated());
     return vo;
   }
