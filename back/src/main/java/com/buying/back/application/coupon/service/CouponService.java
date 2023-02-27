@@ -26,7 +26,7 @@ public class CouponService {
 
   @Transactional
   public CouponVO createCoupon(CreateCouponDTO dto) {
-    Coupon coupon = couponRepository.findByName(dto.getName())
+    Coupon coupon = couponRepository.findByNameStartsWith(dto.getName())
       .orElse(null);
 
     if (Objects.nonNull(coupon)) {

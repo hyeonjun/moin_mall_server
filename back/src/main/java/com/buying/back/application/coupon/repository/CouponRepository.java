@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long>, CouponRepositoryCustom {
 
-  Optional<Coupon> findByName(String name);
+  Optional<Coupon> findByNameStartsWith(String name);
 
 }
