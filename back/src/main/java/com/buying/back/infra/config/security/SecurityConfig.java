@@ -132,7 +132,7 @@ public class SecurityConfig {
     log.info("security cors config");
     CorsConfiguration configuration = new CorsConfiguration();
 
-    configuration.addAllowedOrigin("*");
+    configuration.addAllowedOriginPattern("*");
     configuration.addAllowedHeader("*");
     configuration.addAllowedMethod("*");
     configuration.setAllowCredentials(false);
