@@ -5,8 +5,10 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@PersistJobDataAfterExecution
 @DisallowConcurrentExecution
 public class CheckAccountBirthDayJob implements Job {
 
@@ -15,6 +17,6 @@ public class CheckAccountBirthDayJob implements Job {
 
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
-    batchService.batchCheckAccountBirthDay();
+    batchService.batchCheckNormalAccountBirthDay();
   }
 }

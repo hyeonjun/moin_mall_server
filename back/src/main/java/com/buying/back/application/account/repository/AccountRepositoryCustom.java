@@ -11,5 +11,6 @@ import org.springframework.data.domain.Pageable;
 public interface AccountRepositoryCustom {
 
   Page<NormalAccountManagementVO> findAll(Pageable pageable, SearchAccountManagementDTO dto);
-  List<Account> findAllBirthDayAccountWithCursor(LocalDate today, long cursor, long limit);
+  List<Account> findNormalAccountBirthDayAccountWithCursor(
+    LocalDate today, long cursor, long limit);
 }

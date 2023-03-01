@@ -28,22 +28,23 @@ public class BatchService {
   // 이렇게 하면 Chunk 단위로 작업이 실행되고 실패했을 경우 그만큼 롤백되어 이전 커밋된 Chunk 들은 반영이 된다는 것
 
   @Transactional
-  public void batchCheckAccountBirthDay() {
+  public void batchCheckNormalAccountBirthDay() {
     long cursor = 0L;
     long accountListSize;
 
     LocalDate today = LocalDate.now();
-    String couponSuffix = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    Coupon birthDayCoupon = couponRepository.findByNameStartsWith(couponSuffix.concat("_생일"))
+    String todayYear = today.format(DateTimeFormatter.ofPattern("yyyy"));
+    String couponSuffix = todayYear.concat("-BIRTH");
+    Coupon birthDayCoupon = couponRepository.findByNameStartsWith(couponSuffix)
       .orElseThrow(() -> new CouponException(CouponExceptionCode.NOT_FOUND_COUPON));
 
     do {
       List<Account> birthDayAccounts = accountRepository
-        .findAllBirthDayAccountWithCursor(today, cursor, TRANSACTION_CHUNK_SIZE);
+        .findNormalAccountBirthDayAccountWithCursor(today, cursor, TRANSACTION_CHUNK_SIZE);
       accountListSize = birthDayAccounts.size();
 
       for (Account account: birthDayAccounts) {
-        accountCouponHelper.assignCoupon(account.getId(), birthDayCoupon.getId());
+        accountCouponHelper.assignCoupon(account, birthDayCoupon);
         cursor = account.getId();
       }
     } while(accountListSize == TRANSACTION_CHUNK_SIZE);

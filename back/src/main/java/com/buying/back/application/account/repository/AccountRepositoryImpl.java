@@ -2,6 +2,7 @@ package com.buying.back.application.account.repository;
 
 import static com.buying.back.application.account.domain.QAccount.account;
 
+import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
@@ -39,9 +40,11 @@ public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
   }
 
   @Override
-  public List<Account> findAllBirthDayAccountWithCursor(LocalDate today, long cursor, long limit) {
+  public List<Account> findNormalAccountBirthDayAccountWithCursor(
+    LocalDate today, long cursor, long limit) {
     return selectFrom(account)
       .where(account.id.gt(cursor)
+        .and(account.roleType.eq(RoleType.NORMAL))
         .and(account.birthDay.eq(today)))
       .orderBy(account.id.asc()) // 오름차순으로 순서 정렬 주의
       .limit(limit)
