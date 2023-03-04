@@ -44,7 +44,12 @@ public class BatchService {
       accountListSize = birthDayAccounts.size();
 
       for (Account account: birthDayAccounts) {
-        accountCouponHelper.assignCoupon(account, birthDayCoupon);
+        try {
+          accountCouponHelper.assignCoupon(account, birthDayCoupon);
+        } catch (Exception e) {
+          log.error("account id: {} error", account.getId());
+          log.error(e.getMessage());
+        }
         cursor = account.getId();
       }
     } while(accountListSize == TRANSACTION_CHUNK_SIZE);
