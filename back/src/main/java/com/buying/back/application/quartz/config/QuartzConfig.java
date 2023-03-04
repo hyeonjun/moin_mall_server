@@ -27,7 +27,7 @@ public class QuartzConfig {
     return TriggerBuilder.newTrigger().forJob(checkAccountBirthDayDetail)
       .withIdentity("Check_Account_Birth_Day_Trigger")
       .withDescription("Check_Account_Birth_Day_Trigger")
-      .withSchedule(cronSchedule("0 0 4 * * ?")) // 매일 오전 4시
+      .withSchedule(cronSchedule("0 0/1 * * * ?")) // 매일 오전 4시
       .build();
   }
 
