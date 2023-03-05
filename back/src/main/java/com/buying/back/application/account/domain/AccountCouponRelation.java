@@ -68,7 +68,7 @@ public class AccountCouponRelation extends Base {
       return false;
     }
     AccountCouponRelation that = (AccountCouponRelation) o;
-    return Objects.equals(id, that.id);
+    return Objects.equals(getId(), that.getId());
   }
 
   @Override
