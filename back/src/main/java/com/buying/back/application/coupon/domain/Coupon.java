@@ -68,7 +68,7 @@ public class Coupon extends Base {
       return false;
     }
     Coupon coupon = (Coupon) o;
-    return Objects.equals(id, coupon.id);
+    return Objects.equals(getId(), coupon.getId());
   }
 
   @Override

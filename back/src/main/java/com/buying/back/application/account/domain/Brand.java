@@ -2,6 +2,7 @@ package com.buying.back.application.account.domain;
 
 import com.buying.back.application.account.controller.dto.brand.CreateBrandAdminAccountDTO;
 import com.buying.back.application.common.domain.Base;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,5 +59,22 @@ public class Brand extends Base {
     this.password = dto.getBrandPassword();
     this.url = dto.getUrl();
     this.activated = true;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Brand)) {
+      return false;
+    }
+    Brand brand = (Brand) o;
+    return Objects.equals(getId(), brand.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
