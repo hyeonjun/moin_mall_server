@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class AccountManagementVO extends AccountDefaultVO {
+public class NormalAccountManagementVO extends AccountDefaultVO {
 
   protected LocalDateTime signUpDateTime;
   protected LocalDateTime recentSignInDateTime;
 
-  public AccountManagementVO(Account account) {
+  public NormalAccountManagementVO(Account account) {
     super(account);
     this.signUpDateTime = account.getSignUpDateTime();
     this.recentSignInDateTime = account.getRecentSignInDateTime();
   }
 
   @QueryProjection
-  public AccountManagementVO(Long accountId, String email, String name, LocalDate birthDay,
+  public NormalAccountManagementVO(Long accountId, String email, String name, LocalDate birthDay,
     RoleType role, AccountGradeType grade, boolean activated,
     LocalDateTime signUpDateTime, LocalDateTime recentSignInDateTime) {
     super(accountId, email, name, birthDay, role, grade, activated);

@@ -2,8 +2,10 @@ package com.buying.back.application.account.domain;
 
 import com.buying.back.application.account.code.type.AccountGradeType;
 import com.buying.back.application.account.code.type.RoleType;
-import com.buying.back.application.account.controller.dto.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.brand.CreateBrandDTO;
 import com.buying.back.application.common.domain.Base;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -15,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -59,6 +63,7 @@ public class Account extends Base {
   @Column(name = "activated", nullable = false)
   private boolean activated;
 
+  @Setter
   private LocalDate birthDay;
   private LocalDateTime signUpDateTime;
 
@@ -69,15 +74,20 @@ public class Account extends Base {
   @Setter
   private LocalDateTime recentPasswordUpdateDateTime;
 
+  @ManyToOne
+  @JoinColumn(name = "account_brand_id", referencedColumnName = "brand_id")
+  @JsonBackReference
+  private Brand brand;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "role", length = 191, nullable = false)
   private RoleType roleType;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "grade", length = 191, nullable = false)
+  @Column(name = "grade", length = 191)
   private AccountGradeType gradeType;
 
-  @Builder(builderClassName = "init", builderMethodName = "initAccount")
+  @Builder(builderClassName = "initNormal", builderMethodName = "initNormalAccount")
   public Account(CreateAccountDTO dto) {
     this.email = dto.getEmail();
     this.name = dto.getName();
@@ -87,7 +97,7 @@ public class Account extends Base {
     this.signUpDateTime = LocalDateTime.now();
     this.recentSignInDateTime = LocalDateTime.now();
     this.recentPasswordUpdateDateTime = LocalDateTime.now();
-    this.roleType = RoleType.USER;
+    this.roleType = RoleType.NORMAL;
     this.gradeType = AccountGradeType.LV1;
   }
 
@@ -99,6 +109,19 @@ public class Account extends Base {
     this.name = name;
     this.password = password;
     this.birthDay = LocalDate.now();
+    this.signUpDateTime = LocalDateTime.now();
+    this.recentSignInDateTime = LocalDateTime.now();
+    this.recentPasswordUpdateDateTime = LocalDateTime.now();
+    this.roleType = roleType;
+  }
+
+  @Builder(builderClassName = "initBrandAccount" , builderMethodName = "initBrandAccount")
+  public Account(CreateBrandDTO dto, Brand brand, RoleType roleType) {
+    this.brand = brand;
+    this.email = dto.getAccountEmail();
+    this.name = dto.getAccountName();
+    this.password = dto.getAccountPassword();
+    this.activated = true;
     this.signUpDateTime = LocalDateTime.now();
     this.recentSignInDateTime = LocalDateTime.now();
     this.recentPasswordUpdateDateTime = LocalDateTime.now();

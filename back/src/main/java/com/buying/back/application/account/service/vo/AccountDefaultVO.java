@@ -5,6 +5,8 @@ import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.domain.Account;
 import java.time.LocalDate;
 import java.util.Optional;
+
+import com.buying.back.application.account.domain.Brand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,9 +40,8 @@ public class AccountDefaultVO {
         this.grade = gradeType;
         this.addDiscount = gradeType.getAddDiscount();
         this.addAccumulate = gradeType.getAddAccumulate();
-      });
-
-
+      }
+    );
     this.activated = account.isActivated();
   }
 

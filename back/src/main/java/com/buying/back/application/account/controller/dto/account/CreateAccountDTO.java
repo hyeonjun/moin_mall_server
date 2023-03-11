@@ -1,4 +1,4 @@
-package com.buying.back.application.account.controller.dto;
+package com.buying.back.application.account.controller.dto.account;
 
 import com.buying.back.util.verify.VerifyLengthUtil;
 import java.time.LocalDate;
@@ -23,9 +23,8 @@ public class CreateAccountDTO {
   @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
   private String name;
   @NotBlank
-  @Length(min = 1, max = VerifyLengthUtil.MAX_PASSWORD_LENGTH)
+  @Length(min = 6, max = VerifyLengthUtil.MAX_PASSWORD_LENGTH)
   private String password;
-  @NotNull
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate birthDay;
 

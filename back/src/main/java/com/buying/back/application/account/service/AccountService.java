@@ -2,13 +2,17 @@ package com.buying.back.application.account.service;
 
 import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
-import com.buying.back.application.account.controller.dto.CreateAccountDTO;
-import com.buying.back.application.account.controller.dto.SearchAccountManagementDTO;
-import com.buying.back.application.account.controller.dto.UpdateActivateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
+import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.domain.Account;
+import com.buying.back.application.account.helper.AccountCouponHelper;
 import com.buying.back.application.account.repository.AccountRepository;
+import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
-import com.buying.back.application.account.service.vo.AccountManagementVO;
+import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
+import com.buying.back.application.common.dto.PagingDTO;
+import com.buying.back.application.coupon.service.vo.CouponVO;
 import com.buying.back.util.email.HtmlEmailType;
 import com.buying.back.util.email.provider.EmailProvider;
 import com.buying.back.util.email.template.AccountEmailTemplate;
@@ -28,12 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
 
   private final AccountRepository accountRepository;
+  private final AccountCouponHelper accountCouponHelper;
   private final PasswordProvider passwordProvider;
   private final EmailProvider emailProvider;
 
   // auth
   @Transactional
-  public AccountDefaultVO createAccount(CreateAccountDTO dto) {
+  public AccountDefaultVO createNormalAccount(CreateAccountDTO dto) {
     Account account = accountRepository.findByEmail(dto.getEmail())
       .orElse(null);
 
@@ -42,7 +47,7 @@ public class AccountService {
     }
 
     dto.setPassword(passwordProvider.encode(dto.getPassword()));
-    account = Account.initAccount()
+    account = Account.initNormalAccount()
       .dto(dto)
       .build();
     accountRepository.save(account);
@@ -57,27 +62,33 @@ public class AccountService {
     return new AccountDefaultVO(account);
   }
 
+  public Page<AccountCouponVO> getMyCouponList(Long loginUserId, PagingDTO dto) {
+    Account account = accountRepository.findById(loginUserId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+    return accountCouponHelper.getCouponListByAccount(dto, account);
+  }
+
   // management
-  public Page<AccountManagementVO> getAccountList(SearchAccountManagementDTO dto) {
+  public Page<NormalAccountManagementVO> getNormalAccountList(SearchAccountManagementDTO dto) {
     return accountRepository.findAll(dto.getPageRequest(), dto);
   }
 
-  public AccountManagementVO getAccountByManagement(Long accountId) {
+  public NormalAccountManagementVO getNormalAccountByManagement(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
-    return new AccountManagementVO(account);
+    return new NormalAccountManagementVO(account);
   }
 
-  public AccountManagementVO activateAccount(Long accountId, UpdateActivateAccountDTO dto) {
+  public NormalAccountManagementVO activateNormalAccount(Long accountId, UpdateActivateAccountDTO dto) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
     account.setActivated(dto.getActivated());
     accountRepository.save(account);
-    return new AccountManagementVO(account);
+    return new NormalAccountManagementVO(account);
   }
 
-  public AccountManagementVO resetPassword(Long accountId) {
+  public NormalAccountManagementVO resetNormalPassword(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
@@ -90,7 +101,7 @@ public class AccountService {
         account.getEmail(), password));
 
     accountRepository.save(account);
-    return new AccountManagementVO(account);
+    return new NormalAccountManagementVO(account);
   }
 
 }

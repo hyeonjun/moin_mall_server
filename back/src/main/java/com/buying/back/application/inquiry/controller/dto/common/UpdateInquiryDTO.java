@@ -30,6 +30,6 @@ public class UpdateInquiryDTO implements ValidateDTO {
   @Override
   public void validate(Errors e) {
     InquiryDTOValidationCondition.parentChildTypeMatch(
-      e, this.inquiryParentType, this.getInquiryChildType());
+      e, this.inquiryParentType, this.inquiryChildType);
   }
 }
