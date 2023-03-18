@@ -3,6 +3,7 @@ package com.buying.back.application.account.domain;
 import com.buying.back.application.account.code.type.AccountGradeType;
 import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandDTO;
 import com.buying.back.application.common.domain.Base;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -26,6 +27,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 @Entity
 @Table(
@@ -126,6 +128,22 @@ public class Account extends Base {
     this.recentSignInDateTime = LocalDateTime.now();
     this.recentPasswordUpdateDateTime = LocalDateTime.now();
     this.roleType = roleType;
+  }
+
+  public Account update(UpdateAccountDTO dto) {
+    if (StringUtils.hasText(dto.getEmail())) {
+      this.email = dto.getEmail();
+    }
+
+    if (StringUtils.hasText(dto.getName())) {
+      this.name = dto.getName();
+    }
+
+    if (StringUtils.hasText(dto.getPassword())) {
+      this.password = dto.getPassword();
+    }
+
+    return this;
   }
 
   @Override

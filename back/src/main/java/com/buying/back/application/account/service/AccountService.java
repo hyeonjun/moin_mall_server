@@ -3,6 +3,7 @@ package com.buying.back.application.account.service;
 import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
 import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.domain.Account;
@@ -12,7 +13,6 @@ import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
 import com.buying.back.application.common.dto.PagingDTO;
-import com.buying.back.application.coupon.service.vo.CouponVO;
 import com.buying.back.util.email.HtmlEmailType;
 import com.buying.back.util.email.provider.EmailProvider;
 import com.buying.back.util.email.template.AccountEmailTemplate;
@@ -52,20 +52,30 @@ public class AccountService {
       .build();
     accountRepository.save(account);
 
-    return new AccountDefaultVO(account);
+    return AccountDefaultVO.valueOf(account);
   }
 
   // login user
   public AccountDefaultVO getMyInformation(Long loginUserId) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
-    return new AccountDefaultVO(account);
+    return AccountDefaultVO.valueOf(account);
   }
 
   public Page<AccountCouponVO> getMyCouponList(Long loginUserId, PagingDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
     return accountCouponHelper.getCouponListByAccount(dto, account);
+  }
+
+  public AccountDefaultVO updateMyInformation(Long loginUserId, UpdateAccountDTO dto) {
+    Account account = accountRepository.findById(loginUserId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    account = account.update(dto);
+    accountRepository.save(account);
+
+    return AccountDefaultVO.valueOf(account);
   }
 
   // management
@@ -76,7 +86,7 @@ public class AccountService {
   public NormalAccountManagementVO getNormalAccountByManagement(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
-    return new NormalAccountManagementVO(account);
+    return NormalAccountManagementVO.valueOf(account);
   }
 
   public NormalAccountManagementVO activateNormalAccount(Long accountId, UpdateActivateAccountDTO dto) {
@@ -85,7 +95,7 @@ public class AccountService {
 
     account.setActivated(dto.getActivated());
     accountRepository.save(account);
-    return new NormalAccountManagementVO(account);
+    return NormalAccountManagementVO.valueOf(account);
   }
 
   public NormalAccountManagementVO resetNormalPassword(Long accountId) {
@@ -101,7 +111,7 @@ public class AccountService {
         account.getEmail(), password));
 
     accountRepository.save(account);
-    return new NormalAccountManagementVO(account);
+    return NormalAccountManagementVO.valueOf(account);
   }
 
 }

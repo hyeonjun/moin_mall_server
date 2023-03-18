@@ -9,8 +9,10 @@ import java.util.Optional;
 import com.buying.back.application.account.domain.Brand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class AccountDefaultVO {
 
@@ -26,23 +28,24 @@ public class AccountDefaultVO {
 
   protected boolean activated;
 
-  public AccountDefaultVO(Account account) {
-    this.accountId = account.getId();
-    this.email = account.getEmail();
-    this.name = account.getName();
+  public static AccountDefaultVO valueOf(Account account) {
+    AccountDefaultVO vo = new AccountDefaultVO();
 
-    this.birthDay = account.getBirthDay();
-
-    this.role = account.getRoleType();
+    vo.setAccountId(account.getId());
+    vo.setEmail(account.getEmail());
+    vo.setName(account.getName());
+    vo.setBirthDay(account.getBirthDay());
+    vo.setRole(account.getRoleType());
 
     Optional.ofNullable(account.getGradeType())
       .ifPresent(gradeType -> {
-        this.grade = gradeType;
-        this.addDiscount = gradeType.getAddDiscount();
-        this.addAccumulate = gradeType.getAddAccumulate();
+        vo.setGrade(gradeType);
+        vo.setAddDiscount(gradeType.getAddDiscount());
+        vo.setAddAccumulate(gradeType.getAddAccumulate());
       }
     );
-    this.activated = account.isActivated();
+    vo.setActivated(account.isActivated());
+    return vo;
   }
 
   protected AccountDefaultVO(Long accountId, String email, String name, LocalDate birthDay,

@@ -2,6 +2,7 @@ package com.buying.back.application.account.controller;
 
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
+import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.service.AccountService;
 import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +40,13 @@ public class AccountController {
     @Valid PagingDTO dto) {
     Page<AccountCouponVO> list = accountService.getMyCouponList(loginUser.getAccountId(), dto);
     return new CommonResponse<>(list, CommonResponseCode.SUCCESS);
+  }
+
+  @PutMapping
+  public CommonResponse<AccountDefaultVO> updateMyInformation(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @RequestBody @Valid UpdateAccountDTO dto) {
+    AccountDefaultVO vo = accountService.updateMyInformation(loginUser.getAccountId(), dto);
+    return new CommonResponse<>(vo, SUCCESS);
   }
 }
