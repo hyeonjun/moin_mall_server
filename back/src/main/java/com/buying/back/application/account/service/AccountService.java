@@ -78,6 +78,24 @@ public class AccountService {
     return AccountDefaultVO.valueOf(account);
   }
 
+  public AccountDefaultVO updateAccountActivate(Long loginUserId, UpdateActivateAccountDTO dto) {
+    Account account = accountRepository.findById(loginUserId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    if (account.isActivated() && dto.getActivated()) {
+      throw new AccountException(AccountExceptionCode.ALREADY_ACTIVATED_ACCOUNT);
+    }
+
+    if (!account.isActivated() && !dto.getActivated()) {
+      throw new AccountException(AccountExceptionCode.ALREADY_DEACTIVATED_ACCOUNT);
+    }
+
+    account.setActivated(dto.getActivated());
+    accountRepository.save(account);
+
+    return AccountDefaultVO.valueOf(account);
+  }
+
   // management
   public Page<NormalAccountManagementVO> getNormalAccountList(SearchAccountManagementDTO dto) {
     return accountRepository.findAll(dto.getPageRequest(), dto);

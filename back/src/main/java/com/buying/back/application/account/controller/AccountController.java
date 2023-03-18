@@ -3,6 +3,7 @@ package com.buying.back.application.account.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
+import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.service.AccountService;
 import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
@@ -47,6 +48,14 @@ public class AccountController {
     @AuthenticationPrincipal LoginUser loginUser,
     @RequestBody @Valid UpdateAccountDTO dto) {
     AccountDefaultVO vo = accountService.updateMyInformation(loginUser.getAccountId(), dto);
+    return new CommonResponse<>(vo, SUCCESS);
+  }
+
+  @PutMapping("/update:activated")
+  public CommonResponse<AccountDefaultVO> updateAccountActivate(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @Valid @RequestBody UpdateActivateAccountDTO dto) {
+    AccountDefaultVO vo = accountService.updateAccountActivate(loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 }
