@@ -66,6 +66,9 @@ public class Account extends Base {
   private boolean activated;
 
   @Setter
+  private LocalDate deactivatedDate;
+
+  @Setter
   private LocalDate birthDay;
   private LocalDateTime signUpDateTime;
 

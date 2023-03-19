@@ -24,6 +24,7 @@ public class AccountException extends CommonException {
     NOT_CHANGE_PASSWORD("AEC-004", "Password not changed"),
     ALREADY_ACTIVATED_ACCOUNT("AEC-005", "already activated account"),
     ALREADY_DEACTIVATED_ACCOUNT("AEC-006", "already deactivated account"),
+    DEACTIVATED_ACCOUNT("AEC-007", "deactivated account, try log in this account")
     ;
 
     private final String code;

@@ -13,11 +13,13 @@ import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
 import com.buying.back.application.common.dto.PagingDTO;
+import com.buying.back.util.date.DateUtil;
 import com.buying.back.util.email.HtmlEmailType;
 import com.buying.back.util.email.provider.EmailProvider;
 import com.buying.back.util.email.template.AccountEmailTemplate;
 import com.buying.back.util.encryption.PasswordProvider;
 import com.buying.back.util.string.RandomString;
+import java.time.LocalDate;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,12 @@ public class AccountService {
       .orElse(null);
 
     if (Objects.nonNull(account)) {
+      // 비활성화된 계정이면서, 비활성화된지 1년 이내 이면 존재하는 아이디로 판단 -> 다시 활성화시킬 수 있음
+      // 넘은 경우 완전히 삭제, 같은 이메일로 아이디 생성 불가능
+      if (!account.isActivated() &&
+        DateUtil.getDateDiff(account.getDeactivatedDate(), LocalDate.now()) < 366L) {
+        throw new AccountException(AccountExceptionCode.DEACTIVATED_ACCOUNT);
+      }
       throw new AccountException(AccountExceptionCode.ALREADY_EXIST_ACCOUNT);
     }
 
