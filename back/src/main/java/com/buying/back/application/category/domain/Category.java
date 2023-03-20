@@ -1,4 +1,4 @@
-package com.buying.back.application.product.domain;
+package com.buying.back.application.category.domain;
 
 import com.buying.back.application.product.controller.dto.CategoryDto;
 import lombok.AccessLevel;
