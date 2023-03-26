@@ -8,6 +8,7 @@ import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandCrewAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandAdminAccountDTO;
+import com.buying.back.application.account.controller.dto.brand.UpdateBrandInfoDTO;
 import com.buying.back.application.account.controller.dto.management.SearchBrandEnterpriseManagementDTO;
 import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.domain.Brand;
@@ -100,10 +101,29 @@ public class BrandService {
       throw new AccountException(AccountExceptionCode.ALREADY_DEACTIVATED_ACCOUNT);
     }
 
-    account = account.update(dto);
+    account.update(dto);
     accountRepository.save(account);
 
     return BrandAccountDetailVO.valueOf(brand, account);
+  }
+
+  @Transactional
+  public BrandDetailVO updateBrandEnterpriseInfo(Long brandId, UpdateBrandInfoDTO dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    if (!brand.isActivated()) {
+      throw new BrandException(BrandExceptionCode.ALREADY_DEACTIVATED_BRAND);
+    }
+
+    if (!passwordProvider.matches(dto.getConfirmBrandPassword(), brand.getPassword())) {
+      throw new BrandException(BrandExceptionCode.NOT_MATCH_BRAND_PASSWORD);
+    }
+
+    brand.update(dto);
+    brandRepository.save(brand);
+
+    return BrandDetailVO.valueOf(brand);
   }
 
   // management

@@ -3,8 +3,10 @@ package com.buying.back.application.account.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
+import com.buying.back.application.account.controller.dto.brand.UpdateBrandInfoDTO;
 import com.buying.back.application.account.service.BrandService;
 import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
+import com.buying.back.application.account.service.vo.BrandDetailVO;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
 import com.buying.back.util.response.CommonResponse;
 import javax.validation.Valid;
@@ -40,4 +42,11 @@ public class BrandController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
+  @PutMapping
+  public CommonResponse<BrandDetailVO> updateBrandEnterpriseInfo(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @RequestBody @Valid UpdateBrandInfoDTO dto) {
+    BrandDetailVO vo = brandService.updateBrandEnterpriseInfo(loginUser.getBrandId(), dto);
+    return new CommonResponse<>(vo, SUCCESS);
+  }
 }

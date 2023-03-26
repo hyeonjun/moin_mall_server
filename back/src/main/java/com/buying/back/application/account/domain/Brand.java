@@ -1,6 +1,7 @@
 package com.buying.back.application.account.domain;
 
 import com.buying.back.application.account.controller.dto.brand.CreateBrandAdminAccountDTO;
+import com.buying.back.application.account.controller.dto.brand.UpdateBrandInfoDTO;
 import com.buying.back.application.common.domain.Base;
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 @Entity
 @Table(
@@ -59,6 +61,28 @@ public class Brand extends Base {
     this.password = dto.getBrandPassword();
     this.url = dto.getUrl();
     this.activated = true;
+  }
+
+  public void update(UpdateBrandInfoDTO dto) {
+    if (StringUtils.hasText(dto.getBrandName())) {
+      this.brandName = dto.getBrandName();
+    }
+
+    if (StringUtils.hasText(dto.getRepresentativeName())) {
+      this.representativeName = dto.getRepresentativeName();
+    }
+
+    if (StringUtils.hasText(dto.getRepresentativeEmail())) {
+      this.representativeEmail = dto.getBrandName();
+    }
+
+    if (StringUtils.hasText(dto.getBusinessNumber())) {
+      this.businessNumber = dto.getBrandName();
+    }
+
+    if (StringUtils.hasText(dto.getUrl())) {
+      this.url = dto.getUrl();
+    }
   }
 
   @Override

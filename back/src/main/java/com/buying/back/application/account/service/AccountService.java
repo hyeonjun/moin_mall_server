@@ -80,7 +80,7 @@ public class AccountService {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
-    account = account.update(dto);
+    account.update(dto);
     accountRepository.save(account);
 
     return AccountDefaultVO.valueOf(account);

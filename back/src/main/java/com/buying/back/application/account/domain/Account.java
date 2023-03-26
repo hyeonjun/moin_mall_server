@@ -133,7 +133,7 @@ public class Account extends Base {
     this.roleType = roleType;
   }
 
-  public Account update(UpdateAccountDTO dto) {
+  public void update(UpdateAccountDTO dto) {
     if (StringUtils.hasText(dto.getEmail())) {
       this.email = dto.getEmail();
     }
@@ -145,8 +145,6 @@ public class Account extends Base {
     if (StringUtils.hasText(dto.getPassword())) {
       this.password = dto.getPassword();
     }
-
-    return this;
   }
 
   @Override
