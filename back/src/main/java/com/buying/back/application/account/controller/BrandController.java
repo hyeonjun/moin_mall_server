@@ -46,7 +46,8 @@ public class BrandController {
   public CommonResponse<BrandDetailVO> updateBrandEnterpriseInfo(
     @AuthenticationPrincipal LoginUser loginUser,
     @RequestBody @Valid UpdateBrandInfoDTO dto) {
-    BrandDetailVO vo = brandService.updateBrandEnterpriseInfo(loginUser.getBrandId(), dto);
+    BrandDetailVO vo = brandService
+      .updateBrandEnterpriseInfo(loginUser.getBrandId(), loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
 }

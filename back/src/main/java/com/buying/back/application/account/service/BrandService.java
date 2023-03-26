@@ -108,12 +108,19 @@ public class BrandService {
   }
 
   @Transactional
-  public BrandDetailVO updateBrandEnterpriseInfo(Long brandId, UpdateBrandInfoDTO dto) {
+  public BrandDetailVO updateBrandEnterpriseInfo(Long brandId, Long accountId, UpdateBrandInfoDTO dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
     if (!brand.isActivated()) {
       throw new BrandException(BrandExceptionCode.ALREADY_DEACTIVATED_BRAND);
+    }
+
+    Account account = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    if (!account.isActivated() || !RoleType.BRAND_ADMIN.equals(account.getRoleType())) {
+      throw new AccountException(AccountExceptionCode.ALREADY_DEACTIVATED_ACCOUNT);
     }
 
     if (!passwordProvider.matches(dto.getConfirmBrandPassword(), brand.getPassword())) {
