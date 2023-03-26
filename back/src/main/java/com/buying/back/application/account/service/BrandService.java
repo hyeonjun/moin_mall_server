@@ -5,6 +5,7 @@ import com.buying.back.application.account.code.exception.AccountException.Accou
 import com.buying.back.application.account.code.exception.BrandException;
 import com.buying.back.application.account.code.exception.BrandException.BrandExceptionCode;
 import com.buying.back.application.account.code.type.RoleType;
+import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandCrewAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandAdminAccountDTO;
 import com.buying.back.application.account.controller.dto.management.SearchBrandEnterpriseManagementDTO;
@@ -55,7 +56,7 @@ public class BrandService {
     brandRepository.save(brand);
     Account account = brandAccountHelper.createBrandAdminAccount(dto, brand, RoleType.BRAND_ADMIN);
 
-    return new BrandAccountDetailVO(brand, account);
+    return BrandAccountDetailVO.valueOf(brand, account);
   }
 
   @Transactional
@@ -69,7 +70,7 @@ public class BrandService {
 
     Account account = brandAccountHelper.createBrandAdminAccount(dto, brand, RoleType.BRAND_CREW);
 
-    return new BrandAccountDetailVO(brand, account);
+    return BrandAccountDetailVO.valueOf(brand, account);
   }
 
   public BrandAccountDetailVO getBrandAccountMyInformation(Long brandId, Long accountId) {
@@ -79,7 +80,30 @@ public class BrandService {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
-    return new BrandAccountDetailVO(brand, account);
+    return BrandAccountDetailVO.valueOf(brand, account);
+  }
+
+  @Transactional
+  public BrandAccountDetailVO updateBrandAccountMyInformation(
+    Long brandId, Long accountId, UpdateAccountDTO dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    if (!brand.isActivated()) {
+      throw new BrandException(BrandExceptionCode.ALREADY_DEACTIVATED_BRAND);
+    }
+
+    Account account = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    if (!account.isActivated()) {
+      throw new AccountException(AccountExceptionCode.ALREADY_DEACTIVATED_ACCOUNT);
+    }
+
+    account = account.update(dto);
+    accountRepository.save(account);
+
+    return BrandAccountDetailVO.valueOf(brand, account);
   }
 
   // management

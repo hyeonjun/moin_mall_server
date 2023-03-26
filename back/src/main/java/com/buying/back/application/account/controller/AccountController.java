@@ -32,6 +32,7 @@ public class AccountController {
   @GetMapping("/my-information")
   public CommonResponse<AccountDefaultVO> getMyInformation(
     @AuthenticationPrincipal LoginUser loginUser) {
+    // TODO: 2023/03/26 AccountDetailVO 생성: 쿠폰 개수, 적립금 등
     AccountDefaultVO vo = accountService.getMyInformation(loginUser.getAccountId());
     return new CommonResponse<>(vo, SUCCESS);
   }
@@ -58,4 +59,7 @@ public class AccountController {
     AccountDefaultVO vo = accountService.updateAccountActivate(loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
+
+  // TODO: 2023/03/26 아이디 찾기, 비밀번호 변경
+
 }
