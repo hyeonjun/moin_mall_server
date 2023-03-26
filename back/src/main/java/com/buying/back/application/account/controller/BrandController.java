@@ -23,7 +23,7 @@ public class BrandController {
 
   private final BrandService brandService;
 
-  @GetMapping("/my-information")
+  @GetMapping("/accounts/my-information")
   public CommonResponse<BrandAccountDetailVO> getBrandAccountMyInformation(
     @AuthenticationPrincipal LoginUser loginUser) {
     BrandAccountDetailVO vo = brandService.getBrandAccountMyInformation(
@@ -31,7 +31,7 @@ public class BrandController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
-  @PutMapping
+  @PutMapping("/accounts")
   public CommonResponse<BrandAccountDetailVO> updateBrandAccountMyInformation(
     @AuthenticationPrincipal LoginUser loginUser,
     @RequestBody @Valid UpdateAccountDTO dto) {
@@ -39,4 +39,5 @@ public class BrandController {
       loginUser.getBrandId(), loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
+
 }
