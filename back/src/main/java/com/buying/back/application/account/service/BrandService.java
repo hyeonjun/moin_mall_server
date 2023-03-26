@@ -8,6 +8,7 @@ import com.buying.back.application.account.code.type.RoleType;
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandCrewAccountDTO;
 import com.buying.back.application.account.controller.dto.brand.CreateBrandAdminAccountDTO;
+import com.buying.back.application.account.controller.dto.brand.UpdateBrandActivateDTO;
 import com.buying.back.application.account.controller.dto.brand.UpdateBrandInfoDTO;
 import com.buying.back.application.account.controller.dto.management.SearchBrandEnterpriseManagementDTO;
 import com.buying.back.application.account.domain.Account;
@@ -15,6 +16,7 @@ import com.buying.back.application.account.domain.Brand;
 import com.buying.back.application.account.helper.BrandAccountHelper;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.account.repository.BrandRepository;
+import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
 import com.buying.back.application.account.service.vo.BrandAccountManagementVO;
 import com.buying.back.application.account.service.vo.BrandDetailVO;
@@ -108,6 +110,36 @@ public class BrandService {
   }
 
   @Transactional
+  public void updateBrandAccountActivate(
+    Long brandId, Long accountId, UpdateBrandActivateDTO dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    Account account = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    // brand 비활성화, 변경 - 활성화하려고 할 때, admin만 활성화 가능
+    if (!brand.isActivated() && dto.getActivated() && !RoleType.BRAND_ADMIN.equals(account.getRoleType())) {
+      throw new BrandException(BrandExceptionCode.ALREADY_ACTIVATED_BRAND);
+    }
+
+    // admin 비활성화 -> brand 비활성화 -> crew 비활성화
+    // crew 비활성화
+
+    // admin 활성화 -> brand 활성화 api 호출
+    // crew 활성화 -> brand 활성화 여부 확인
+    if (Boolean.FALSE.equals(dto.getActivated()) && RoleType.BRAND_ADMIN.equals(account.getRoleType())) {
+      brand.setActivated(Boolean.FALSE);
+      brandRepository.save(brand);
+
+      // brand accounts 비활성화
+      brandAccountHelper.updateBrandAccountDeactivate(brand);
+    } else {
+      brandAccountHelper.updateAccountActivate(account, dto.getActivated());
+    }
+  }
+
+  @Transactional
   public BrandDetailVO updateBrandEnterpriseInfo(Long brandId, Long accountId, UpdateBrandInfoDTO dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
@@ -131,6 +163,30 @@ public class BrandService {
     brandRepository.save(brand);
 
     return BrandDetailVO.valueOf(brand);
+  }
+
+  @Transactional
+  public void updateBrandDeactivate(Long brandId, Long accountId) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    if (!brand.isActivated()) {
+      throw new BrandException(BrandExceptionCode.ALREADY_DEACTIVATED_BRAND);
+    }
+
+    Account account = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    if (!RoleType.BRAND_ADMIN.equals(account.getRoleType())) {
+      throw new AccountException(AccountExceptionCode.NOT_AUTHORIZED);
+    }
+
+    // brand 비활성화 -> admin, crew 비활성화
+    brand.setActivated(Boolean.FALSE);
+    brandRepository.save(brand);
+
+    // brand accounts 비활성화
+    brandAccountHelper.updateBrandAccountDeactivate(brand);
   }
 
   // management

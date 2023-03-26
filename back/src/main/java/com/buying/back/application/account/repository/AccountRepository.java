@@ -1,6 +1,8 @@
 package com.buying.back.application.account.repository;
 
 import com.buying.back.application.account.domain.Account;
+import com.buying.back.application.account.domain.Brand;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +16,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>,
 
   Optional<Account> findByEmail(String email);
 
+  List<Account> findAllByBrandAndActivated(Brand brand, Boolean activated);
 
 }

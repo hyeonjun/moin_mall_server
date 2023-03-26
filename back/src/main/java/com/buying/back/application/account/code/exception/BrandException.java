@@ -23,7 +23,8 @@ public class BrandException extends CommonException {
     ALREADY_EXIST_BUSINESS_NUMBER("BEC-002", "already exist business number"),
     NOT_FOUND_BRAND("BEC-003", "brand not found"),
     NOT_MATCH_BRAND_PASSWORD("BEC-004", "brand password dose not match"),
-    ALREADY_DEACTIVATED_BRAND("BED-005", "already deactivated account")
+    ALREADY_DEACTIVATED_BRAND("BED-005", "already deactivated brand"),
+    ALREADY_ACTIVATED_BRAND("BED-006", "already activated brand")
     ;
 
     private final String code;

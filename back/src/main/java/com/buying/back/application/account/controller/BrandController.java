@@ -3,6 +3,7 @@ package com.buying.back.application.account.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
+import com.buying.back.application.account.controller.dto.brand.UpdateBrandActivateDTO;
 import com.buying.back.application.account.controller.dto.brand.UpdateBrandInfoDTO;
 import com.buying.back.application.account.service.BrandService;
 import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
@@ -40,6 +41,22 @@ public class BrandController {
     BrandAccountDetailVO vo = brandService.updateBrandAccountMyInformation(
       loginUser.getBrandId(), loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
+  }
+
+  @PutMapping("/accounts/update:activated")
+  public CommonResponse<Void> updateBrandAccountActivate(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @RequestBody @Valid UpdateBrandActivateDTO dto) {
+    brandService.updateBrandAccountActivate(
+      loginUser.getBrandId(), loginUser.getAccountId(), dto);
+    return new CommonResponse<>(SUCCESS);
+  }
+
+  @PutMapping("/update:deactivated")
+  public CommonResponse<Void> updateBrandDeactivate(
+    @AuthenticationPrincipal LoginUser loginUser) {
+    brandService.updateBrandDeactivate(loginUser.getBrandId(), loginUser.getAccountId());
+    return new CommonResponse<>(SUCCESS);
   }
 
   @PutMapping

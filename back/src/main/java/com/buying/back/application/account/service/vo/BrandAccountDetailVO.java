@@ -32,6 +32,17 @@ public class BrandAccountDetailVO extends BrandDetailVO {
     return vo;
   }
 
+  public static BrandAccountDetailVO valueOf(Brand brand, AccountDefaultVO accountVO) {
+    BrandAccountDetailVO vo = new BrandAccountDetailVO(brand);
+
+    vo.setAccountId(accountVO.getAccountId());
+    vo.setAccountEmail(accountVO.getEmail());
+    vo.setAccountName(accountVO.getName());
+    vo.setRole(accountVO.getRole());
+    vo.setActivated(accountVO.isActivated());
+    return vo;
+  }
+
   private BrandAccountDetailVO(Brand brand) {
     super(brand);
   }
