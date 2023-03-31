@@ -2,6 +2,8 @@ package com.buying.back.application.product.controller.dto;
 
 import com.buying.back.util.verify.VerifyLengthUtil;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
@@ -9,6 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ProductDto {
@@ -49,5 +52,17 @@ public class ProductDto {
         private List<ItemDto.Update> itemsDto;
         @Valid
         private List<ItemDto.Create> newItemsDto;
+    }
+
+    @Getter
+    @Setter
+    public static class Search {
+        private String productName;
+        private String brandName;
+        private Long categoryId;
+        private Integer priceFrom;
+        private Integer priceTo;
+        private LocalDate createdDateFrom;
+        private LocalDate createdDateTo;
     }
 }

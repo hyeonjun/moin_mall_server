@@ -6,10 +6,7 @@ import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.exception.ProductException;
 import com.buying.back.application.product.repository.ProductRepository;
-import com.buying.back.application.product.service.vo.ItemDefaultVO;
-import com.buying.back.application.product.service.vo.ItemOptionVO;
-import com.buying.back.application.product.service.vo.OptionDefaultVO;
-import com.buying.back.application.product.service.vo.ProductDefaultVO;
+import com.buying.back.application.product.service.vo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +27,10 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
 
-        List<ItemDefaultVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
+        List<ItemDetailVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
         List<OptionDefaultVO> productOptions = productOptionHelperService.getProductOptions(product);
 
-        return new ProductDefaultVO(product, itemsByProduct, productOptions);
+        return new ProductDetailVO(product, itemsByProduct, productOptions);
     }
 
     @Transactional
@@ -56,11 +53,12 @@ public class ProductService {
         if(!newItemsDto.isEmpty()) {
             createItemsAndOptions(product, newItemsDto);
         }
-        dto.getItemsDto().forEach(productItemHelperService::updateItems);
+        dto.getItemsDto().forEach(productItemHelperService::updateItem);
 
-        List<ItemDefaultVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
+        List<ItemDetailVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
         List<OptionDefaultVO> productOptions = productOptionHelperService.getProductOptions(product);
-        return new ProductDefaultVO(product, itemsByProduct, productOptions);
+
+        return new ProductDetailVO(product, itemsByProduct, productOptions);
     }
 
     @Transactional
@@ -71,9 +69,10 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    // TODO: 2023-03-31 나중에 코드 다시 읽고 여기 전부 고치기 기억이 안나네
     private ProductDefaultVO createItemsAndOptions(Product product, List<ItemDto.Create> itemsDto) {
         List<OptionDefaultVO> productOptions = new ArrayList<>();
-        List<ItemDefaultVO> itemDefaultVOList = itemsDto.stream().map(itemDto -> {
+        List<ItemDetailVO> itemDefaultVOList = itemsDto.stream().map(itemDto -> {
             StringBuilder itemOptions = new StringBuilder();
 
             List<ItemOptionVO> itemOptionsVO = productOptionHelperService.createOptionAll(product, itemDto.getOptionsDto()).stream()
@@ -91,12 +90,12 @@ public class ProductService {
                 }
             }
             itemDto.setOptions(itemOptions.toString());
-            return new ItemDefaultVO(productItemHelperService.createItem(product, itemDto), itemOptionsVO);
+            return new ItemDetailVO(productItemHelperService.createItem(product, itemDto), itemOptionsVO);
         }).collect(Collectors.toList());
 
         List<OptionDefaultVO> optionDefaultVOList = productOptions.stream().distinct().collect(Collectors.toList());
 
-        return new ProductDefaultVO(product, itemDefaultVOList, optionDefaultVOList);
+        return new ProductDetailVO(product, itemDefaultVOList, optionDefaultVOList);
     }
 }
 

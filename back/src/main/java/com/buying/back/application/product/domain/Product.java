@@ -7,13 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +29,9 @@ public class Product extends Base {
     private Long brandId;
     private String name;
     private Integer price;
+    private boolean deleted = false;
+    private LocalDateTime deletedAt;
+
     @Builder
     private Product(Long categoryId, Long brandId, String name, Integer price) {
         this.categoryId = categoryId;
@@ -55,5 +53,10 @@ public class Product extends Base {
         this.name = dto.getName();
         this.price = dto.getPrice();
         this.categoryId = dto.getCategoryId();
+    }
+
+    public void delete() {
+        this.deleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 }
