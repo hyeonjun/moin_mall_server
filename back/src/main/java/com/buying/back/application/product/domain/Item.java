@@ -14,6 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -62,6 +66,10 @@ public class Item {
         this.discountPrice = dto.getDiscountPrice();
         this.discountRate = dto.getDiscountRate();
         return this;
+    }
+
+    public Set<Long> getOptionIds() {
+        return Arrays.stream(options.split("/")).map(Long::valueOf).collect(Collectors.toSet());
     }
 
     public void setProduct(Product product) {

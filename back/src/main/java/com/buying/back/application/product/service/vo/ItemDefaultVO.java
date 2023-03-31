@@ -26,17 +26,7 @@ public class ItemDefaultVO {
         this.discountRate = item.getDiscountRate();
     }
 
-    public ItemDefaultVO(Item item, List<ItemOptionVO> options) {
-        this.id = item.getId();
-        this.name = item.getName();
-        this.price = item.getPrice();
-        this.quantity = item.getQuantity();
-        this.discountPrice = item.getDiscountPrice();
-        this.discountRate = item.getDiscountRate();
-        this.options = options;
-    }
-
-    public ItemDefaultVO(List<ItemOptionVO> options) {
-        this.options = options;
+    public static ItemDefaultVO valueOf(Item item) {
+        return new ItemDefaultVO(item);
     }
 }
