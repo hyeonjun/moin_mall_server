@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -23,15 +24,27 @@ public class OptionService {
         return optionRepository.findDistinctNameByProduct(product);
     }
 
-    public List<ItemOptionVO> getItemOptions(List<Long> ids) {
+    public List<ItemOptionVO> getItemOptions(Set<Long> ids) {
         return optionRepository.findOptionsByIdIn(ids);
     }
 
     @Transactional
-    public Option create(Product product, OptionDto.Create dto) {
+    public OptionDefaultVO create(OptionDto.Create dto) {
+        Option option = Option.create(dto);
+
+        optionRepository.save(option);
+
+        return OptionDefaultVO.valueOf(option);
+    }
+
+    @Transactional
+    public OptionDefaultVO create(Product product, OptionDto.Create dto) {
         Option option = Option.create(dto);
         option.setProduct(product);
-        return optionRepository.save(option);
+
+        optionRepository.save(option);
+
+        return OptionDefaultVO.valueOf(option);
     }
 
     @Transactional

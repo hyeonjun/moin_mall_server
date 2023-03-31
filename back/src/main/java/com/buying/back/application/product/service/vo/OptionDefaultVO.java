@@ -19,7 +19,7 @@ public class OptionDefaultVO {
         this.orderBy = orderBy;
     }
 
-    public OptionDefaultVO(Option option) {
-        this(option.getId(), option.getName(), option.getOrderBy());
+    public static OptionDefaultVO valueOf(Option option) {
+        return new OptionDefaultVO(option.getId(), option.getName(), option.getOrderBy());
     }
 }
