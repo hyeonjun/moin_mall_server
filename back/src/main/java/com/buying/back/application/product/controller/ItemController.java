@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/pub/items")
+@RequestMapping("/api/v1/pub/items") // brd 변경 필요
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;

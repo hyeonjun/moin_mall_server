@@ -80,10 +80,12 @@ public class ProductRepositoryImpl extends CustomQuerydslRepositorySupport imple
   }
 
   private QProductDefaultVO productDefaultVO() {
-    return new QProductDefaultVO(
-      product.id,
-      product.name,
-      product.price
-    );
+    return null;
   }
+//    return new QProductDefaultVO(
+//      product.id,
+//      product.name,
+//      product.price
+//    );
+//  }
 }
