@@ -3,6 +3,7 @@ package com.buying.back.application.account.service;
 import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
 import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.domain.Account;
@@ -12,12 +13,13 @@ import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
 import com.buying.back.application.common.dto.PagingDTO;
-import com.buying.back.application.coupon.service.vo.CouponVO;
+import com.buying.back.util.date.DateUtil;
 import com.buying.back.util.email.HtmlEmailType;
 import com.buying.back.util.email.provider.EmailProvider;
 import com.buying.back.util.email.template.AccountEmailTemplate;
 import com.buying.back.util.encryption.PasswordProvider;
 import com.buying.back.util.string.RandomString;
+import java.time.LocalDate;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,12 @@ public class AccountService {
       .orElse(null);
 
     if (Objects.nonNull(account)) {
+      // 비활성화된 계정이면서, 비활성화된지 1년 이내 이면 존재하는 아이디로 판단 -> 다시 활성화시킬 수 있음
+      // 넘은 경우 완전히 삭제, 같은 이메일로 아이디 생성 불가능
+      if (!account.isActivated() &&
+        DateUtil.getDateDiff(account.getDeactivatedDate(), LocalDate.now()) < 366L) {
+        throw new AccountException(AccountExceptionCode.DEACTIVATED_ACCOUNT);
+      }
       throw new AccountException(AccountExceptionCode.ALREADY_EXIST_ACCOUNT);
     }
 
@@ -52,20 +60,48 @@ public class AccountService {
       .build();
     accountRepository.save(account);
 
-    return new AccountDefaultVO(account);
+    return AccountDefaultVO.valueOf(account);
   }
 
   // login user
   public AccountDefaultVO getMyInformation(Long loginUserId) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
-    return new AccountDefaultVO(account);
+    return AccountDefaultVO.valueOf(account);
   }
 
   public Page<AccountCouponVO> getMyCouponList(Long loginUserId, PagingDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
     return accountCouponHelper.getCouponListByAccount(dto, account);
+  }
+
+  public AccountDefaultVO updateMyInformation(Long loginUserId, UpdateAccountDTO dto) {
+    Account account = accountRepository.findById(loginUserId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    account.update(dto);
+    accountRepository.save(account);
+
+    return AccountDefaultVO.valueOf(account);
+  }
+
+  public AccountDefaultVO updateAccountActivate(Long loginUserId, UpdateActivateAccountDTO dto) {
+    Account account = accountRepository.findById(loginUserId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    if (account.isActivated() && dto.getActivated()) {
+      throw new AccountException(AccountExceptionCode.ALREADY_ACTIVATED_ACCOUNT);
+    }
+
+    if (!account.isActivated() && !dto.getActivated()) {
+      throw new AccountException(AccountExceptionCode.ALREADY_DEACTIVATED_ACCOUNT);
+    }
+
+    account.setActivated(dto.getActivated());
+    accountRepository.save(account);
+
+    return AccountDefaultVO.valueOf(account);
   }
 
   // management
@@ -76,7 +112,7 @@ public class AccountService {
   public NormalAccountManagementVO getNormalAccountByManagement(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
-    return new NormalAccountManagementVO(account);
+    return NormalAccountManagementVO.valueOf(account);
   }
 
   public NormalAccountManagementVO activateNormalAccount(Long accountId, UpdateActivateAccountDTO dto) {
@@ -85,7 +121,7 @@ public class AccountService {
 
     account.setActivated(dto.getActivated());
     accountRepository.save(account);
-    return new NormalAccountManagementVO(account);
+    return NormalAccountManagementVO.valueOf(account);
   }
 
   public NormalAccountManagementVO resetNormalPassword(Long accountId) {
@@ -101,7 +137,7 @@ public class AccountService {
         account.getEmail(), password));
 
     accountRepository.save(account);
-    return new NormalAccountManagementVO(account);
+    return NormalAccountManagementVO.valueOf(account);
   }
 
 }

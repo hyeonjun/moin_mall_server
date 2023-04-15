@@ -8,18 +8,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class NormalAccountManagementVO extends AccountDefaultVO {
 
   protected LocalDateTime signUpDateTime;
   protected LocalDateTime recentSignInDateTime;
 
-  public NormalAccountManagementVO(Account account) {
-    super(account);
-    this.signUpDateTime = account.getSignUpDateTime();
-    this.recentSignInDateTime = account.getRecentSignInDateTime();
+  public static NormalAccountManagementVO valueOf(Account account) {
+    NormalAccountManagementVO vo = (NormalAccountManagementVO) AccountDefaultVO.valueOf(account);
+    vo.setSignUpDateTime(account.getSignUpDateTime());
+    vo.setRecentSignInDateTime(account.getRecentSignInDateTime());
+    return vo;
   }
 
   @QueryProjection

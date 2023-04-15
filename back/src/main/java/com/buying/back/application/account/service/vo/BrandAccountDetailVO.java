@@ -5,8 +5,10 @@ import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.domain.Brand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class BrandAccountDetailVO extends BrandDetailVO {
 
@@ -18,12 +20,30 @@ public class BrandAccountDetailVO extends BrandDetailVO {
 
   private boolean activated;
 
-  public BrandAccountDetailVO(Brand brand, Account account) {
+  public static BrandAccountDetailVO valueOf(Brand brand, Account account) {
+    BrandAccountDetailVO vo = new BrandAccountDetailVO(brand);
+
+    vo.setAccountId(account.getId());
+    vo.setAccountEmail(account.getEmail());
+    vo.setAccountName(account.getName());
+    vo.setRole(account.getRoleType());
+    vo.setActivated(account.isActivated());
+
+    return vo;
+  }
+
+  public static BrandAccountDetailVO valueOf(Brand brand, AccountDefaultVO accountVO) {
+    BrandAccountDetailVO vo = new BrandAccountDetailVO(brand);
+
+    vo.setAccountId(accountVO.getAccountId());
+    vo.setAccountEmail(accountVO.getEmail());
+    vo.setAccountName(accountVO.getName());
+    vo.setRole(accountVO.getRole());
+    vo.setActivated(accountVO.isActivated());
+    return vo;
+  }
+
+  private BrandAccountDetailVO(Brand brand) {
     super(brand);
-    this.accountId = account.getId();
-    this.accountEmail = account.getEmail();
-    this.accountName = account.getName();
-    this.role = account.getRoleType();
-    this.activated = account.isActivated();
   }
 }
