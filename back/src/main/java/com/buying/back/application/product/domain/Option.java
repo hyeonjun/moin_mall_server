@@ -1,11 +1,7 @@
 package com.buying.back.application.product.domain;
 
 import com.buying.back.application.product.controller.dto.OptionDto;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,38 +10,45 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Option {
-    @Id @Column(name = "option_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String value;
-    private Integer orderBy;
-    @JoinColumn(name = "product_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
 
-    @Builder
-    private Option(String name, String value, Integer orderBy, Product product) {
-        this.name = name;
-        this.value = value;
-        this.orderBy = orderBy;
-        this.product = product;
-    }
+  @Id
+  @Column(name = "option_id")
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+  private String name;
+  private String value;
+  private Integer orderBy;
 
-    public static Option create(OptionDto.Create dto) {
-        return Option.builder()
-                .name(dto.getOptionName())
-                .value(dto.getOptionValue())
-                .orderBy(dto.getOrderBy())
-                .build();
-    }
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "product_id")
+  @JsonBackReference
+  private Product product;
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+  @Builder
+  private Option(String name, String value, Integer orderBy, Product product) {
+    this.name = name;
+    this.value = value;
+    this.orderBy = orderBy;
+    this.product = product;
+  }
+
+  public static Option create(OptionDto.Create dto, Product product) {
+    return Option.builder()
+      .name(dto.getOptionName())
+      .value(dto.getOptionValue())
+      .orderBy(dto.getOrderBy())
+      .product(product)
+      .build();
+  }
 }
