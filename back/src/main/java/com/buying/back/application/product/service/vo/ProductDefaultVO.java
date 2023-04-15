@@ -1,5 +1,7 @@
 package com.buying.back.application.product.service.vo;
 
+import com.buying.back.application.account.domain.Brand;
+import com.buying.back.application.category.domain.Category;
 import com.buying.back.application.product.domain.Product;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
@@ -8,22 +10,40 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ProductDefaultVO {
-    private Long productId;
-    private String name;
-    private Integer price;
-    // TODO: 2023-02-02 Category Response Add
-    // TODO: 2023-02-02 Brand Response  Add
 
-    public ProductDefaultVO(Product product) {
-        this.productId = product.getId();
-        this.name = product.getName();
-        this.price = product.getPrice();
-    }
+  private Long productId;
+  private String name;
+  private Integer price;
 
-    @QueryProjection
-    public ProductDefaultVO(Long productId, String name, Integer price) {
-        this.productId = productId;
-        this.name = name;
-        this.price = price;
-    }
+  private Long brandId;
+  private Long categoryId;
+  private String categoryName;
+
+  protected ProductDefaultVO(Product product) {
+    this.productId = product.getId();
+    this.name = product.getName();
+    this.price = product.getPrice();
+
+    Brand brand = product.getBrand();
+    this.brandId = brand.getId();
+
+    Category category = product.getCategory();
+    this.categoryId = category.getId();
+    this.categoryName = category.getName();
+  }
+
+  public static ProductDefaultVO valueOf(Product product) {
+    return new ProductDefaultVO(product);
+  }
+
+  @QueryProjection
+  public ProductDefaultVO(Long productId, String name, Integer price, Long brandId, Long categoryId,
+    String categoryName) {
+    this.productId = productId;
+    this.name = name;
+    this.price = price;
+    this.brandId = brandId;
+    this.categoryId = categoryId;
+    this.categoryName = categoryName;
+  }
 }

@@ -11,16 +11,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ProductDetailVO extends ProductDefaultVO {
-  private List<ItemDetailVO> items;
-  private List<OptionDefaultVO> options;
+  private List<ItemVO> items;
 
-  public ProductDetailVO(Product product, List<ItemDetailVO> items, List<OptionDefaultVO> options) {
+  private ProductDetailVO(Product product) {
     super(product);
-    this.items = items;
-    this.options = options;
   }
 
-  public void add(ItemDetailVO itemDefaultVO) {
-    items.add(itemDefaultVO);
+  public static ProductDetailVO valueOf(Product product, List<ItemVO> items) {
+    ProductDetailVO vo = new ProductDetailVO(product);
+    vo.setItems(items);
+    return vo;
   }
 }

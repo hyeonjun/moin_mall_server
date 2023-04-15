@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Table(
   name = "product",
   indexes = {
-    @Index(columnList = "name")
+    @Index(columnList = "product_name")
   }
 )
 @Entity

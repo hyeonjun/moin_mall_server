@@ -16,11 +16,9 @@ public class ItemDto {
 
     @Data
     public static class Create {
-        @NotNull(message = "상품명은 필수 값입니다.")
+        @NotBlank(message = "상품명은 필수 값입니다.")
         @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
         private String name;
-        @JsonIgnore
-        private String options;
         @NotNull
         @Min(value = 0, message = "Item 재고 수량은 0 보다 작을 수 없습니다.")
         private Integer quantity;

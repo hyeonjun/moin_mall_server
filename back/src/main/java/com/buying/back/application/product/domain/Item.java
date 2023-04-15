@@ -53,10 +53,10 @@ public class Item {
     this.product = product;
   }
 
-  public static Item create(ItemDto.Create dto, Product product) {
+  public static Item create(ItemDto.Create dto, Product product, String options) {
     return Item.builder()
       .name(dto.getName())
-      .options(dto.getOptions())
+      .options(options)
       .quantity(dto.getQuantity())
       .price(dto.getPrice())
       .discountPrice(dto.getDiscountPrice())
