@@ -21,7 +21,7 @@ public class ProductDefaultVO {
     }
 
     @QueryProjection
-    private ProductDefaultVO(Long productId, String name, Integer price) {
+    public ProductDefaultVO(Long productId, String name, Integer price) {
         this.productId = productId;
         this.name = name;
         this.price = price;
