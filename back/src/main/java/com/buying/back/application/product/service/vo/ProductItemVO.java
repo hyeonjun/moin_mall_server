@@ -9,18 +9,15 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class ProductItemVO extends ProductVO {
-  
+public class ProductItemVO {
+
+  private Long productId;
   private List<ItemVO> items;
 
-  private ProductItemVO(Product product) {
-    super(product);
-  }
-
   public static ProductItemVO valueOf(Product product, List<ItemVO> items) {
-    ProductItemVO vo = new ProductItemVO(product);
+    ProductItemVO vo = new ProductItemVO();
 
+    vo.setProductId(product.getId());
     vo.setItems(items);
 
     return vo;

@@ -1,5 +1,7 @@
 package com.buying.back.application.product.domain;
 
+import static com.buying.back.application.product.service.ItemService.ITEM_OPTION_DELIMITER;
+
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -85,7 +87,7 @@ public class Item extends Base {
   }
 
   public Set<Long> getOptionIds() {
-    return Arrays.stream(this.options.split("/"))
+    return Arrays.stream(this.options.split(ITEM_OPTION_DELIMITER))
       .map(Long::valueOf)
       .collect(Collectors.toSet());
   }

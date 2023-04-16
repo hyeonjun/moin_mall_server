@@ -11,26 +11,26 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OptionVO {
 
-  private Long id;
-  private String name;
-  private String value;
-  private Integer orderBy;
+  private Long optionId;
+  private String optionName;
+  private String optionValue;
+  private Integer optionOrderBy;
 
   @QueryProjection
   public OptionVO(Long id, String name, String value, Integer orderBy) {
-    this.id = id;
-    this.name = name;
-    this.value = value;
-    this.orderBy = orderBy;
+    this.optionId = id;
+    this.optionName = name;
+    this.optionValue = value;
+    this.optionOrderBy = orderBy;
   }
 
   public static OptionVO valueOf(Option option) {
     OptionVO vo = new OptionVO();
 
-    vo.setId(option.getId());
-    vo.setName(option.getName());
-    vo.setValue(option.getValue());
-    vo.setOrderBy(option.getOrderBy());
+    vo.setOptionId(option.getId());
+    vo.setOptionName(option.getName());
+    vo.setOptionValue(option.getValue());
+    vo.setOptionOrderBy(option.getOrderBy());
 
     return vo;
   }

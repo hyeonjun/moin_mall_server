@@ -49,6 +49,10 @@ public class ProductService {
     return ProductVO.valueOf(product);
   }
 
+  public ProductItemVO getProductItem(Long brandId, Long productId) {
+    return new ProductItemVO();
+  }
+
   public Page<ProductVO> getProductList(Long brandId, ProductDto.Search dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));

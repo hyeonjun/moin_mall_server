@@ -39,6 +39,13 @@ public class ProductBrandController {
     return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
+  @GetMapping("/{product-id}/items")
+  public CommonResponse<ProductItemVO> getProductItem(
+    @AuthenticationPrincipal LoginUser loginUser, @PathVariable("product-id") Long productId) {
+    ProductItemVO vo = productService.getProductItem(loginUser.getBrandId(), productId);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
+  }
+
   @GetMapping
   public CommonResponse<Page<ProductVO>> getProductList(
     @AuthenticationPrincipal LoginUser loginUser, ProductDto.Search dto) {

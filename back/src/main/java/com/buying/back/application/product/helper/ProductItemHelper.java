@@ -1,5 +1,7 @@
 package com.buying.back.application.product.helper;
 
+import static com.buying.back.application.product.service.ItemService.ITEM_OPTION_DELIMITER;
+
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.domain.Item;
 import com.buying.back.application.product.domain.Product;
@@ -40,10 +42,10 @@ public class ProductItemHelper {
   public List<ItemVO> createItem(Product product, List<ItemDto.Create> itemDtoList) {
     return itemDtoList.stream().map(itemDto -> {
         // 해당 상품에 대한 옵션 생성
-        List<OptionVO> options = itemOptionHelper.createOptionAll(product, itemDto.getOptionsDto());
+        List<OptionVO> options = itemOptionHelper.createAllOption(product, itemDto.getOptionsDto());
         String itemOptions = options.stream()
-          .map(option -> String.valueOf(option.getId()))
-          .collect(Collectors.joining(","));
+          .map(option -> String.valueOf(option.getOptionId()))
+          .collect(Collectors.joining(ITEM_OPTION_DELIMITER));
 
         // 상품에 대한 아이템 생성
         Item item = Item.create(itemDto, product, itemOptions);

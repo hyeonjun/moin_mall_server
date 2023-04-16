@@ -21,7 +21,7 @@ public class ItemOptionHelper {
   private final OptionRepository optionRepository;
 
   @Transactional
-  public List<OptionVO> createOptionAll(Product product, List<OptionDto.Create> optionsDto) {
+  public List<OptionVO> createAllOption(Product product, List<OptionDto.Create> optionsDto) {
     List<Option> options = optionRepository.saveAll(optionsDto.stream()
         .map(dto -> Option.create(dto, product))
         .collect(Collectors.toList()));

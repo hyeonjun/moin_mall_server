@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 public class ItemService {
     private final ItemRepository itemRepository;
 
+    public final static String ITEM_OPTION_DELIMITER = "/";
+
     public List<ItemVO> getAllByProduct(Product product) {
 //        List<Item> items = itemRepository.findAllByProduct(product);
 //        List<ItemVO> vos = items.stream().map(ItemVO::valueOf).collect(Collectors.toList());

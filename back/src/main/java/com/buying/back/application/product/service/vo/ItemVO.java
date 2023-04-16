@@ -10,23 +10,24 @@ import lombok.Setter;
 @Setter
 public class ItemVO {
 
-  private Long id;
-  private String name;
-  private Integer price;
-  private Integer quantity;
-  private Integer discountPrice;
-  private Integer discountRate;
+  private Long itemId;
+  private String itemName;
+  private Integer itemPrice;
+  private Integer itemQuantity;
+  private Integer itemDiscountPrice;
+  private Integer itemDiscountRate;
   private List<OptionVO> options;
 
   public static ItemVO valueOf(Item item, List<OptionVO> options) {
     ItemVO vo = new ItemVO();
 
-    vo.setId(item.getId());
-    vo.setName(item.getName());
-    vo.setPrice(item.getPrice());
-    vo.setQuantity(item.getQuantity());
-    vo.setDiscountPrice(item.getDiscountPrice());
-    vo.setDiscountRate(item.getDiscountRate());
+    vo.setItemId(item.getId());
+    vo.setItemName(item.getName());
+    vo.setItemPrice(item.getPrice());
+    vo.setItemQuantity(item.getQuantity());
+    vo.setItemDiscountPrice(item.getDiscountPrice());
+    vo.setItemDiscountRate(item.getDiscountRate());
+
     vo.setOptions(options);
 
     return vo;
