@@ -1,7 +1,9 @@
 package com.buying.back.application.product.controller;
 
+import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.service.ProductService;
+import com.buying.back.application.product.service.vo.ItemVO;
 import com.buying.back.application.product.service.vo.ProductItemVO;
 import com.buying.back.application.product.service.vo.ProductVO;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
@@ -79,6 +81,28 @@ public class ProductBrandController {
     ProductVO productVO = productService.updateProduct(loginUser.getBrandId(), productId, dto);
     return new CommonResponse<>(productVO, CommonResponseCode.SUCCESS);
   }
+
+  // 상품의 아이템 단일 수정
+  @PutMapping("/{product-id}/items/{item-id}")
+  public CommonResponse<ItemVO> updateItem(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @PathVariable(value = "product-id") Long productId,
+    @PathVariable(value = "item-id") Long itemId, @RequestBody @Valid ItemDto.Update dto) {
+    ItemVO itemVO = null; // productService.updateItem(loginUser.getBrandId(), productId, itemId, dto);
+    return new CommonResponse<>(itemVO, CommonResponseCode.SUCCESS);
+  }
+
+  // 상품의 아이템들 추가
+
+  // 상품의 아이템의 옵션 단일 수정
+
+  // 상품의 아이템 단일 삭제
+
+  // 상품의 아이템에 옵션 추가
+
+  // 상품의 아이템의 옵션 단일 수정
+
+
 
   @Operation(summary = "상품 삭제", description = "상품에 대한 옵션들과 각 옵션별 아이템들을 삭제합니다.")
   @DeleteMapping("/{product-id}")

@@ -17,9 +17,9 @@ public class ProductOptionHelper {
 
   private final OptionService optionService;
 
-  public List<OptionVO> getProductOptions(Product product) {
-    return optionService.getProductOptions(product);
-  }
+//  public List<OptionVO> getProductOptions(Product product) {
+//    return optionService.getProductOptions(product);
+//  }
 
   public Option createOption(Product product, OptionDto.Create optionDto) {
     return null;

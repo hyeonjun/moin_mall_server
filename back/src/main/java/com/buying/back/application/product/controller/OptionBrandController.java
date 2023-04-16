@@ -20,12 +20,12 @@ public class OptionBrandController {
     private final OptionService optionService;
     private final OptionProductHelper optionProductHelper;
 
-    @GetMapping("/{product-id}")
-    public CommonResponse<List<OptionVO>> getProductOptions(@PathVariable("product-id") Long productId) {
-        Product product = optionProductHelper.getProduct(productId);
-        List<OptionVO> productOptions = optionService.getProductOptions(product);
-        return new CommonResponse<>(productOptions, CommonResponseCode.SUCCESS);
-    }
+//    @GetMapping("/{product-id}")
+//    public CommonResponse<List<OptionVO>> getProductOptions(@PathVariable("product-id") Long productId) {
+//        Product product = optionProductHelper.getProduct(productId);
+//        List<OptionVO> productOptions = optionService.getProductOptions(product);
+//        return new CommonResponse<>(productOptions, CommonResponseCode.SUCCESS);
+//    }
 
 //    @PostMapping
 //    public CommonResponse<OptionVO> createProductOptions(@RequestParam Long productId, @RequestBody OptionDto.Create create) {
