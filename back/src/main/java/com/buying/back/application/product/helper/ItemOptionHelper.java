@@ -20,6 +20,10 @@ public class ItemOptionHelper {
 
   private final OptionRepository optionRepository;
 
+  public List<OptionVO> getAllOptionByItem(Set<Long> optionIds) {
+    return optionRepository.findAllOptionIdIn(optionIds);
+  }
+
   @Transactional
   public List<OptionVO> createAllOption(Product product, List<OptionDto.Create> optionsDto) {
     List<Option> options = optionRepository.saveAll(optionsDto.stream()

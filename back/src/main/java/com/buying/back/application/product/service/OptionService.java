@@ -20,9 +20,6 @@ import java.util.stream.Collectors;
 public class OptionService {
     private final OptionRepository optionRepository;
 
-    public List<OptionVO> getProductOptions(Product product) {
-        return optionRepository.findDistinctNameByProduct(product);
-    }
 
     public List<ItemVO> getItemOptions(Set<Long> ids) {
         return null; // optionRepository.findOptionsByIdIn(ids);

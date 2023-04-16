@@ -11,6 +11,7 @@ import com.buying.back.application.product.service.OptionService;
 import com.buying.back.application.product.service.vo.ItemVO;
 import com.buying.back.application.product.service.vo.OptionVO;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -22,20 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductItemHelper {
 
   private final ItemOptionHelper itemOptionHelper;
-  private final OptionService optionService;
-  private final ItemService itemService;
   private final ItemRepository itemRepository;
 
   public List<ItemVO> getItemsByProduct(Product product) {
-    List<Item> items = itemRepository.findAllByProduct(product);
-
-    return null;
-//      items.stream().map(item -> {
-//      Set<Long> optionIds = item.getOptionIds();
-//      List<ItemOptionVO> itemOptions = optionService.getItemOptions(optionIds);
-//
-//      return new ItemDetailVO(item, itemOptions);
-//    }).collect(Collectors.toList());
+    return itemRepository.findAllByProduct(product).stream()
+      .map(item -> {
+        List<OptionVO> itemOptions = itemOptionHelper.getAllOptionByItem(item.getOptionIds());
+        return ItemVO.valueOf(item, itemOptions);
+      }).collect(Collectors.toList());
   }
 
   @Transactional

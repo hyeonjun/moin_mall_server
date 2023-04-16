@@ -58,7 +58,9 @@ public class ProductService {
 
     checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
 
-    return new ProductItemVO();
+    List<ItemVO> items = productItemHelper.getItemsByProduct(product);
+
+    return ProductItemVO.valueOf(product, items);
   }
 
   public Page<ProductVO> getProductList(Long brandId, ProductDto.Search dto) {
