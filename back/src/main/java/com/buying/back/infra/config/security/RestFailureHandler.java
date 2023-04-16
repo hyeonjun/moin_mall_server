@@ -27,8 +27,6 @@ public class RestFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     ResponseCode responseCode = CommonResponseCode.FAIL;
     if(exception instanceof BadCredentialsException) {
       responseCode = AuthenticationExceptionCode.BAD_CREDENTIALS;
-    } else if (exception instanceof AccountExpiredException) {
-      responseCode = AuthenticationExceptionCode.INACTIVE_USER;
     }
     jsonConverter.write(new CommonResponse<>(responseCode), MediaType.APPLICATION_JSON,
       new ServletServerHttpResponse(response));

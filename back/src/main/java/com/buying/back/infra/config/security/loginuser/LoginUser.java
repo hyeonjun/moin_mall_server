@@ -17,6 +17,7 @@ public class LoginUser extends User {
   private final String name;
   private final LocalDateTime recentPasswordUpdateDateTime;
   private Long brandId;
+  private final boolean activated;
 
   public LoginUser(Account account) {
     super(account.getEmail(), account.getPassword(), Collections.emptySet());
@@ -24,6 +25,7 @@ public class LoginUser extends User {
     this.email = account.getEmail();
     this.name = account.getName();
     this.recentPasswordUpdateDateTime = account.getRecentPasswordUpdateDateTime();
+    this.activated = account.isActivated();
 
     Brand brand = account.getBrand();
     if (Objects.nonNull(brand)) {
