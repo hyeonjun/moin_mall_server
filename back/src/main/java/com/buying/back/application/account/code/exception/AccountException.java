@@ -25,7 +25,8 @@ public class AccountException extends CommonException {
     ALREADY_ACTIVATED_ACCOUNT("AEC-005", "already activated account"),
     ALREADY_DEACTIVATED_ACCOUNT("AEC-006", "already deactivated account"),
     DEACTIVATED_ACCOUNT("AEC-007", "deactivated account, try log in this account"),
-    NOT_AUTHORIZED("AEC-008", "not authorized")
+    NOT_AUTHORIZED("AEC-008", "not authorized"),
+    NOT_MATCHES_NEW_PASSWORD("AEC-009", "not matches new password"),
     ;
 
     private final String code;

@@ -15,7 +15,5 @@ public class UpdateAccountDTO {
   private String email;
   @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
   private String name;
-  @Length(min = 6, max = VerifyLengthUtil.MAX_PASSWORD_LENGTH)
-  private String password;
 
 }

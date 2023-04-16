@@ -3,6 +3,7 @@ package com.buying.back.application.account.controller;
 import static com.buying.back.util.response.CommonResponseCode.SUCCESS;
 
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.UpdateAccountPasswordDTO;
 import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.service.AccountService;
 import com.buying.back.application.account.service.vo.AccountCouponVO;
@@ -60,12 +61,14 @@ public class AccountController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
-  // TODO: 2023/03/26 아이디 찾기, 비밀번호 변경
+  // TODO: 2023/03/26 아이디 찾기
   @PutMapping("/update:password")
   public CommonResponse<AccountDefaultVO> updateAccountPassword(
     @AuthenticationPrincipal LoginUser loginUser,
-    @Valid @RequestBody UpdateActivateAccountDTO dto) {
-    AccountDefaultVO vo = accountService.updateAccountActivate(loginUser.getAccountId(), dto);
+    @Valid @RequestBody UpdateAccountPasswordDTO dto) {
+    AccountDefaultVO vo = accountService.updateAccountPassword(loginUser.getAccountId(), dto);
     return new CommonResponse<>(vo, SUCCESS);
   }
+
+
 }
