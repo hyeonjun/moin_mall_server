@@ -16,6 +16,7 @@ public class LoginUser extends User {
   private final String email;
   private final String name;
   private final LocalDateTime recentPasswordUpdateDateTime;
+  private final LocalDateTime recentSignInDateTime;
   private Long brandId;
   private final boolean activated;
 
@@ -25,6 +26,7 @@ public class LoginUser extends User {
     this.email = account.getEmail();
     this.name = account.getName();
     this.recentPasswordUpdateDateTime = account.getRecentPasswordUpdateDateTime();
+    this.recentSignInDateTime = account.getRecentSignInDateTime();
     this.activated = account.isActivated();
 
     Brand brand = account.getBrand();
