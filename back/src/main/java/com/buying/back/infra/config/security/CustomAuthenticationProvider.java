@@ -44,10 +44,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       throw new BadCredentialsException("id or password is wrong!");
     }
 
-    if (!account.isActivated()) {
-      throw new AccountExpiredException("inactive user");
-    }
-
     LoginUser loginUser = new LoginUser(account);
 
     return new UsernamePasswordAuthenticationToken(loginUser, loginUser.getPassword(),
