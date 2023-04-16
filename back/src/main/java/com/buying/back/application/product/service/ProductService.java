@@ -7,6 +7,8 @@ import com.buying.back.application.account.repository.BrandRepository;
 import com.buying.back.application.category.code.exception.CategoryException;
 import com.buying.back.application.category.domain.Category;
 import com.buying.back.application.category.repository.CategoryRepository;
+import com.buying.back.application.common.exception.code.AuthenticationException;
+import com.buying.back.application.common.exception.code.AuthenticationException.AuthenticationExceptionCode;
 import com.buying.back.application.product.code.ProductExceptionCode;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
@@ -64,22 +66,29 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductDefaultVO updateProduct(Long productId, ProductDto.Update dto) {
-/*    Product product = productRepository.findById(productId).orElseThrow();
-    product.update(dto, null);
-    productRepository.save(product);
+  public ProductDefaultVO updateProduct(Long brandId, Long productId, ProductDto.Update dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
-    List<ItemDto.Create> newItemsDto = dto.getNewItemsDto();
-    if (!newItemsDto.isEmpty()) {
-      createItemsAndOptions(product, newItemsDto);
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
+
+    // 브랜드 검증
+    if (!brand.equals(product.getBrand())) {
+      throw new AuthenticationException(AuthenticationExceptionCode.NOT_AUTHORIZED);
     }
-    dto.getItemsDto().forEach(productItemHelper::updateItem);
 
-    List<ItemDetailVO> itemsByProduct = productItemHelper.getItemsByProduct(product);
-    List<OptionVO> productOptions = productOptionHelper.getProductOptions(product);
-
-    return new ProductDetailVO(product, itemsByProduct, productOptions);*/
-    return new ProductDefaultVO();
+    // 상품 정보 및 카테고리 변경
+    Category originCategory = product.getCategory();
+    Category targetCategory = null;
+    // 같은 카테고리인 경우 변경할 필요없음
+    if (!originCategory.getId().equals(dto.getCategoryId())) {
+      targetCategory = categoryRepository.findById(dto.getCategoryId())
+        .orElseThrow(() -> new CategoryException(CategoryException.CategoryExceptionCode.NOT_FOUND_CATEGORY));
+    }
+    product.update(dto, targetCategory);
+    productRepository.save(product);
+    return ProductDefaultVO.valueOf(product);
   }
 
   @Transactional

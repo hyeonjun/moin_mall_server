@@ -46,10 +46,10 @@ public class ProductDto {
         @NotBlank
         @Min(value = 0, message = "상품 가격은 0 보다 커야합니다.")
         private Integer price;
-        @Valid
-        private List<ItemDto.Update> itemsDto;
-        @Valid
-        private List<ItemDto.Create> newItemsDto;
+//        @Valid
+//        private List<ItemDto.Update> itemsDto;
+//        @Valid
+//        private List<ItemDto.Create> newItemsDto;
     }
 
     @Getter

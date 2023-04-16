@@ -51,17 +51,20 @@ public class ProductBrandController {
 
   @Operation(summary = "상품 수정", description = "상품 정보 수정, 옵션 수정 불가")
   @PutMapping("/{product-id}")
-  public CommonResponse<ProductDefaultVO> updateProduct(
+  public CommonResponse<ProductDefaultVO> updateProduct( // 상품의 정보만 수정하는 API
     @AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "product-id") Long productId, @RequestBody @Valid ProductDto.Update dto) {
     /*
-     * 카테고리는 수정 가능
-     * 브랜드는 수정 불가능
-     * 기존 옵션에 옵션값 추가만 가능
+     * 상품 정보 수정
+     * 내부 아이템 수정
+      * 아이템 정보 수정
+      * 아이템의 옵션 정보에 대해 수정 / 옵션 추가 가능 / 옵션 삭제는 따로
+        * 수정 시 아이디는 그대로니까 수정 가능
+        * 추가 시 기존 String.concat(,Id)
+        * 삭제 시 해당 아이템 아이디를 받아서 해야된다
      * 아이템은 재고, 가격, 할인가, 할인율, 상품상태(추가예정) 만 가능하게
-     * 옵션은 수정 불가
      */
-    ProductDefaultVO productDefaultVO = productService.updateProduct(productId, dto);
+    ProductDefaultVO productDefaultVO = productService.updateProduct(loginUser.getBrandId(), productId, dto);
     return new CommonResponse<>(productDefaultVO, CommonResponseCode.SUCCESS);
   }
 
