@@ -72,7 +72,7 @@ public class ProductBrandController {
   @DeleteMapping("/{product-id}")
   public CommonResponse<Void> deleteProduct(
     @AuthenticationPrincipal LoginUser loginUser, @PathVariable(value = "product-id") Long productId) {
-    productService.deleteProduct(productId);
+    productService.deleteProduct(loginUser.getBrandId(), productId);
     return new CommonResponse<>(CommonResponseCode.SUCCESS);
   }
 }

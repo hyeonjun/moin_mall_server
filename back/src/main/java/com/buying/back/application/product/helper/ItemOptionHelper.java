@@ -5,9 +5,12 @@ import com.buying.back.application.product.domain.Option;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.repository.OptionRepository;
 import com.buying.back.application.product.service.vo.OptionVO;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,11 @@ public class ItemOptionHelper {
 
     return options.stream().map(OptionVO::valueOf)
       .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public void deleteOptionByProduct(Set<Long> optionIds) {
+    optionRepository.deleteAllByOptionIdsInQuery(optionIds, LocalDateTime.now());
   }
 
 }

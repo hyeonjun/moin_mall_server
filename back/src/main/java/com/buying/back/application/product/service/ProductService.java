@@ -92,12 +92,23 @@ public class ProductService {
   }
 
   @Transactional
-  public void deleteProduct(Long productId) {
+  public void deleteProduct(Long brandId, Long productId) {
     Product product = productRepository.findById(productId)
-      .orElseThrow(() -> new RuntimeException("NOT FOND PRODUCT"));
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
+
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    if (!brand.equals(product.getBrand())) {
+      throw new AuthenticationException(AuthenticationExceptionCode.NOT_AUTHORIZED);
+    }
+
+    // 상품 삭제
+    product.delete();
+    productRepository.save(product);
+
+    // 상품에 속한 아이템 및 아이팀의 옵션 삭제 -> Async
     productItemHelper.deleteItemByProduct(product);
-    productOptionHelper.deleteOptionByProduct(product);
-    productRepository.delete(product);
   }
 }
 

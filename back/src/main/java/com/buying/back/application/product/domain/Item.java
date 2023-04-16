@@ -1,7 +1,9 @@
 package com.buying.back.application.product.domain;
 
+import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -23,7 +25,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Item {
+public class Item extends Base {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,6 +43,9 @@ public class Item {
   @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "product_id")
   @JsonBackReference
   private Product product;
+
+  private boolean deleted;
+  private LocalDateTime deletedAt;
 
   @Builder
   private Item(String name, String options, Integer quantity, Integer price, Integer discountPrice,
@@ -72,6 +77,11 @@ public class Item {
     this.quantity = dto.getQuantity();
     this.discountPrice = dto.getDiscountPrice();
     this.discountRate = dto.getDiscountRate();
+  }
+
+  public void deleteItem() {
+    this.deleted = true;
+    this.deletedAt = LocalDateTime.now();
   }
 
   public Set<Long> getOptionIds() {

@@ -11,7 +11,9 @@ import com.buying.back.application.product.service.vo.OptionVO;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +36,7 @@ public class ProductItemHelper {
 //    }).collect(Collectors.toList());
   }
 
+  @Transactional
   public List<ItemVO> createItem(Product product, List<ItemDto.Create> itemDtoList) {
     return itemDtoList.stream().map(itemDto -> {
         // 해당 상품에 대한 옵션 생성
@@ -54,7 +57,13 @@ public class ProductItemHelper {
     return null; // itemService.updateItem(itemDto);
   }
 
+  @Async
+  @Transactional // 여기서 실패되어도 상위 메서드는 롤백되지 않음을 주의
   public void deleteItemByProduct(Product product) {
-    itemService.deleteByProduct(product);
+    List<Item> items = itemRepository.findAllByProduct(product);
+    items.stream()
+      .peek(Item::deleteItem) // 아이템 삭제
+      .forEach(item -> itemOptionHelper.deleteOptionByProduct(item.getOptionIds())); // 아이템에 대한 옵션 삭제
+    itemRepository.saveAll(items);
   }
 }

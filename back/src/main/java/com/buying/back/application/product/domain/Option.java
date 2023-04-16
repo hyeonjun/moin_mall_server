@@ -2,6 +2,7 @@ package com.buying.back.application.product.domain;
 
 import com.buying.back.application.product.controller.dto.OptionDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,6 +37,9 @@ public class Option {
   @JsonBackReference
   private Product product;
 
+  private boolean deleted;
+  private LocalDateTime deletedAt;
+
   @Builder
   private Option(String name, String value, Integer orderBy, Product product) {
     this.name = name;
@@ -51,6 +55,11 @@ public class Option {
       .orderBy(dto.getOrderBy())
       .product(product)
       .build();
+  }
+
+  public void optionDelete() {
+    this.deleted = true;
+    this.deletedAt = LocalDateTime.now();
   }
 
   @Override
