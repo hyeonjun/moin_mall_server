@@ -1,9 +1,8 @@
 package com.buying.back.application.product.repository;
 
-import com.buying.back.application.account.domain.Brand;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.repository.param.SearchProductListParam;
-import com.buying.back.application.product.service.vo.ProductDefaultVO;
+import com.buying.back.application.product.service.vo.ProductVO;
 import com.buying.back.application.product.service.vo.QProductDefaultVO;
 import com.buying.back.util.querydsl.CustomQuerydslRepositorySupport;
 import com.querydsl.core.BooleanBuilder;
@@ -26,8 +25,8 @@ public class ProductRepositoryImpl extends CustomQuerydslRepositorySupport imple
   }
 
   @Override
-  public Page<ProductDefaultVO> findAllByBrand(Pageable pageable, SearchProductListParam param) {
-    JPAQuery<ProductDefaultVO> jpaQuery = select(productDefaultVO())
+  public Page<ProductVO> findAllByBrand(Pageable pageable, SearchProductListParam param) {
+    JPAQuery<ProductVO> jpaQuery = select(productDefaultVO())
       .from(product)
       .innerJoin(product.brand, brand)
       .innerJoin(product.category, category)

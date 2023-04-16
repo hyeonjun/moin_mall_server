@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ProductDefaultVO {
+public class ProductVO {
 
   private Long productId;
   private String name;
@@ -19,7 +19,7 @@ public class ProductDefaultVO {
   private Long categoryId;
   private String categoryName;
 
-  protected ProductDefaultVO(Product product) {
+  protected ProductVO(Product product) {
     this.productId = product.getId();
     this.name = product.getName();
     this.price = product.getPrice();
@@ -32,12 +32,12 @@ public class ProductDefaultVO {
     this.categoryName = category.getName();
   }
 
-  public static ProductDefaultVO valueOf(Product product) {
-    return new ProductDefaultVO(product);
+  public static ProductVO valueOf(Product product) {
+    return new ProductVO(product);
   }
 
   @QueryProjection
-  public ProductDefaultVO(Long productId, String name, Integer price, Long brandId, Long categoryId,
+  public ProductVO(Long productId, String name, Integer price, Long brandId, Long categoryId,
     String categoryName) {
     this.productId = productId;
     this.name = name;

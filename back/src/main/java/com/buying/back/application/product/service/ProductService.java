@@ -10,21 +10,16 @@ import com.buying.back.application.category.repository.CategoryRepository;
 import com.buying.back.application.common.exception.code.AuthenticationException;
 import com.buying.back.application.common.exception.code.AuthenticationException.AuthenticationExceptionCode;
 import com.buying.back.application.product.code.ProductExceptionCode;
-import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.exception.ProductException;
 import com.buying.back.application.product.helper.ProductItemHelper;
-import com.buying.back.application.product.helper.ProductOptionHelper;
 import com.buying.back.application.product.repository.ProductRepository;
 import com.buying.back.application.product.repository.param.SearchProductListParam;
 import com.buying.back.application.product.service.vo.ItemVO;
-import com.buying.back.application.product.service.vo.OptionVO;
-import com.buying.back.application.product.service.vo.ProductDefaultVO;
-import com.buying.back.application.product.service.vo.ProductDetailVO;
-import java.util.ArrayList;
+import com.buying.back.application.product.service.vo.ProductVO;
+import com.buying.back.application.product.service.vo.ProductItemVO;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -38,19 +33,23 @@ public class ProductService {
   private final BrandRepository brandRepository;
   private final ProductRepository productRepository;
   private final ProductItemHelper productItemHelper;
-  private final ProductOptionHelper productOptionHelper;
 
-  public ProductDefaultVO getProduct(Long productId) {
+
+  public ProductVO getProduct(Long brandId, Long productId) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
     Product product = productRepository.findById(productId)
       .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
 
-//    List<ItemDetailVO> itemsByProduct = productItemHelper.getItemsByProduct(product);
-//    List<OptionVO> productOptions = productOptionHelper.getProductOptions(product);
+    if (!product.getBrand().getId().equals(brand.getId())) {
+      throw new AuthenticationException(AuthenticationExceptionCode.NOT_AUTHORIZED);
+    }
 
-    return new ProductDetailVO(); // product, itemsByProduct, productOptions
+    return ProductVO.valueOf(product);
   }
 
-  public Page<ProductDefaultVO> getProductList(Long brandId, ProductDto.Search dto) {
+  public Page<ProductVO> getProductList(Long brandId, ProductDto.Search dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
@@ -62,7 +61,7 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductDetailVO createProduct(Long brandId, ProductDto.Create dto) {
+  public ProductItemVO createProduct(Long brandId, ProductDto.Create dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
@@ -75,11 +74,11 @@ public class ProductService {
 
     List<ItemVO> itemVOList = productItemHelper.createItem(product, dto.getItemsDto());
 
-    return ProductDetailVO.valueOf(product, itemVOList);
+    return ProductItemVO.valueOf(product, itemVOList);
   }
 
   @Transactional
-  public ProductDefaultVO updateProduct(Long brandId, Long productId, ProductDto.Update dto) {
+  public ProductVO updateProduct(Long brandId, Long productId, ProductDto.Update dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
@@ -101,7 +100,7 @@ public class ProductService {
     }
     product.update(dto, targetCategory);
     productRepository.save(product);
-    return ProductDefaultVO.valueOf(product);
+    return ProductVO.valueOf(product);
   }
 
   @Transactional

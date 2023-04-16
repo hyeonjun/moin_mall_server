@@ -2,7 +2,8 @@ package com.buying.back.application.product.controller;
 
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.service.ProductService;
-import com.buying.back.application.product.service.vo.ProductDefaultVO;
+import com.buying.back.application.product.service.vo.ProductItemVO;
+import com.buying.back.application.product.service.vo.ProductVO;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
 import com.buying.back.util.response.CommonResponse;
 import com.buying.back.util.response.CommonResponseCode;
@@ -29,37 +30,33 @@ public class ProductBrandController {
 
   private final ProductService productService;
 
-  @Operation(summary = "상품 단건 조회", description = "상품에 대한 각 옵션과 각 옵션별 아이템들을 조회합니다.")
+  // 상품 단건 조회 시 동시에 해당 상품의 아이템을 조회 -> 아이템: 아이템 정보 + 옵션 정보
+  @Operation(summary = "상품 단건 조회", description = "상품 정보만 조회")
   @GetMapping("/{product-id}")
-  public CommonResponse<ProductDefaultVO> getProduct(
+  public CommonResponse<ProductVO> getProduct(
     @AuthenticationPrincipal LoginUser loginUser, @PathVariable("product-id") Long productId) {
-    ProductDefaultVO productVO = productService.getProduct(productId);
-    return new CommonResponse<>(productVO, CommonResponseCode.SUCCESS);
+    ProductVO vo = productService.getProduct(loginUser.getBrandId(), productId);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
-  // TODO: 2023/04/15 상품 리스트 조회
-  // 해당 기업의 상품 리스트 조회(Page<ProductDefaultVO>) -> 상품 클릭
-  //   1. 해당 상품 상세 정보 조회(ProductDetailVO)
-  //   2. 해당 상품의 옵션과 각 옵션별 아이템 조회(Page<OptionDetailVO> -> OptionDetailVO -> Page<ItemDetailVO>)
   @GetMapping
-  public CommonResponse<Page<ProductDefaultVO>> getProductList(
+  public CommonResponse<Page<ProductVO>> getProductList(
     @AuthenticationPrincipal LoginUser loginUser, ProductDto.Search dto) {
-    Page<ProductDefaultVO> page = productService.getProductList(loginUser.getBrandId(), dto);
+    Page<ProductVO> page = productService.getProductList(loginUser.getBrandId(), dto);
     return new CommonResponse<>(page, CommonResponseCode.SUCCESS);
   }
 
-
   @Operation(summary = "상품 등록", description = "상품에 대한 옵션과 각 옵션별 아이템들을 등록합니다.")
   @PostMapping
-  public CommonResponse<ProductDefaultVO> createProduct(
+  public CommonResponse<ProductItemVO> createProduct(
     @AuthenticationPrincipal LoginUser loginUser, @RequestBody @Valid ProductDto.Create dto) {
-    ProductDefaultVO product = productService.createProduct(loginUser.getBrandId(), dto);
-    return new CommonResponse<>(product, CommonResponseCode.SUCCESS);
+    ProductItemVO vo = productService.createProduct(loginUser.getBrandId(), dto);
+    return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }
 
-  @Operation(summary = "상품 수정", description = "상품 정보 수정, 옵션 수정 불가")
+  @Operation(summary = "상품 수정", description = "상품 정보 수정")
   @PutMapping("/{product-id}")
-  public CommonResponse<ProductDefaultVO> updateProduct( // 상품의 정보만 수정하는 API
+  public CommonResponse<ProductVO> updateProduct( // 상품의 정보만 수정하는 API
     @AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "product-id") Long productId, @RequestBody @Valid ProductDto.Update dto) {
     /*
@@ -72,8 +69,8 @@ public class ProductBrandController {
         * 삭제 시 해당 아이템 아이디를 받아서 해야된다
      * 아이템은 재고, 가격, 할인가, 할인율, 상품상태(추가예정) 만 가능하게
      */
-    ProductDefaultVO productDefaultVO = productService.updateProduct(loginUser.getBrandId(), productId, dto);
-    return new CommonResponse<>(productDefaultVO, CommonResponseCode.SUCCESS);
+    ProductVO productVO = productService.updateProduct(loginUser.getBrandId(), productId, dto);
+    return new CommonResponse<>(productVO, CommonResponseCode.SUCCESS);
   }
 
   @Operation(summary = "상품 삭제", description = "상품에 대한 옵션들과 각 옵션별 아이템들을 삭제합니다.")
