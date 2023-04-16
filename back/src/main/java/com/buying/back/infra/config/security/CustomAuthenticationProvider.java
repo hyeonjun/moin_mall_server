@@ -4,6 +4,7 @@ import com.buying.back.application.account.domain.Account;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.infra.config.security.loginuser.LoginUser;
 import com.buying.back.util.encryption.PasswordProvider;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     if (!passwordProvider.matches(password, account.getPassword())) {
       throw new BadCredentialsException("id or password is wrong!");
     }
+
+    // 로그인 성공
+    accountRepository.updateRecentSignInDateTimeQuery(account.getId(), LocalDateTime.now());
 
     LoginUser loginUser = new LoginUser(account);
 

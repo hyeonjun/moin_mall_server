@@ -4,6 +4,8 @@ import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
 import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
+import com.buying.back.application.account.controller.dto.account.UpdateAccountPasswordDTO;
+import com.buying.back.application.account.controller.dto.account.UpdateAuthPasswordDTO;
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.domain.Account;
@@ -63,6 +65,23 @@ public class AccountService {
     return AccountDefaultVO.valueOf(account);
   }
 
+  @Transactional
+  public AccountDefaultVO updateAuthPassword(UpdateAuthPasswordDTO dto) {
+    Account account = accountRepository.findByEmail(dto.getEmail())
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    // TODO: 2023/04/16 code(인증 번호) 검증 필요
+
+    if (dto.getConfirmPassword().equals(dto.getNewPassword())) {
+      throw new AccountException(AccountExceptionCode.NOT_MATCHES_NEW_PASSWORD);
+    }
+
+    account.updatePassword(passwordProvider.encode(dto.getNewPassword()));
+    accountRepository.save(account);
+
+    return AccountDefaultVO.valueOf(account);
+  }
+
   // login user
   public AccountDefaultVO getMyInformation(Long loginUserId) {
     Account account = accountRepository.findById(loginUserId)
@@ -76,16 +95,18 @@ public class AccountService {
     return accountCouponHelper.getCouponListByAccount(dto, account);
   }
 
+  @Transactional
   public AccountDefaultVO updateMyInformation(Long loginUserId, UpdateAccountDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
 
-    account.update(dto);
+    account.updateInformation(dto);
     accountRepository.save(account);
 
     return AccountDefaultVO.valueOf(account);
   }
 
+  @Transactional
   public AccountDefaultVO updateAccountActivate(Long loginUserId, UpdateActivateAccountDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
@@ -104,6 +125,25 @@ public class AccountService {
     return AccountDefaultVO.valueOf(account);
   }
 
+  @Transactional
+  public AccountDefaultVO updateAccountPassword(Long loginUserId, UpdateAccountPasswordDTO dto) {
+    Account account = accountRepository.findById(loginUserId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+
+    if (!account.isActivated()) {
+      throw new AccountException(AccountExceptionCode.DEACTIVATED_ACCOUNT);
+    }
+
+    if (dto.getConfirmPassword().equals(dto.getNewPassword())) {
+      throw new AccountException(AccountExceptionCode.NOT_MATCHES_NEW_PASSWORD);
+    }
+
+    account.updatePassword(passwordProvider.encode(dto.getNewPassword()));
+    accountRepository.save(account);
+
+    return AccountDefaultVO.valueOf(account);
+  }
+
   // management
   public Page<NormalAccountManagementVO> getNormalAccountList(SearchAccountManagementDTO dto) {
     return accountRepository.findAll(dto.getPageRequest(), dto);
@@ -115,6 +155,7 @@ public class AccountService {
     return NormalAccountManagementVO.valueOf(account);
   }
 
+  @Transactional
   public NormalAccountManagementVO activateNormalAccount(Long accountId, UpdateActivateAccountDTO dto) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
@@ -124,6 +165,7 @@ public class AccountService {
     return NormalAccountManagementVO.valueOf(account);
   }
 
+  @Transactional
   public NormalAccountManagementVO resetNormalPassword(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));

@@ -16,7 +16,6 @@ import com.buying.back.application.account.domain.Brand;
 import com.buying.back.application.account.helper.BrandAccountHelper;
 import com.buying.back.application.account.repository.AccountRepository;
 import com.buying.back.application.account.repository.BrandRepository;
-import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.BrandAccountDetailVO;
 import com.buying.back.application.account.service.vo.BrandAccountManagementVO;
 import com.buying.back.application.account.service.vo.BrandDetailVO;
@@ -103,7 +102,7 @@ public class BrandService {
       throw new AccountException(AccountExceptionCode.ALREADY_DEACTIVATED_ACCOUNT);
     }
 
-    account.update(dto);
+    account.updateInformation(dto);
     accountRepository.save(account);
 
     return BrandAccountDetailVO.valueOf(brand, account);
