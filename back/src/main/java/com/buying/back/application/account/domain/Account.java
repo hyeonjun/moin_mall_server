@@ -29,7 +29,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
 
-@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
   name = "account",
   uniqueConstraints = {
@@ -37,12 +38,11 @@ import org.springframework.util.StringUtils;
   },
   indexes = {
     @Index(columnList = "email"),
-    @Index(columnList = "birthDay"),
-    @Index(columnList = "signUpDateTime")
+    @Index(columnList = "birth_day"),
+    @Index(columnList = "sign_up_date_time")
   }
 )
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Account extends Base {
 
   @Id
@@ -69,7 +69,10 @@ public class Account extends Base {
   private LocalDate deactivatedDate;
 
   @Setter
+  @Column(name = "birth_day", nullable = false)
   private LocalDate birthDay;
+
+  @Column(name = "sign_up_date_time", nullable = false)
   private LocalDateTime signUpDateTime;
 
   @Setter
