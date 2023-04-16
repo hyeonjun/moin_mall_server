@@ -3,6 +3,7 @@ package com.buying.back.application.product.domain;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
@@ -77,5 +78,22 @@ public class Item {
     return Arrays.stream(this.options.split("/"))
       .map(Long::valueOf)
       .collect(Collectors.toSet());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Item)) {
+      return false;
+    }
+    Item item = (Item) o;
+    return Objects.equals(getId(), item.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }

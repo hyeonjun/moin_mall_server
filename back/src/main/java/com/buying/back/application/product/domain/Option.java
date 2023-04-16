@@ -2,6 +2,7 @@ package com.buying.back.application.product.domain;
 
 import com.buying.back.application.product.controller.dto.OptionDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,5 +51,22 @@ public class Option {
       .orderBy(dto.getOrderBy())
       .product(product)
       .build();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Option)) {
+      return false;
+    }
+    Option option = (Option) o;
+    return Objects.equals(getId(), option.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }

@@ -6,6 +6,7 @@ import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -73,11 +74,31 @@ public class Product extends Base {
   public void update(ProductDto.Update dto, Category category) {
     this.name = dto.getName();
     this.price = dto.getPrice();
-    this.category = category;
+
+    if (category != null) {
+      this.category = category;
+    }
   }
 
   public void delete() {
     this.deleted = true;
     this.deletedAt = LocalDateTime.now();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Product)) {
+      return false;
+    }
+    Product product = (Product) o;
+    return Objects.equals(getId(), product.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
