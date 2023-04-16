@@ -30,7 +30,7 @@ public class ProductOptionHelper {
 //    return optionService.createAll(product, optionsDto);
 //  }
 
-  public void deleteOptionByProduct(Product product) {
-    optionService.deleteByProduct(product);
-  }
+//  public void deleteOptionByProduct(Product product) {
+//    optionService.deleteByProduct(product);
+//  }
 }

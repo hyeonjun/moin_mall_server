@@ -56,8 +56,8 @@ public class OptionService {
 //                .collect(Collectors.toList()));
 //    }
 
-    @Transactional
-    public void deleteByProduct(Product product) {
-        optionRepository.deleteByProduct(product);
-    }
+//    @Transactional
+//    public void deleteByProduct(Product product) {
+//        optionRepository.deleteByProduct(product);
+//    }
 }

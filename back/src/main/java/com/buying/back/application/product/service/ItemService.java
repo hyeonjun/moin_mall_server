@@ -47,8 +47,8 @@ public class ItemService {
 //        return new ItemVO(item);
 //    }
 
-    @Transactional
-    public void deleteByProduct(Product product) {
-        itemRepository.deleteByProduct(product);
-    }
+//    @Transactional
+//    public void deleteByProduct(Product product) {
+//        itemRepository.deleteByProduct(product);
+//    }
 }

@@ -9,11 +9,13 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class SearchProductListParam {
+
   private String productName;
-  private String brandName;
+
   private Long categoryId;
+  private Long brandId;
+
   private Integer priceFrom;
   private Integer priceTo;
 
@@ -25,13 +27,11 @@ public class SearchProductListParam {
   public static SearchProductListParam valueOf(ProductDto.Search dto) {
     SearchProductListParam param = new SearchProductListParam();
     param.setProductName(dto.getProductName());
-    param.setBrandName(dto.getBrandName());
     param.setCategoryId(dto.getCategoryId());
     param.setPriceFrom(dto.getPriceFrom());
     param.setPriceTo(dto.getPriceTo());
     param.setCreatedDateFrom(dto.getCreatedDateFrom());
     param.setCreatedDateTo(dto.getCreatedDateTo());
-    param.setDeleted(Boolean.FALSE);
     return param;
   }
 }

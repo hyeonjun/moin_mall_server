@@ -1,5 +1,6 @@
 package com.buying.back.application.product.controller.dto;
 
+import com.buying.back.application.common.dto.PagingDTO;
 import com.buying.back.util.verify.VerifyLengthUtil;
 import lombok.Data;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 
 public class ProductDto {
 
@@ -54,13 +56,13 @@ public class ProductDto {
 
     @Getter
     @Setter
-    public static class Search {
+    public static class Search extends PagingDTO {
         private String productName;
-        private String brandName;
         private Long categoryId;
         private Integer priceFrom;
         private Integer priceTo;
         private LocalDate createdDateFrom;
         private LocalDate createdDateTo;
+        private Boolean deleted;
     }
 }

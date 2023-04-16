@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,12 +41,19 @@ public class ProductBrandController {
   // 해당 기업의 상품 리스트 조회(Page<ProductDefaultVO>) -> 상품 클릭
   //   1. 해당 상품 상세 정보 조회(ProductDetailVO)
   //   2. 해당 상품의 옵션과 각 옵션별 아이템 조회(Page<OptionDetailVO> -> OptionDetailVO -> Page<ItemDetailVO>)
+  @GetMapping
+  public CommonResponse<Page<ProductDefaultVO>> getProductList(
+    @AuthenticationPrincipal LoginUser loginUser, ProductDto.Search dto) {
+    Page<ProductDefaultVO> page = productService.getProductList(loginUser.getBrandId(), dto);
+    return new CommonResponse<>(page, CommonResponseCode.SUCCESS);
+  }
+
 
   @Operation(summary = "상품 등록", description = "상품에 대한 옵션과 각 옵션별 아이템들을 등록합니다.")
   @PostMapping
   public CommonResponse<ProductDefaultVO> createProduct(
     @AuthenticationPrincipal LoginUser loginUser, @RequestBody @Valid ProductDto.Create dto) {
-    ProductDefaultVO product = productService.createProduct(dto, loginUser.getBrandId());
+    ProductDefaultVO product = productService.createProduct(loginUser.getBrandId(), dto);
     return new CommonResponse<>(product, CommonResponseCode.SUCCESS);
   }
 

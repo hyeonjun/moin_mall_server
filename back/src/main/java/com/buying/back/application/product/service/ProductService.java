@@ -17,6 +17,7 @@ import com.buying.back.application.product.exception.ProductException;
 import com.buying.back.application.product.helper.ProductItemHelper;
 import com.buying.back.application.product.helper.ProductOptionHelper;
 import com.buying.back.application.product.repository.ProductRepository;
+import com.buying.back.application.product.repository.param.SearchProductListParam;
 import com.buying.back.application.product.service.vo.ItemVO;
 import com.buying.back.application.product.service.vo.OptionVO;
 import com.buying.back.application.product.service.vo.ProductDefaultVO;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,8 +50,19 @@ public class ProductService {
     return new ProductDetailVO(); // product, itemsByProduct, productOptions
   }
 
+  public Page<ProductDefaultVO> getProductList(Long brandId, ProductDto.Search dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    SearchProductListParam param = SearchProductListParam.valueOf(dto);
+    param.setDeleted(dto.getDeleted());
+    param.setBrandId(brand.getId());
+
+    return productRepository.findAllByBrand(dto.getPageRequest(), param);
+  }
+
   @Transactional
-  public ProductDetailVO createProduct(ProductDto.Create dto, Long brandId) {
+  public ProductDetailVO createProduct(Long brandId, ProductDto.Create dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
