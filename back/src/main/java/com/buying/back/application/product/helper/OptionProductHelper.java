@@ -1,4 +1,4 @@
-package com.buying.back.application.product.service.helper;
+package com.buying.back.application.product.helper;
 
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.exception.ProductException;

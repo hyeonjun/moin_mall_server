@@ -1,101 +1,137 @@
 package com.buying.back.application.product.service;
 
+import com.buying.back.application.account.code.exception.BrandException;
+import com.buying.back.application.account.code.exception.BrandException.BrandExceptionCode;
+import com.buying.back.application.account.domain.Brand;
+import com.buying.back.application.account.helper.CheckLoginUserAuthorizeHelper;
+import com.buying.back.application.account.repository.BrandRepository;
+import com.buying.back.application.category.code.exception.CategoryException;
+import com.buying.back.application.category.domain.Category;
+import com.buying.back.application.category.repository.CategoryRepository;
+import com.buying.back.application.common.exception.code.AuthenticationException;
+import com.buying.back.application.common.exception.code.AuthenticationException.AuthenticationExceptionCode;
 import com.buying.back.application.product.code.ProductExceptionCode;
-import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.exception.ProductException;
+import com.buying.back.application.product.helper.ProductItemHelper;
 import com.buying.back.application.product.repository.ProductRepository;
-import com.buying.back.application.product.service.vo.*;
+import com.buying.back.application.product.repository.param.SearchProductListParam;
+import com.buying.back.application.product.service.vo.ItemVO;
+import com.buying.back.application.product.service.vo.ProductVO;
+import com.buying.back.application.product.service.vo.ProductItemVO;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class ProductService {
-    private final ProductRepository productRepository;
-    private final ProductItemHelperService productItemHelperService;
-    private final ProductOptionHelperService productOptionHelperService;
+  private final CategoryRepository categoryRepository;
+  private final BrandRepository brandRepository;
+  private final ProductRepository productRepository;
+  private final ProductItemHelper productItemHelper;
+  private final CheckLoginUserAuthorizeHelper checkLoginUserAuthorizeHelper;
 
-    public ProductDefaultVO getProduct(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
 
-        List<ItemDetailVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
-        List<OptionDefaultVO> productOptions = productOptionHelperService.getProductOptions(product);
+  public ProductVO getProduct(Long brandId, Long productId) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
-        return new ProductDetailVO(product, itemsByProduct, productOptions);
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
+
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
+
+    return ProductVO.valueOf(product);
+  }
+
+  public ProductItemVO getProductItem(Long brandId, Long productId) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
+
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
+
+    List<ItemVO> items = productItemHelper.getItemsByProduct(product);
+
+    return ProductItemVO.valueOf(product, items);
+  }
+
+  public Page<ProductVO> getProductList(Long brandId, ProductDto.Search dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    SearchProductListParam param = SearchProductListParam.valueOf(dto);
+    param.setDeleted(dto.getDeleted());
+    param.setBrandId(brand.getId());
+
+    return productRepository.findAllByBrand(dto.getPageRequest(), param);
+  }
+
+  @Transactional
+  public ProductItemVO createProduct(Long brandId, ProductDto.Create dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    Category category = categoryRepository.findById(dto.getCategoryId())
+      .orElseThrow(() -> new CategoryException(
+        CategoryException.CategoryExceptionCode.NOT_FOUND_CATEGORY));
+
+    Product product = Product.create(dto, brand, category);
+    productRepository.save(product);
+
+    List<ItemVO> itemVOList = productItemHelper.createItem(product, dto.getItemsDto());
+
+    return ProductItemVO.valueOf(product, itemVOList);
+  }
+
+  @Transactional
+  public ProductVO updateProduct(Long brandId, Long productId, ProductDto.Update dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
+
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
+
+    // 상품 정보 및 카테고리 변경
+    Category originCategory = product.getCategory();
+    Category targetCategory = null;
+    // 같은 카테고리인 경우 변경할 필요없음
+    if (!originCategory.getId().equals(dto.getCategoryId())) {
+      targetCategory = categoryRepository.findById(dto.getCategoryId())
+        .orElseThrow(() -> new CategoryException(CategoryException.CategoryExceptionCode.NOT_FOUND_CATEGORY));
     }
+    product.update(dto, targetCategory);
+    productRepository.save(product);
+    return ProductVO.valueOf(product);
+  }
 
-    @Transactional
-    public ProductDefaultVO createProduct(ProductDto.Create dto) {
-        List<ItemDto.Create> itemsDto = dto.getItemsDto();
 
-        Product product = Product.create(dto);
-        productRepository.save(product);
 
-        return createItemsAndOptions(product, itemsDto);
-    }
+  @Transactional
+  public void deleteProduct(Long brandId, Long productId) {
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
 
-    @Transactional
-    public ProductDefaultVO updateProduct(Long productId, ProductDto.Update dto) {
-        Product product = productRepository.findById(productId).orElseThrow();
-        product.update(dto);
-        productRepository.save(product);
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
-        List<ItemDto.Create> newItemsDto = dto.getNewItemsDto();
-        if(!newItemsDto.isEmpty()) {
-            createItemsAndOptions(product, newItemsDto);
-        }
-        dto.getItemsDto().forEach(productItemHelperService::updateItem);
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
 
-        List<ItemDetailVO> itemsByProduct = productItemHelperService.getItemsByProduct(product);
-        List<OptionDefaultVO> productOptions = productOptionHelperService.getProductOptions(product);
+    // 상품 삭제
+    product.delete();
+    productRepository.save(product);
 
-        return new ProductDetailVO(product, itemsByProduct, productOptions);
-    }
-
-    @Transactional
-    public void deleteProduct(Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("NOT FOND PRODUCT"));
-        productItemHelperService.deleteItemByProduct(product);
-        productOptionHelperService.deleteOptionByProduct(product);
-        productRepository.delete(product);
-    }
-
-    // TODO: 2023-03-31 나중에 코드 다시 읽고 여기 전부 고치기 기억이 안나네
-    private ProductDefaultVO createItemsAndOptions(Product product, List<ItemDto.Create> itemsDto) {
-        List<OptionDefaultVO> productOptions = new ArrayList<>();
-        List<ItemDetailVO> itemDefaultVOList = itemsDto.stream().map(itemDto -> {
-            StringBuilder itemOptions = new StringBuilder();
-
-            List<ItemOptionVO> itemOptionsVO = productOptionHelperService.createOptionAll(product, itemDto.getOptionsDto()).stream()
-                    .map(item -> {
-                        ItemOptionVO itemOptionVO = new ItemOptionVO(item);
-                        productOptions.add(itemOptionVO);
-                        return itemOptionVO;
-                    })
-                    .collect(Collectors.toList());
-
-            for (int i = 0; i < itemOptionsVO.size(); i++) {
-                itemOptions.append(itemOptionsVO.get(i).getId());
-                if (itemOptionsVO.size() - 1 != i) {
-                    itemOptions.append("/");
-                }
-            }
-            itemDto.setOptions(itemOptions.toString());
-            return new ItemDetailVO(productItemHelperService.createItem(product, itemDto), itemOptionsVO);
-        }).collect(Collectors.toList());
-
-        List<OptionDefaultVO> optionDefaultVOList = productOptions.stream().distinct().collect(Collectors.toList());
-
-        return new ProductDetailVO(product, itemDefaultVOList, optionDefaultVOList);
-    }
+    // 상품에 속한 아이템 및 아이팀의 옵션 삭제 -> Async
+    productItemHelper.deleteItemByProduct(product);
+  }
 }
 

@@ -2,16 +2,19 @@ package com.buying.back.application.product.repository;
 
 import com.buying.back.application.product.domain.Item;
 import com.buying.back.application.product.domain.Product;
-import com.buying.back.application.product.service.vo.ItemDefaultVO;
+import java.time.LocalDateTime;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByProduct(Product product);
-    void deleteByProduct(Product product);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("UPDATE Item item SET item.deleted = true, item.deletedAt = :now WHERE item.product.id = :productId")
+    void deleteAllByProductIdQuery(Long productId, LocalDateTime now);
 /*
     @Query(value = "select item from Item item where item.product = :product")
     List<ItemDefaultVO> findItemsByProductId(@Param("product") Product product);
