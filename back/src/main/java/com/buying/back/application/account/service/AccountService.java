@@ -65,6 +65,7 @@ public class AccountService {
     return AccountDefaultVO.valueOf(account);
   }
 
+  @Transactional
   public AccountDefaultVO updateAuthPassword(UpdateAuthPasswordDTO dto) {
     Account account = accountRepository.findByEmail(dto.getEmail())
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
@@ -94,6 +95,7 @@ public class AccountService {
     return accountCouponHelper.getCouponListByAccount(dto, account);
   }
 
+  @Transactional
   public AccountDefaultVO updateMyInformation(Long loginUserId, UpdateAccountDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
@@ -104,6 +106,7 @@ public class AccountService {
     return AccountDefaultVO.valueOf(account);
   }
 
+  @Transactional
   public AccountDefaultVO updateAccountActivate(Long loginUserId, UpdateActivateAccountDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
@@ -122,6 +125,7 @@ public class AccountService {
     return AccountDefaultVO.valueOf(account);
   }
 
+  @Transactional
   public AccountDefaultVO updateAccountPassword(Long loginUserId, UpdateAccountPasswordDTO dto) {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
@@ -151,6 +155,7 @@ public class AccountService {
     return NormalAccountManagementVO.valueOf(account);
   }
 
+  @Transactional
   public NormalAccountManagementVO activateNormalAccount(Long accountId, UpdateActivateAccountDTO dto) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
@@ -160,6 +165,7 @@ public class AccountService {
     return NormalAccountManagementVO.valueOf(account);
   }
 
+  @Transactional
   public NormalAccountManagementVO resetNormalPassword(Long accountId) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
