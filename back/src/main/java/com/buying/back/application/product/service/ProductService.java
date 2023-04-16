@@ -3,6 +3,7 @@ package com.buying.back.application.product.service;
 import com.buying.back.application.account.code.exception.BrandException;
 import com.buying.back.application.account.code.exception.BrandException.BrandExceptionCode;
 import com.buying.back.application.account.domain.Brand;
+import com.buying.back.application.account.helper.CheckLoginUserAuthorizeHelper;
 import com.buying.back.application.account.repository.BrandRepository;
 import com.buying.back.application.category.code.exception.CategoryException;
 import com.buying.back.application.category.domain.Category;
@@ -33,6 +34,7 @@ public class ProductService {
   private final BrandRepository brandRepository;
   private final ProductRepository productRepository;
   private final ProductItemHelper productItemHelper;
+  private final CheckLoginUserAuthorizeHelper checkLoginUserAuthorizeHelper;
 
 
   public ProductVO getProduct(Long brandId, Long productId) {
@@ -42,14 +44,20 @@ public class ProductService {
     Product product = productRepository.findById(productId)
       .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
 
-    if (!product.getBrand().getId().equals(brand.getId())) {
-      throw new AuthenticationException(AuthenticationExceptionCode.NOT_AUTHORIZED);
-    }
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
 
     return ProductVO.valueOf(product);
   }
 
   public ProductItemVO getProductItem(Long brandId, Long productId) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
+
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
+
     return new ProductItemVO();
   }
 
@@ -89,10 +97,7 @@ public class ProductService {
     Product product = productRepository.findById(productId)
       .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
 
-    // 브랜드 검증
-    if (!brand.equals(product.getBrand())) {
-      throw new AuthenticationException(AuthenticationExceptionCode.NOT_AUTHORIZED);
-    }
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
 
     // 상품 정보 및 카테고리 변경
     Category originCategory = product.getCategory();
@@ -115,9 +120,7 @@ public class ProductService {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
-    if (!brand.equals(product.getBrand())) {
-      throw new AuthenticationException(AuthenticationExceptionCode.NOT_AUTHORIZED);
-    }
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
 
     // 상품 삭제
     product.delete();
