@@ -61,5 +61,11 @@ public class AccountController {
   }
 
   // TODO: 2023/03/26 아이디 찾기, 비밀번호 변경
-
+  @PutMapping("/update:password")
+  public CommonResponse<AccountDefaultVO> updateAccountPassword(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @Valid @RequestBody UpdateActivateAccountDTO dto) {
+    AccountDefaultVO vo = accountService.updateAccountActivate(loginUser.getAccountId(), dto);
+    return new CommonResponse<>(vo, SUCCESS);
+  }
 }
