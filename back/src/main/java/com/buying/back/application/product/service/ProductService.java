@@ -13,6 +13,7 @@ import com.buying.back.application.common.exception.code.AuthenticationException
 import com.buying.back.application.product.code.ProductExceptionCode;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
+import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.exception.ProductException;
 import com.buying.back.application.product.helper.ProductItemHelper;
@@ -94,7 +95,7 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductVO updateProduct(Long brandId, Long productId, ProductDto.Update dto) {
+  public ProductVO updateProduct(Long brandId, Long productId, UpdateBrandProductDTO dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 

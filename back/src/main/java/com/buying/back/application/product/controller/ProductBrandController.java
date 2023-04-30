@@ -3,6 +3,7 @@ package com.buying.back.application.product.controller;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
+import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.buying.back.application.product.service.ProductService;
 import com.buying.back.application.product.service.vo.ItemVO;
 import com.buying.back.application.product.service.vo.ProductItemVO;
@@ -68,7 +69,7 @@ public class ProductBrandController {
   @PutMapping("/{product-id}")
   public CommonResponse<ProductVO> updateProduct( // 상품의 정보만 수정하는 API
     @AuthenticationPrincipal LoginUser loginUser,
-    @PathVariable(value = "product-id") Long productId, @RequestBody @Valid ProductDto.Update dto) {
+    @PathVariable(value = "product-id") Long productId, @RequestBody @Valid UpdateBrandProductDTO dto) {
     /*
      * 상품 정보 수정
      * 내부 아이템 수정

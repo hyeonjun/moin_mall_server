@@ -5,6 +5,7 @@ import com.buying.back.application.category.domain.Category;
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
+import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -72,7 +73,7 @@ public class Product extends Base {
       .build();
   }
 
-  public void update(ProductDto.Update dto, Category category) {
+  public void update(UpdateBrandProductDTO dto, Category category) {
     this.name = dto.getName();
     this.price = dto.getPrice();
 
