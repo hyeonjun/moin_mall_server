@@ -2,7 +2,6 @@ package com.buying.back.application.product.helper;
 
 import com.buying.back.application.common.exception.code.AuthenticationException;
 import com.buying.back.application.common.exception.code.AuthenticationException.AuthenticationExceptionCode;
-import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandItemDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.buying.back.application.product.domain.Item;

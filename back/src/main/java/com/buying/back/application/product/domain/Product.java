@@ -3,7 +3,6 @@ package com.buying.back.application.product.domain;
 import com.buying.back.application.account.domain.Brand;
 import com.buying.back.application.category.domain.Category;
 import com.buying.back.application.common.domain.Base;
-import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;

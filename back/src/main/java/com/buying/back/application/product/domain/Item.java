@@ -1,17 +1,11 @@
 package com.buying.back.application.product.domain;
 
-import static com.buying.back.application.product.service.ItemService.ITEM_OPTION_DELIMITER;
-
 import com.buying.back.application.common.domain.Base;
-import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandItemDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

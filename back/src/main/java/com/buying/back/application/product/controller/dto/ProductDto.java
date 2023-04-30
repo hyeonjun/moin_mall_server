@@ -16,17 +16,4 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 public class ProductDto {
-
-  @Getter
-  @Setter
-  public static class Search extends PagingDTO {
-
-    private String productName;
-    private Long categoryId;
-    private Integer priceFrom;
-    private Integer priceTo;
-    private LocalDate createdDateFrom;
-    private LocalDate createdDateTo;
-    private Boolean deleted;
-  }
 }

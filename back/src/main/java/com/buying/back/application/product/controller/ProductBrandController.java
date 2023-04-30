@@ -3,6 +3,7 @@ package com.buying.back.application.product.controller;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
+import com.buying.back.application.product.controller.dto.brand.SearchBrandProductDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.buying.back.application.product.service.ProductService;
@@ -53,7 +54,7 @@ public class ProductBrandController {
 
   @GetMapping
   public CommonResponse<Page<ProductVO>> getProductList(
-    @AuthenticationPrincipal LoginUser loginUser, ProductDto.Search dto) {
+    @AuthenticationPrincipal LoginUser loginUser, SearchBrandProductDTO dto) {
     Page<ProductVO> page = productService.getProductList(loginUser.getBrandId(), dto);
     return new CommonResponse<>(page, CommonResponseCode.SUCCESS);
   }
@@ -71,16 +72,6 @@ public class ProductBrandController {
   public CommonResponse<ProductVO> updateProduct( // 상품의 정보만 수정하는 API
     @AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "product-id") Long productId, @RequestBody @Valid UpdateBrandProductDTO dto) {
-    /*
-     * 상품 정보 수정
-     * 내부 아이템 수정
-      * 아이템 정보 수정
-      * 아이템의 옵션 정보에 대해 수정 / 옵션 추가 가능 / 옵션 삭제는 따로
-        * 수정 시 아이디는 그대로니까 수정 가능
-        * 추가 시 기존 String.concat(,Id)
-        * 삭제 시 해당 아이템 아이디를 받아서 해야된다
-     * 아이템은 재고, 가격, 할인가, 할인율, 상품상태(추가예정) 만 가능하게
-     */
     ProductVO productVO = productService.updateProduct(loginUser.getBrandId(), productId, dto);
     return new CommonResponse<>(productVO, CommonResponseCode.SUCCESS);
   }
@@ -91,21 +82,13 @@ public class ProductBrandController {
     @AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "product-id") Long productId,
     @PathVariable(value = "item-id") Long itemId, @RequestBody @Valid UpdateBrandItemDTO dto) {
-    ItemVO itemVO = null; // productService.updateItem(loginUser.getBrandId(), productId, itemId, dto);
+    ItemVO itemVO = productService.updateItem(loginUser.getBrandId(), productId, itemId, dto);
     return new CommonResponse<>(itemVO, CommonResponseCode.SUCCESS);
   }
 
-  // 상품의 아이템들 추가
+  // 상품의 아이템 단일 추가
 
-  // 상품의 아이템의 옵션 단일 수정
-
-  // 상품의 아이템 단일 삭제
-
-  // 상품의 아이템에 옵션 추가
-
-  // 상품의 아이템의 옵션 단일 수정
-
-
+  // 상품의 아이템 삭제
 
   @Operation(summary = "상품 삭제", description = "상품에 대한 옵션들과 각 옵션별 아이템들을 삭제합니다.")
   @DeleteMapping("/{product-id}")

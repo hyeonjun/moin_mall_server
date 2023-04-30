@@ -13,6 +13,7 @@ import com.buying.back.application.common.exception.code.AuthenticationException
 import com.buying.back.application.product.code.ProductExceptionCode;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
+import com.buying.back.application.product.controller.dto.brand.SearchBrandProductDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.buying.back.application.product.domain.Product;
@@ -67,14 +68,11 @@ public class ProductService {
     return ProductItemVO.valueOf(product, items);
   }
 
-  public Page<ProductVO> getProductList(Long brandId, ProductDto.Search dto) {
+  public Page<ProductVO> getProductList(Long brandId, SearchBrandProductDTO dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
-    SearchProductListParam param = SearchProductListParam.valueOf(dto);
-    param.setDeleted(dto.getDeleted());
-    param.setBrandId(brand.getId());
-
+    SearchProductListParam param = SearchProductListParam.valueOf(dto, brand);
     return productRepository.findAllByBrand(dto.getPageRequest(), param);
   }
 
