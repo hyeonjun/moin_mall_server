@@ -3,6 +3,7 @@ package com.buying.back.application.product.controller;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
+import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.buying.back.application.product.service.ProductService;
 import com.buying.back.application.product.service.vo.ItemVO;
@@ -89,7 +90,7 @@ public class ProductBrandController {
   public CommonResponse<ItemVO> updateItem(
     @AuthenticationPrincipal LoginUser loginUser,
     @PathVariable(value = "product-id") Long productId,
-    @PathVariable(value = "item-id") Long itemId, @RequestBody @Valid ItemDto.Update dto) {
+    @PathVariable(value = "item-id") Long itemId, @RequestBody @Valid UpdateBrandItemDTO dto) {
     ItemVO itemVO = null; // productService.updateItem(loginUser.getBrandId(), productId, itemId, dto);
     return new CommonResponse<>(itemVO, CommonResponseCode.SUCCESS);
   }

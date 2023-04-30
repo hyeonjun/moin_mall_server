@@ -13,6 +13,7 @@ import com.buying.back.application.common.exception.code.AuthenticationException
 import com.buying.back.application.product.code.ProductExceptionCode;
 import com.buying.back.application.product.controller.dto.ProductDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
+import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.buying.back.application.product.controller.dto.brand.UpdateBrandProductDTO;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.exception.ProductException;
@@ -117,6 +118,19 @@ public class ProductService {
     return ProductVO.valueOf(product);
   }
 
+  @Transactional
+  public ItemVO updateItem(Long brandId, Long productId, Long itemId, UpdateBrandItemDTO dto) {
+    Brand brand = brandRepository.findById(brandId)
+      .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
+
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_PRODUCT));
+
+    checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
+
+    // 상품 아이템 변경
+    return productItemHelper.updateItem(product, itemId, dto);
+  }
 
 
   @Transactional

@@ -1,9 +1,14 @@
 package com.buying.back.application.product.helper;
 
+import com.buying.back.application.common.exception.code.AuthenticationException;
+import com.buying.back.application.common.exception.code.AuthenticationException.AuthenticationExceptionCode;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandItemDTO;
+import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.buying.back.application.product.domain.Item;
 import com.buying.back.application.product.domain.Product;
+import com.buying.back.application.product.exception.ProductException;
+import com.buying.back.application.product.exception.ProductException.ProductExceptionCode;
 import com.buying.back.application.product.repository.ItemRepository;
 import com.buying.back.application.product.service.vo.ItemVO;
 import java.util.List;
@@ -38,8 +43,18 @@ public class ProductItemHelper {
         .map(ItemVO::valueOf).collect(Collectors.toList());
   }
 
-  public ItemVO updateItem(ItemDto.Update itemDto) {
-    return null; // itemService.updateItem(itemDto);
+  @Transactional
+  public ItemVO updateItem(Product product, Long itemId, UpdateBrandItemDTO dto) {
+    Item item = itemRepository.findById(itemId)
+      .orElseThrow(() -> new ProductException(ProductExceptionCode.NOT_FOUND_ITEM));
+
+    if (!item.getProduct().equals(product)) {
+      throw new AuthenticationException(AuthenticationExceptionCode.NOT_AUTHORIZED);
+    }
+
+    item.updateItem(dto);
+
+    return ItemVO.valueOf(item);
   }
 
 //  @Async

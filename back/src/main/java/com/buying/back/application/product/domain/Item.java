@@ -5,6 +5,7 @@ import static com.buying.back.application.product.service.ItemService.ITEM_OPTIO
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.brand.CreateBrandItemDTO;
+import com.buying.back.application.product.controller.dto.brand.UpdateBrandItemDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -84,7 +85,7 @@ public class Item extends Base {
       .build();
   }
 
-  public void updateItem(ItemDto.Update dto) {
+  public void updateItem(UpdateBrandItemDTO dto) {
     this.options = dto.getOptions();
     this.additionalPrice = dto.getAdditionalPrice();
     this.stockQuantity = dto.getStockQuantity();
