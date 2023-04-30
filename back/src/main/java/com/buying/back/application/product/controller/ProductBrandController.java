@@ -2,6 +2,7 @@ package com.buying.back.application.product.controller;
 
 import com.buying.back.application.product.controller.dto.ItemDto;
 import com.buying.back.application.product.controller.dto.ProductDto;
+import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
 import com.buying.back.application.product.service.ProductService;
 import com.buying.back.application.product.service.vo.ItemVO;
 import com.buying.back.application.product.service.vo.ProductItemVO;
@@ -58,7 +59,7 @@ public class ProductBrandController {
   @Operation(summary = "상품 등록", description = "상품에 대한 옵션과 각 옵션별 아이템들을 등록합니다.")
   @PostMapping
   public CommonResponse<ProductItemVO> createProduct(
-    @AuthenticationPrincipal LoginUser loginUser, @RequestBody @Valid ProductDto.Create dto) {
+    @AuthenticationPrincipal LoginUser loginUser, @RequestBody @Valid CreateBrandProductDTO dto) {
     ProductItemVO vo = productService.createProduct(loginUser.getBrandId(), dto);
     return new CommonResponse<>(vo, CommonResponseCode.SUCCESS);
   }

@@ -15,8 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NormalAccountManagementVO extends AccountDefaultVO {
 
-  protected LocalDateTime signUpDateTime;
-  protected LocalDateTime recentSignInDateTime;
+  private LocalDateTime signUpDateTime;
+  private LocalDateTime recentSignInDateTime;
 
   public static NormalAccountManagementVO valueOf(Account account) {
     NormalAccountManagementVO vo = (NormalAccountManagementVO) AccountDefaultVO.valueOf(account);

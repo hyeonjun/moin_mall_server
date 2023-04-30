@@ -4,6 +4,7 @@ import static com.buying.back.application.product.service.ItemService.ITEM_OPTIO
 
 import com.buying.back.application.common.domain.Base;
 import com.buying.back.application.product.controller.dto.ItemDto;
+import com.buying.back.application.product.controller.dto.brand.CreateBrandItemDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -16,8 +17,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,18 +30,28 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(
+  name = "item",
+  indexes = {
+    @Index(columnList = "product_id, options")
+  }
+)
 public class Item extends Base {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "item_id")
   private Long id;
-  private String name;
   private String options;
-  private Integer quantity;
-  private Integer price;
+
+  @Column(name = "stock_quantity", nullable = false)
+  private Integer stockQuantity;
+  @Column(name = "additional_price", nullable = false)
+  private Integer additionalPrice;
+  @Column(name = "discount_price", nullable = false)
   private Integer discountPrice;
-  private Integer discountRate;
+  @Column(name = "discount_rate", nullable = false)
+  private Double discountRate;
 
   @Setter
   @ManyToOne(fetch = FetchType.LAZY)
@@ -50,23 +63,21 @@ public class Item extends Base {
   private LocalDateTime deletedAt;
 
   @Builder
-  private Item(String name, String options, Integer quantity, Integer price, Integer discountPrice,
-    Integer discountRate, Product product) {
-    this.name = name;
+  private Item(String options, Integer stockQuantity, Integer additionalPrice, Integer discountPrice,
+    Double discountRate, Product product) {
     this.options = options;
-    this.quantity = quantity;
-    this.price = price;
+    this.stockQuantity = stockQuantity;
+    this.additionalPrice = additionalPrice;
     this.discountPrice = discountPrice;
     this.discountRate = discountRate;
     this.product = product;
   }
 
-  public static Item create(ItemDto.Create dto, Product product, String options) {
+  public static Item create(CreateBrandItemDTO dto, Product product) {
     return Item.builder()
-      .name(dto.getName())
-      .options(options)
-      .quantity(dto.getQuantity())
-      .price(dto.getPrice())
+      .options(dto.getOptions())
+      .stockQuantity(dto.getStockQuantity())
+      .additionalPrice(dto.getAdditionalPrice())
       .discountPrice(dto.getDiscountPrice())
       .discountRate(dto.getDiscountRate())
       .product(product)
@@ -74,9 +85,9 @@ public class Item extends Base {
   }
 
   public void updateItem(ItemDto.Update dto) {
-    this.name = dto.getName();
-    this.price = dto.getPrice();
-    this.quantity = dto.getQuantity();
+    this.options = dto.getOptions();
+    this.additionalPrice = dto.getAdditionalPrice();
+    this.stockQuantity = dto.getStockQuantity();
     this.discountPrice = dto.getDiscountPrice();
     this.discountRate = dto.getDiscountRate();
   }
@@ -84,12 +95,6 @@ public class Item extends Base {
   public void deleteItem() {
     this.deleted = true;
     this.deletedAt = LocalDateTime.now();
-  }
-
-  public Set<Long> getOptionIds() {
-    return Arrays.stream(this.options.split(ITEM_OPTION_DELIMITER))
-      .map(Long::valueOf)
-      .collect(Collectors.toSet());
   }
 
   @Override

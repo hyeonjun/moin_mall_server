@@ -1,24 +1,18 @@
 package com.buying.back.application.product.service;
 
-import com.buying.back.application.product.controller.dto.OptionDto;
-import com.buying.back.application.product.domain.Option;
-import com.buying.back.application.product.domain.Product;
-import com.buying.back.application.product.repository.OptionRepository;
 import com.buying.back.application.product.service.vo.ItemVO;
-import com.buying.back.application.product.service.vo.OptionVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class OptionService {
-    private final OptionRepository optionRepository;
+//    private final OptionRepository optionRepository;
 
 
     public List<ItemVO> getItemOptions(Set<Long> ids) {

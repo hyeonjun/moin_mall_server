@@ -12,6 +12,7 @@ import com.buying.back.application.common.exception.code.AuthenticationException
 import com.buying.back.application.common.exception.code.AuthenticationException.AuthenticationExceptionCode;
 import com.buying.back.application.product.code.ProductExceptionCode;
 import com.buying.back.application.product.controller.dto.ProductDto;
+import com.buying.back.application.product.controller.dto.brand.CreateBrandProductDTO;
 import com.buying.back.application.product.domain.Product;
 import com.buying.back.application.product.exception.ProductException;
 import com.buying.back.application.product.helper.ProductItemHelper;
@@ -20,6 +21,7 @@ import com.buying.back.application.product.repository.param.SearchProductListPar
 import com.buying.back.application.product.service.vo.ItemVO;
 import com.buying.back.application.product.service.vo.ProductVO;
 import com.buying.back.application.product.service.vo.ProductItemVO;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -58,7 +60,7 @@ public class ProductService {
 
     checkLoginUserAuthorizeHelper.checkBrandAuthority(brand, product.getBrand());
 
-    List<ItemVO> items = productItemHelper.getItemsByProduct(product);
+    List<ItemVO> items = new ArrayList<>(); // productItemHelper.getItemsByProduct(product);
 
     return ProductItemVO.valueOf(product, items);
   }
@@ -75,7 +77,7 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductItemVO createProduct(Long brandId, ProductDto.Create dto) {
+  public ProductItemVO createProduct(Long brandId, CreateBrandProductDTO dto) {
     Brand brand = brandRepository.findById(brandId)
       .orElseThrow(() -> new BrandException(BrandExceptionCode.NOT_FOUND_BRAND));
 
@@ -131,7 +133,7 @@ public class ProductService {
     productRepository.save(product);
 
     // 상품에 속한 아이템 및 아이팀의 옵션 삭제 -> Async
-    productItemHelper.deleteItemByProduct(product);
+//    productItemHelper.deleteItemByProduct(product);
   }
 }
 

@@ -17,52 +17,32 @@ import org.hibernate.validator.constraints.Length;
 
 public class ProductDto {
 
-  @Data
+  @Getter
+  @Setter
   public static class Create {
 
-    /*
-     * 카테고리는 이미 만들어진 것 ( 따로 API 동작 )
-     * Product - Option - Stock
-     * */
+    @NotNull
+    private Long categoryId;
     @NotBlank
     @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
     private String name;
     @NotNull
-    @Min(value = 0, message = "상품 가격은 0 보다 커야합니다.")
+    @Min(value = 0)
     private Integer price;
-    @NotNull
-    private Long categoryId;
     @Valid
-    @NotNull(message = "Item 은 1개 이상 등록되어야 합니다.(Item List is Null)")
-    @Size(min = 1, message = "Item 은 1개 이상 등록되어야 합니다.(Item List size[0])")
-    private List<ItemDto.Create> itemsDto;
+    @Size(min = 1)
+    private List<ItemDto.Create> itemsDto = new ArrayList<>();
   }
 
-  @Data
+  @Getter
+  @Setter
   public static class Update {
 
-    @NotBlank
     @Length(min = 1, max = VerifyLengthUtil.MAX_NAME_LENGTH)
     private String name;
-    @NotNull
     private Long categoryId;
-    @NotBlank
-    @Min(value = 0, message = "상품 가격은 0 보다 커야합니다.")
+    @Min(value = 0)
     private Integer price;
-//        @Valid
-//        private List<ItemDto.Update> itemsDto;
-//        @Valid
-//        private List<ItemDto.Create> newItemsDto;
-  }
-
-  @Data
-  public static class UpdateItems {
-
-    @Valid
-    private List<ItemDto.Update> itemsUpdateDto = new ArrayList<>();
-
-
-
   }
 
   @Getter
