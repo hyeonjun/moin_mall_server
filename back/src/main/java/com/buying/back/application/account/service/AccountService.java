@@ -182,4 +182,10 @@ public class AccountService {
     return NormalAccountManagementVO.valueOf(account);
   }
 
+  public Boolean checkAccountPassword(Long accountId, String password) {
+    Account account = accountRepository.findById(accountId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+    return passwordProvider.matches(password, account.getPassword());
+  }
+
 }
