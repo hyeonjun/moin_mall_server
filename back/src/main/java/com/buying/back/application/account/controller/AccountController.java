@@ -70,5 +70,12 @@ public class AccountController {
     return new CommonResponse<>(vo, SUCCESS);
   }
 
+  @GetMapping("/check:password")
+  public CommonResponse<Boolean> checkAccountPassword(
+    @AuthenticationPrincipal LoginUser loginUser,
+    @Valid String password) {
+    Boolean result = accountService.checkAccountPassword(loginUser.getAccountId(), password);
+    return new CommonResponse<>(result, SUCCESS);
+  }
 
 }
