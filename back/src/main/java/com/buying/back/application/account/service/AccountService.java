@@ -2,6 +2,7 @@ package com.buying.back.application.account.service;
 
 import com.buying.back.application.account.code.exception.AccountException;
 import com.buying.back.application.account.code.exception.AccountException.AccountExceptionCode;
+import com.buying.back.application.account.controller.dto.account.CheckAccountPasswordDTO;
 import com.buying.back.application.account.controller.dto.account.CreateAccountDTO;
 import com.buying.back.application.account.controller.dto.account.UpdateAccountDTO;
 import com.buying.back.application.account.controller.dto.account.UpdateAccountPasswordDTO;
@@ -182,10 +183,10 @@ public class AccountService {
     return NormalAccountManagementVO.valueOf(account);
   }
 
-  public Boolean checkAccountPassword(Long accountId, String password) {
+  public Boolean checkAccountPassword(Long accountId, CheckAccountPasswordDTO dto) {
     Account account = accountRepository.findById(accountId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
-    return passwordProvider.matches(password, account.getPassword());
+    return passwordProvider.matches(dto.getPassword(), account.getPassword());
   }
 
 }
