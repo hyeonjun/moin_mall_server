@@ -1,5 +1,7 @@
 package com.buying.back.infra.config;
 
+import static com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
@@ -9,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -16,7 +19,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 @Configuration
 public class ObjectMapperConfig {
 
-  @Bean
+  @Primary
+  @Bean("defaultObjectMapper")
   public ObjectMapper objectMapper() {
     return Jackson2ObjectMapperBuilder.json()
       .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -31,6 +35,16 @@ public class ObjectMapperConfig {
   @Bean
   public HttpMessageConverter<?> customMappingJackson2HttpMessageConverter() {
     return new MappingJackson2HttpMessageConverter(objectMapper());
+  }
+
+  @Bean("debugAopObjectMapper")
+  public ObjectMapper objectMapperAOP() {
+    return Jackson2ObjectMapperBuilder.json()
+      .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .modules(new JavaTimeModule())
+      .featuresToEnable(Feature.WRITE_BIGDECIMAL_AS_PLAIN)
+      .featuresToDisable(FAIL_ON_EMPTY_BEANS)
+      .build();
   }
 
 }
